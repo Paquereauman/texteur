@@ -1,0 +1,4074 @@
+[
+ {
+  "hanzi": "北京",
+  "trad": "",
+  "pinyin": "Běijīng",
+  "sens": "Pékin (capitale de la Chine)"
+ },
+ {
+  "hanzi": "上海",
+  "trad": "",
+  "pinyin": "Shànghǎi",
+  "sens": "Shanghai (centre économique et financier)"
+ },
+ {
+  "hanzi": "深圳",
+  "trad": "",
+  "pinyin": "Shēnzhèn",
+  "sens": "Shenzhen (métropole technologique du Guangdong)"
+ },
+ {
+  "hanzi": "广州",
+  "trad": "廣州",
+  "pinyin": "Guǎngzhōu",
+  "sens": "Canton / Guangzhou (capitale du Guangdong)"
+ },
+ {
+  "hanzi": "天津",
+  "trad": "",
+  "pinyin": "Tiānjīn",
+  "sens": "Tianjin (municipalité autonome du nord)"
+ },
+ {
+  "hanzi": "重庆",
+  "trad": "重慶",
+  "pinyin": "Chóngqìng",
+  "sens": "Chongqing (mégalopole du sud-ouest)"
+ },
+ {
+  "hanzi": "成都",
+  "trad": "",
+  "pinyin": "Chéngdū",
+  "sens": "Chengdu (capitale du Sichuan)"
+ },
+ {
+  "hanzi": "杭州",
+  "trad": "",
+  "pinyin": "Hángzhōu",
+  "sens": "Hangzhou (capitale du Zhejiang, siège d'Alibaba)"
+ },
+ {
+  "hanzi": "武汉",
+  "trad": "武漢",
+  "pinyin": "Wǔhàn",
+  "sens": "Wuhan (carrefour industriel du Hubei)"
+ },
+ {
+  "hanzi": "西安",
+  "trad": "",
+  "pinyin": "Xī'ān",
+  "sens": "Xi'an (capitale historique du Shaanxi, Guerriers de terre cuite)"
+ },
+ {
+  "hanzi": "南京",
+  "trad": "",
+  "pinyin": "Nánjīng",
+  "sens": "Nankin / Nanjing (capitale du Jiangsu)"
+ },
+ {
+  "hanzi": "苏州",
+  "trad": "蘇州",
+  "pinyin": "Sūzhōu",
+  "sens": "Suzhou (centre manufacturier et parcs technologiques du Jiangsu)"
+ },
+ {
+  "hanzi": "东莞",
+  "trad": "東莞",
+  "pinyin": "Dōngguǎn",
+  "sens": "Dongguan (pôle manufacturier mondial du Guangdong)"
+ },
+ {
+  "hanzi": "佛山",
+  "trad": "",
+  "pinyin": "Fóshān",
+  "sens": "Foshan (pôle industriel du Guangdong)"
+ },
+ {
+  "hanzi": "宁波",
+  "trad": "寧波",
+  "pinyin": "Níngbō",
+  "sens": "Ningbo (grand port maritime du Zhejiang)"
+ },
+ {
+  "hanzi": "无锡",
+  "trad": "無錫",
+  "pinyin": "Wúxī",
+  "sens": "Wuxi (centre technologique du Jiangsu)"
+ },
+ {
+  "hanzi": "青岛",
+  "trad": "青島",
+  "pinyin": "Qīngdǎo",
+  "sens": "Qingdao (grand port et pôle industriel du Shandong)"
+ },
+ {
+  "hanzi": "长沙",
+  "trad": "長沙",
+  "pinyin": "Chángshā",
+  "sens": "Changsha (capitale du Hunan)"
+ },
+ {
+  "hanzi": "郑州",
+  "trad": "鄭州",
+  "pinyin": "Zhèngzhōu",
+  "sens": "Zhengzhou (carrefour logistique et industriel du Henan)"
+ },
+ {
+  "hanzi": "合肥",
+  "trad": "",
+  "pinyin": "Héféi",
+  "sens": "Hefei (pôle d'innovation et batteries de l'Anhui)"
+ },
+ {
+  "hanzi": "沈阳",
+  "trad": "瀋陽",
+  "pinyin": "Shěnyáng",
+  "sens": "Shenyang (capitale industrielle du Liaoning)"
+ },
+ {
+  "hanzi": "大连",
+  "trad": "大連",
+  "pinyin": "Dàlián",
+  "sens": "Dalian (grand port du Liaoning)"
+ },
+ {
+  "hanzi": "济南",
+  "trad": "濟南",
+  "pinyin": "Jǐnán",
+  "sens": "Jinan (capitale du Shandong)"
+ },
+ {
+  "hanzi": "厦门",
+  "trad": "廈門",
+  "pinyin": "Xiàmén",
+  "sens": "Xiamen (zone économique spéciale du Fujian)"
+ },
+ {
+  "hanzi": "福州",
+  "trad": "",
+  "pinyin": "Fúzhōu",
+  "sens": "Fuzhou (capitale du Fujian)"
+ },
+ {
+  "hanzi": "昆明",
+  "trad": "",
+  "pinyin": "Kūnmíng",
+  "sens": "Kunming (capitale du Yunnan, ville du printemps)"
+ },
+ {
+  "hanzi": "哈尔滨",
+  "trad": "哈爾濱",
+  "pinyin": "Hā'ěrbīn",
+  "sens": "Harbin (capitale du Heilongjiang, festival de glace)"
+ },
+ {
+  "hanzi": "长春",
+  "trad": "長春",
+  "pinyin": "Chángchūn",
+  "sens": "Changchun (capitale automobile du Jilin)"
+ },
+ {
+  "hanzi": "南昌",
+  "trad": "",
+  "pinyin": "Nánchāng",
+  "sens": "Nanchang (capitale du Jiangxi)"
+ },
+ {
+  "hanzi": "贵阳",
+  "trad": "貴陽",
+  "pinyin": "Guìyáng",
+  "sens": "Guiyang (centre national de mégadonnées du Guizhou)"
+ },
+ {
+  "hanzi": "南宁",
+  "trad": "南寧",
+  "pinyin": "Nánníng",
+  "sens": "Nanning (capitale du Guangxi, porte de l'ASEAN)"
+ },
+ {
+  "hanzi": "太原",
+  "trad": "",
+  "pinyin": "Tàiyuán",
+  "sens": "Taiyuan (capitale du Shanxi)"
+ },
+ {
+  "hanzi": "石家庄",
+  "trad": "石家莊",
+  "pinyin": "Shíjiāzhuāng",
+  "sens": "Shijiazhuang (capitale du Hebei)"
+ },
+ {
+  "hanzi": "兰州",
+  "trad": "蘭州",
+  "pinyin": "Lánzhōu",
+  "sens": "Lanzhou (capitale du Gansu, carrefour de la Route de la Soie)"
+ },
+ {
+  "hanzi": "乌鲁木齐",
+  "trad": "烏魯木齊",
+  "pinyin": "Wūlǔmùqí",
+  "sens": "Urumqi (capitale de la région du Xinjiang)"
+ },
+ {
+  "hanzi": "呼和浩特",
+  "trad": "",
+  "pinyin": "Hūhéhàotè",
+  "sens": "Hohhot (capitale de la Mongolie-Intérieure)"
+ },
+ {
+  "hanzi": "银川",
+  "trad": "",
+  "pinyin": "Yínchuān",
+  "sens": "Yinchuan (capitale du Ningxia)"
+ },
+ {
+  "hanzi": "西宁",
+  "trad": "西寧",
+  "pinyin": "Xīníng",
+  "sens": "Xining (capitale du Qinghai)"
+ },
+ {
+  "hanzi": "拉萨",
+  "trad": "",
+  "pinyin": "Lāsà",
+  "sens": "Lhassa (capitale de la région autonome du Tibet)"
+ },
+ {
+  "hanzi": "海口",
+  "trad": "",
+  "pinyin": "Hǎikǒu",
+  "sens": "Haikou (capitale de Hainan, zone franche portuaire)"
+ },
+ {
+  "hanzi": "三亚",
+  "trad": "三亞",
+  "pinyin": "Sānyà",
+  "sens": "Sanya (station balnéaire de Hainan)"
+ },
+ {
+  "hanzi": "香港",
+  "trad": "",
+  "pinyin": "Xiānggǎng",
+  "sens": "Hong Kong (région administrative spéciale)"
+ },
+ {
+  "hanzi": "澳门",
+  "trad": "澳門",
+  "pinyin": "Àomén",
+  "sens": "Macao (région administrative spéciale)"
+ },
+ {
+  "hanzi": "台北",
+  "trad": "臺北",
+  "pinyin": "Táiběi",
+  "sens": "Taipei (capitale de Taïwan)"
+ },
+ {
+  "hanzi": "高雄",
+  "trad": "",
+  "pinyin": "Gāoxióng",
+  "sens": "Kaohsiung (grand port du sud de Taïwan)"
+ },
+ {
+  "hanzi": "新竹",
+  "trad": "",
+  "pinyin": "Xīnzhú",
+  "sens": "Hsinchu (parc scientifique et pôle semi-conducteurs de Taïwan)"
+ },
+ {
+  "hanzi": "珠海",
+  "trad": "",
+  "pinyin": "Zhūhǎi",
+  "sens": "Zhuhai (zone économique spéciale voisine de Macao)"
+ },
+ {
+  "hanzi": "中山",
+  "trad": "",
+  "pinyin": "Zhōngshān",
+  "sens": "Zhongshan (ville manufacturière du Guangdong)"
+ },
+ {
+  "hanzi": "惠州",
+  "trad": "",
+  "pinyin": "Huìzhōu",
+  "sens": "Huizhou (pôle électronique du Guangdong)"
+ },
+ {
+  "hanzi": "汕头",
+  "trad": "汕頭",
+  "pinyin": "Shàntóu",
+  "sens": "Shantou (zone économique spéciale du Guangdong)"
+ },
+ {
+  "hanzi": "义乌",
+  "trad": "義烏",
+  "pinyin": "Yìwū",
+  "sens": "Yiwu (capitale mondiale des petites marchandises, Zhejiang)"
+ },
+ {
+  "hanzi": "温州",
+  "trad": "",
+  "pinyin": "Wēnzhōu",
+  "sens": "Wenzhou (berceau de l'entrepreneuriat privé du Zhejiang)"
+ },
+ {
+  "hanzi": "绍兴",
+  "trad": "紹興",
+  "pinyin": "Shàoxīng",
+  "sens": "Shaoxing (pôle textile du Zhejiang)"
+ },
+ {
+  "hanzi": "嘉兴",
+  "trad": "嘉興",
+  "pinyin": "Jiāxīng",
+  "sens": "Jiaxing (pôle industriel du delta du Yangtsé)"
+ },
+ {
+  "hanzi": "金华",
+  "trad": "金華",
+  "pinyin": "Jīnhuá",
+  "sens": "Jinhua (pôle commercial et logistique du Zhejiang)"
+ },
+ {
+  "hanzi": "常州",
+  "trad": "",
+  "pinyin": "Chángzhōu",
+  "sens": "Changzhou (pôle véhicules électriques et batteries du Jiangsu)"
+ },
+ {
+  "hanzi": "南通",
+  "trad": "",
+  "pinyin": "Nántōng",
+  "sens": "Nantong (port maritime et construction navale du Jiangsu)"
+ },
+ {
+  "hanzi": "徐州",
+  "trad": "",
+  "pinyin": "Xúzhōu",
+  "sens": "Xuzhou (pôle de machinerie lourde du Jiangsu)"
+ },
+ {
+  "hanzi": "烟台",
+  "trad": "煙臺",
+  "pinyin": "Yāntái",
+  "sens": "Yantai (port et industrie chimique du Shandong)"
+ },
+ {
+  "hanzi": "潍坊",
+  "trad": "濰坊",
+  "pinyin": "Wéifāng",
+  "sens": "Weifang (pôle agricole et mécanique du Shandong)"
+ },
+ {
+  "hanzi": "威海",
+  "trad": "",
+  "pinyin": "Wēihǎi",
+  "sens": "Weihai (port maritime du Shandong)"
+ },
+ {
+  "hanzi": "泉州",
+  "trad": "",
+  "pinyin": "Quánzhōu",
+  "sens": "Quanzhou (départ de la Route maritime de la Soie, Fujian)"
+ },
+ {
+  "hanzi": "洛阳",
+  "trad": "洛陽",
+  "pinyin": "Luòyáng",
+  "sens": "Luoyang (capitale impériale historique du Henan)"
+ },
+ {
+  "hanzi": "桂林",
+  "trad": "",
+  "pinyin": "Guìlín",
+  "sens": "Guilin (paysages karstiques renommés du Guangxi)"
+ },
+ {
+  "hanzi": "大理",
+  "trad": "",
+  "pinyin": "Dàlǐ",
+  "sens": "Dali (ville historique et touristique du Yunnan)"
+ },
+ {
+  "hanzi": "丽江",
+  "trad": "麗江",
+  "pinyin": "Lìjiāng",
+  "sens": "Lijiang (cité ancienne UNESCO du Yunnan)"
+ },
+ {
+  "hanzi": "广东",
+  "trad": "廣東",
+  "pinyin": "Guǎngdōng",
+  "sens": "Guangdong (province manufacturière leader)"
+ },
+ {
+  "hanzi": "浙江",
+  "trad": "",
+  "pinyin": "Zhèjiāng",
+  "sens": "Zhejiang (province d'innovation et d'e-commerce)"
+ },
+ {
+  "hanzi": "江苏",
+  "trad": "江蘇",
+  "pinyin": "Jiāngsū",
+  "sens": "Jiangsu (province industrielle majeure)"
+ },
+ {
+  "hanzi": "山东",
+  "trad": "山東",
+  "pinyin": "Shāndōng",
+  "sens": "Shandong (province côtière et agricole)"
+ },
+ {
+  "hanzi": "四川",
+  "trad": "",
+  "pinyin": "Sìchuān",
+  "sens": "Sichuan (province dynamique du sud-ouest)"
+ },
+ {
+  "hanzi": "湖北",
+  "trad": "",
+  "pinyin": "Húběi",
+  "sens": "Hubei (province centrale, pôle automobile et optique)"
+ },
+ {
+  "hanzi": "湖南",
+  "trad": "",
+  "pinyin": "Húnán",
+  "sens": "Hunan (province centrale, machines lourdes et médias)"
+ },
+ {
+  "hanzi": "河南",
+  "trad": "",
+  "pinyin": "Hénán",
+  "sens": "Henan (province centrale très peuplée)"
+ },
+ {
+  "hanzi": "河北",
+  "trad": "",
+  "pinyin": "Héběi",
+  "sens": "Hebei (province entourant Pékin)"
+ },
+ {
+  "hanzi": "福建",
+  "trad": "",
+  "pinyin": "Fújiàn",
+  "sens": "Fujian (province côtière face à Taïwan)"
+ },
+ {
+  "hanzi": "安徽",
+  "trad": "",
+  "pinyin": "Ānhuī",
+  "sens": "Anhui (pôle émergent de hautes technologies)"
+ },
+ {
+  "hanzi": "江西",
+  "trad": "",
+  "pinyin": "Jiāngxī",
+  "sens": "Jiangxi (province centrale, céramique et métaux rares)"
+ },
+ {
+  "hanzi": "陕西",
+  "trad": "陝西",
+  "pinyin": "Shǎnxī",
+  "sens": "Shaanxi (province historique, aéronautique et énergie)"
+ },
+ {
+  "hanzi": "山西",
+  "trad": "",
+  "pinyin": "Shānxī",
+  "sens": "Shanxi (province du charbon et de l'énergie)"
+ },
+ {
+  "hanzi": "辽宁",
+  "trad": "遼寧",
+  "pinyin": "Liáoníng",
+  "sens": "Liaoning (province du nord-est, industrie lourde)"
+ },
+ {
+  "hanzi": "吉林",
+  "trad": "",
+  "pinyin": "Jílín",
+  "sens": "Jilin (province du nord-est, automobile et chimie)"
+ },
+ {
+  "hanzi": "黑龙江",
+  "trad": "黑龍江",
+  "pinyin": "Hēilóngjiāng",
+  "sens": "Heilongjiang (province septentrionale)"
+ },
+ {
+  "hanzi": "云南",
+  "trad": "雲南",
+  "pinyin": "Yúnnán",
+  "sens": "Yunnan (province frontalière du sud-ouest)"
+ },
+ {
+  "hanzi": "贵州",
+  "trad": "貴州",
+  "pinyin": "Guìzhōu",
+  "sens": "Guizhou (province du sud-ouest, mégadonnées et alcool)"
+ },
+ {
+  "hanzi": "海南",
+  "trad": "",
+  "pinyin": "Hǎinán",
+  "sens": "Hainan (province insulaire tropicale et port franc)"
+ },
+ {
+  "hanzi": "甘肃",
+  "trad": "甘肅",
+  "pinyin": "Gānsù",
+  "sens": "Gansu (province du couloir du Hexi)"
+ },
+ {
+  "hanzi": "青海",
+  "trad": "",
+  "pinyin": "Qīnghǎi",
+  "sens": "Qinghai (province du plateau tibétain)"
+ },
+ {
+  "hanzi": "新疆",
+  "trad": "",
+  "pinyin": "Xīnjiāng",
+  "sens": "Xinjiang (région autonome ouïghoure)"
+ },
+ {
+  "hanzi": "西藏",
+  "trad": "",
+  "pinyin": "Xīzàng",
+  "sens": "Tibet / Xizang (région autonome du plateau tibétain)"
+ },
+ {
+  "hanzi": "内蒙古",
+  "trad": "",
+  "pinyin": "Nèi Měnggǔ",
+  "sens": "Mongolie-Intérieure (région autonome)"
+ },
+ {
+  "hanzi": "广西",
+  "trad": "廣西",
+  "pinyin": "Guǎngxī",
+  "sens": "Guangxi (région autonome zhuang du sud)"
+ },
+ {
+  "hanzi": "宁夏",
+  "trad": "寧夏",
+  "pinyin": "Níngxià",
+  "sens": "Ningxia (région autonome hui)"
+ },
+ {
+  "hanzi": "台湾",
+  "trad": "臺灣",
+  "pinyin": "Táiwān",
+  "sens": "Taïwan (île et province insulaire)"
+ },
+ {
+  "hanzi": "长城",
+  "trad": "長城",
+  "pinyin": "Chángchéng",
+  "sens": "Grande Muraille de Chine"
+ },
+ {
+  "hanzi": "故宫",
+  "trad": "故宮",
+  "pinyin": "Gùgōng",
+  "sens": "Cité interdite (Palais impérial de Pékin)"
+ },
+ {
+  "hanzi": "天安门",
+  "trad": "天安門",
+  "pinyin": "Tiān'ānmén",
+  "sens": "Place Tiananmen (Pékin)"
+ },
+ {
+  "hanzi": "天坛",
+  "trad": "天壇",
+  "pinyin": "Tiāntán",
+  "sens": "Temple du Ciel (Pékin)"
+ },
+ {
+  "hanzi": "颐和园",
+  "trad": "頤和園",
+  "pinyin": "Yíhéyuán",
+  "sens": "Palais d'Été (Pékin)"
+ },
+ {
+  "hanzi": "兵马俑",
+  "trad": "兵馬俑",
+  "pinyin": "Bīngmǎyǒng",
+  "sens": "Guerriers et chevaux de terre cuite (Xi'an)"
+ },
+ {
+  "hanzi": "长江",
+  "trad": "長江",
+  "pinyin": "Chángjiāng",
+  "sens": "Fleuve Yangzi Jiang / Fleuve Bleu"
+ },
+ {
+  "hanzi": "黄河",
+  "trad": "黃河",
+  "pinyin": "Huánghé",
+  "sens": "Fleuve Jaune (berceau de la civilisation chinoise)"
+ },
+ {
+  "hanzi": "珠江",
+  "trad": "",
+  "pinyin": "Zhūjiāng",
+  "sens": "Rivière des Perles (delta du Guangdong)"
+ },
+ {
+  "hanzi": "淮河",
+  "trad": "",
+  "pinyin": "Huáihé",
+  "sens": "Rivière Huai (ligne de démarcation Nord/Sud)"
+ },
+ {
+  "hanzi": "泰山",
+  "trad": "",
+  "pinyin": "Tàishān",
+  "sens": "Mont Tai (montagne sacrée du Shandong)"
+ },
+ {
+  "hanzi": "黄山",
+  "trad": "黃山",
+  "pinyin": "Huángshān",
+  "sens": "Monts Huangshan (montagnes Jaunes de l'Anhui)"
+ },
+ {
+  "hanzi": "华山",
+  "trad": "華山",
+  "pinyin": "Huàshān",
+  "sens": "Mont Hua (montagne sacrée du Shaanxi)"
+ },
+ {
+  "hanzi": "恒山",
+  "trad": "",
+  "pinyin": "Héngshān",
+  "sens": "Mont Heng du Nord (Shanxi)"
+ },
+ {
+  "hanzi": "衡山",
+  "trad": "",
+  "pinyin": "Héngshān",
+  "sens": "Mont Heng du Sud (Hunan)"
+ },
+ {
+  "hanzi": "嵩山",
+  "trad": "",
+  "pinyin": "Sōngshān",
+  "sens": "Mont Song (Henan, temple Shaolin)"
+ },
+ {
+  "hanzi": "峨眉山",
+  "trad": "",
+  "pinyin": "Éméishān",
+  "sens": "Mont Emei (Sichuan, montagne sacrée bouddhique)"
+ },
+ {
+  "hanzi": "五台山",
+  "trad": "五臺山",
+  "pinyin": "Wǔtáishān",
+  "sens": "Mont Wutai (Shanxi, montagne sacrée bouddhique)"
+ },
+ {
+  "hanzi": "九华山",
+  "trad": "九華山",
+  "pinyin": "Jiǔhuáshān",
+  "sens": "Mont Jiuhua (Anhui, montagne sacrée bouddhique)"
+ },
+ {
+  "hanzi": "普陀山",
+  "trad": "",
+  "pinyin": "Pǔtuóshān",
+  "sens": "Mont Putuo (Zhejiang, montagne sacrée de Guanyin)"
+ },
+ {
+  "hanzi": "珠穆朗玛峰",
+  "trad": "珠穆朗瑪峰",
+  "pinyin": "Zhūmùlǎngmǎ Fēng",
+  "sens": "Mont Everest / Qomolangma"
+ },
+ {
+  "hanzi": "青藏高原",
+  "trad": "",
+  "pinyin": "Qīng-Zàng Gāoyuán",
+  "sens": "Plateau tibétain (toit du monde)"
+ },
+ {
+  "hanzi": "三峡大坝",
+  "trad": "三峽大壩",
+  "pinyin": "Sānxiá Dàbà",
+  "sens": "Barrage des Trois-Gorges (Hubei)"
+ },
+ {
+  "hanzi": "东方明珠",
+  "trad": "東方明珠",
+  "pinyin": "Dōngfāng Míngzhū",
+  "sens": "Tour Perle de l'Orient (Shanghai)"
+ },
+ {
+  "hanzi": "莫高窟",
+  "trad": "",
+  "pinyin": "Mògāo Kū",
+  "sens": "Grottes de Mogao (Dunhuang, Gansu)"
+ },
+ {
+  "hanzi": "布达拉宫",
+  "trad": "布達拉宮",
+  "pinyin": "Bùdálǎ Gōng",
+  "sens": "Palais du Potala (Lhassa, Tibet)"
+ },
+ {
+  "hanzi": "西湖",
+  "trad": "",
+  "pinyin": "Xī Hú",
+  "sens": "Lac de l'Ouest (Hangzhou)"
+ },
+ {
+  "hanzi": "华为",
+  "trad": "華為",
+  "pinyin": "Huáwèi",
+  "sens": "Huawei Technologies (télécoms, smartphones, cloud)"
+ },
+ {
+  "hanzi": "腾讯",
+  "trad": "騰訊",
+  "pinyin": "Téngxùn",
+  "sens": "Tencent Holdings (WeChat, jeux vidéo, fintech)"
+ },
+ {
+  "hanzi": "阿里巴巴",
+  "trad": "",
+  "pinyin": "Ālǐbābā",
+  "sens": "Alibaba Group (e-commerce, cloud, logistique)"
+ },
+ {
+  "hanzi": "字节跳动",
+  "trad": "字節跳動",
+  "pinyin": "Zìjié Tiàodòng",
+  "sens": "ByteDance (TikTok, Douyin)"
+ },
+ {
+  "hanzi": "小米",
+  "trad": "",
+  "pinyin": "Xiǎomǐ",
+  "sens": "Xiaomi Corporation (smartphones, IoT, véhicules électriques)"
+ },
+ {
+  "hanzi": "百度",
+  "trad": "",
+  "pinyin": "Bǎidù",
+  "sens": "Baidu (moteur de recherche, IA, conduite autonome)"
+ },
+ {
+  "hanzi": "美团",
+  "trad": "美團",
+  "pinyin": "Měituán",
+  "sens": "Meituan (livraison, services locaux, e-commerce)"
+ },
+ {
+  "hanzi": "京东",
+  "trad": "京東",
+  "pinyin": "Jīngdōng",
+  "sens": "JD.com (e-commerce, logistique intégrée)"
+ },
+ {
+  "hanzi": "拼多多",
+  "trad": "",
+  "pinyin": "Pīnduōduō",
+  "sens": "Pinduoduo / PDD Holdings (e-commerce, Temu)"
+ },
+ {
+  "hanzi": "网易",
+  "trad": "網易",
+  "pinyin": "WǎngYì",
+  "sens": "NetEase (jeux en ligne, services internet)"
+ },
+ {
+  "hanzi": "快手",
+  "trad": "",
+  "pinyin": "Kuàishǒu",
+  "sens": "Kuaishou (vidéos courtes et e-commerce)"
+ },
+ {
+  "hanzi": "哔哩哔哩",
+  "trad": "",
+  "pinyin": "Bīlībīlī",
+  "sens": "Bilibili (plateforme vidéo et animation)"
+ },
+ {
+  "hanzi": "大疆",
+  "trad": "",
+  "pinyin": "Dàjiāng",
+  "sens": "DJI Innovations (drones civils et stabilisateurs)"
+ },
+ {
+  "hanzi": "联想",
+  "trad": "聯想",
+  "pinyin": "Liánxiǎng",
+  "sens": "Lenovo Group (ordinateurs personnels, serveurs)"
+ },
+ {
+  "hanzi": "中芯国际",
+  "trad": "中芯國際",
+  "pinyin": "Zhōngxīn Guójì",
+  "sens": "SMIC (fonderie de semi-conducteurs chinoise)"
+ },
+ {
+  "hanzi": "台积电",
+  "trad": "台積電",
+  "pinyin": "Tái-Jī-Diàn",
+  "sens": "TSMC (leader mondial des semi-conducteurs)"
+ },
+ {
+  "hanzi": "京东方",
+  "trad": "京東方",
+  "pinyin": "Jīngdōngfāng",
+  "sens": "BOE Technology (écrans OLED et LCD)"
+ },
+ {
+  "hanzi": "比亚迪",
+  "trad": "比亞迪",
+  "pinyin": "Bǐyàdí",
+  "sens": "BYD Company (véhicules électriques et batteries)"
+ },
+ {
+  "hanzi": "宁德时代",
+  "trad": "寧德時代",
+  "pinyin": "Níngdé Shídài",
+  "sens": "CATL (leader mondial des batteries pour VE)"
+ },
+ {
+  "hanzi": "吉利",
+  "trad": "",
+  "pinyin": "Jílì",
+  "sens": "Geely Auto (groupe automobile, Volvo, Zeekr)"
+ },
+ {
+  "hanzi": "蔚来",
+  "trad": "蔚來",
+  "pinyin": "Wèilái",
+  "sens": "NIO (constructeur de véhicules électriques haut de gamme)"
+ },
+ {
+  "hanzi": "小鹏",
+  "trad": "小鵬",
+  "pinyin": "Xiǎopéng",
+  "sens": "XPeng Motors (véhicules électriques intelligents)"
+ },
+ {
+  "hanzi": "理想汽车",
+  "trad": "理想汽車",
+  "pinyin": "Lǐxiǎng Qìchē",
+  "sens": "Li Auto (véhicules hybrides et électriques)"
+ },
+ {
+  "hanzi": "长城汽车",
+  "trad": "長城汽車",
+  "pinyin": "Chángchéng Qìchē",
+  "sens": "Great Wall Motor / GWM (SUV et pick-up)"
+ },
+ {
+  "hanzi": "奇瑞",
+  "trad": "",
+  "pinyin": "Qíruì",
+  "sens": "Chery Automobile (constructeur et exportateur automobile)"
+ },
+ {
+  "hanzi": "上汽集团",
+  "trad": "上汽集團",
+  "pinyin": "Shàngqì Jítuán",
+  "sens": "SAIC Motor (premier groupe automobile chinois)"
+ },
+ {
+  "hanzi": "海尔",
+  "trad": "海爾",
+  "pinyin": "Hǎi'ěr",
+  "sens": "Haier Smart Home (électroménager mondial)"
+ },
+ {
+  "hanzi": "美的",
+  "trad": "",
+  "pinyin": "Měidì",
+  "sens": "Midea Group (électroménager, robotique KUKA)"
+ },
+ {
+  "hanzi": "格力",
+  "trad": "",
+  "pinyin": "Gèlì",
+  "sens": "Gree Electric (climatiseurs et équipement ménager)"
+ },
+ {
+  "hanzi": "富士康",
+  "trad": "",
+  "pinyin": "Fùshìkāng",
+  "sens": "Foxconn / Hon Hai Precision (assemblage électronique)"
+ },
+ {
+  "hanzi": "中国移动",
+  "trad": "中國移動",
+  "pinyin": "Zhōngguó Yídòng",
+  "sens": "China Mobile (premier opérateur télécom mondial)"
+ },
+ {
+  "hanzi": "中国电信",
+  "trad": "中國電信",
+  "pinyin": "Zhōngguó Diànxìn",
+  "sens": "China Telecom (opérateur de télécommunications)"
+ },
+ {
+  "hanzi": "中国联通",
+  "trad": "中國聯通",
+  "pinyin": "Zhōngguó Liántōng",
+  "sens": "China Unicom (opérateur télécom)"
+ },
+ {
+  "hanzi": "工商银行",
+  "trad": "工商銀行",
+  "pinyin": "Gōngshāng Yínháng",
+  "sens": "ICBC (Banque industrielle et commerciale de Chine)"
+ },
+ {
+  "hanzi": "建设银行",
+  "trad": "建設銀行",
+  "pinyin": "Jiànshè Yínháng",
+  "sens": "China Construction Bank / CCB"
+ },
+ {
+  "hanzi": "农业银行",
+  "trad": "農業銀行",
+  "pinyin": "Nóngyè Yínháng",
+  "sens": "Agricultural Bank of China / ABC"
+ },
+ {
+  "hanzi": "中国银行",
+  "trad": "中國銀行",
+  "pinyin": "Zhōngguó Yínháng",
+  "sens": "Bank of China / BOC"
+ },
+ {
+  "hanzi": "招商银行",
+  "trad": "招商銀行",
+  "pinyin": "Zhāoshāng Yínháng",
+  "sens": "China Merchants Bank / CMB"
+ },
+ {
+  "hanzi": "中国平安",
+  "trad": "中國平安",
+  "pinyin": "Zhōngguó Píng'ān",
+  "sens": "Ping An Insurance (groupe d'assurance et fintech)"
+ },
+ {
+  "hanzi": "中石化",
+  "trad": "",
+  "pinyin": "Zhōngshíhuà",
+  "sens": "Sinopec (groupe pétrochimique d'État)"
+ },
+ {
+  "hanzi": "中石油",
+  "trad": "",
+  "pinyin": "Zhōngshíyóu",
+  "sens": "PetroChina / CNPC (compagnie pétrolière nationale)"
+ },
+ {
+  "hanzi": "国家电网",
+  "trad": "國家電網",
+  "pinyin": "Guójiā Diànwǎng",
+  "sens": "State Grid Corporation of China (réseau électrique)"
+ },
+ {
+  "hanzi": "中国中车",
+  "trad": "中國中車",
+  "pinyin": "Zhōngguó Zhōngchē",
+  "sens": "CRRC (constructeur ferroviaire et TGV mondial)"
+ },
+ {
+  "hanzi": "中远海运",
+  "trad": "中遠海運",
+  "pinyin": "Zhōngyuǎn Hǎiyùn",
+  "sens": "COSCO Shipping (armateur et transport de conteneurs)"
+ },
+ {
+  "hanzi": "贵州茅台",
+  "trad": "貴州茅臺",
+  "pinyin": "Guìzhōu Máotái",
+  "sens": "Kweichow Moutai (spiritueux haut de gamme baijiu)"
+ },
+ {
+  "hanzi": "五粮液",
+  "trad": "五糧液",
+  "pinyin": "Wǔliángyè",
+  "sens": "Wuliangye (célèbre distillerie de baijiu)"
+ },
+ {
+  "hanzi": "青岛啤酒",
+  "trad": "青島啤酒",
+  "pinyin": "Qīngdǎo Píjiǔ",
+  "sens": "Bière Tsingtao (brasserie historique de Qingdao)"
+ },
+ {
+  "hanzi": "安踏",
+  "trad": "",
+  "pinyin": "Āntà",
+  "sens": "Anta Sports (équipements sportifs, Fila, Amer Sports)"
+ },
+ {
+  "hanzi": "李宁",
+  "trad": "李寧",
+  "pinyin": "Lǐ Níng",
+  "sens": "Li-Ning (marque d'articles de sport)"
+ },
+ {
+  "hanzi": "希音",
+  "trad": "",
+  "pinyin": "Xīyīn",
+  "sens": "Shein (géant mondial de la mode en ligne)"
+ },
+ {
+  "hanzi": "顺丰速运",
+  "trad": "順豐速運",
+  "pinyin": "Shùnfēng Sùyùn",
+  "sens": "SF Express (leader de la livraison express en Chine)"
+ },
+ {
+  "hanzi": "菜鸟网络",
+  "trad": "菜鳥網絡",
+  "pinyin": "Càiniǎo Wǎngluò",
+  "sens": "Cainiao Network (plateforme logistique mondiale d'Alibaba)"
+ },
+ {
+  "hanzi": "微信",
+  "trad": "",
+  "pinyin": "Wēixìn",
+  "sens": "WeChat (messagerie et écosystème mobile leader)"
+ },
+ {
+  "hanzi": "支付宝",
+  "trad": "支付寶",
+  "pinyin": "Zhīfùbǎo",
+  "sens": "Alipay (plateforme de paiement mobile leader)"
+ },
+ {
+  "hanzi": "淘宝",
+  "trad": "淘寶",
+  "pinyin": "Táobǎo",
+  "sens": "Taobao (plateforme d'e-commerce C2C leader)"
+ },
+ {
+  "hanzi": "天猫",
+  "trad": "天貓",
+  "pinyin": "Tiānmāo",
+  "sens": "Tmall (plateforme d'e-commerce B2C pour grandes marques)"
+ },
+ {
+  "hanzi": "小红书",
+  "trad": "",
+  "pinyin": "Xiǎohóngshū",
+  "sens": "Xiaohongshu / RED (réseau social et lifestyle)"
+ },
+ {
+  "hanzi": "抖音",
+  "trad": "",
+  "pinyin": "Dǒuyīn",
+  "sens": "Douyin (version chinoise de TikTok)"
+ },
+ {
+  "hanzi": "孔子",
+  "trad": "",
+  "pinyin": "Kǒngzǐ",
+  "sens": "Confucius (philosophe et éducateur fondateur de la pensée chinoise)"
+ },
+ {
+  "hanzi": "老子",
+  "trad": "",
+  "pinyin": "Lǎozǐ",
+  "sens": "Laozi / Lao-tseu (fondateur du taoïsme, auteur du Daodejing)"
+ },
+ {
+  "hanzi": "孙子",
+  "trad": "孫子",
+  "pinyin": "Sūnzǐ",
+  "sens": "Sunzi / Sun Tzu (stratège militaire, auteur de L'Art de la guerre)"
+ },
+ {
+  "hanzi": "孟子",
+  "trad": "",
+  "pinyin": "Mèngzǐ",
+  "sens": "Mencius (philosophe confucéen)"
+ },
+ {
+  "hanzi": "庄子",
+  "trad": "莊子",
+  "pinyin": "Zhuāngzǐ",
+  "sens": "Zhuangzi (grand penseur et maître taoïste)"
+ },
+ {
+  "hanzi": "司马迁",
+  "trad": "司馬遷",
+  "pinyin": "Sīmǎ Qiān",
+  "sens": "Sima Qian (père de l'historiographie chinoise, Shiji)"
+ },
+ {
+  "hanzi": "秦始皇",
+  "trad": "",
+  "pinyin": "Qín Shǐhuáng",
+  "sens": "Qin Shi Huang (premier empereur de Chine unifiée, dynastie Qin)"
+ },
+ {
+  "hanzi": "汉武帝",
+  "trad": "漢武帝",
+  "pinyin": "Hàn Wǔdì",
+  "sens": "Empereur Wu des Han (ouverture de la Route de la Soie)"
+ },
+ {
+  "hanzi": "唐太宗",
+  "trad": "",
+  "pinyin": "Táng Tàizōng",
+  "sens": "Empereur Taizong des Tang (âge d'or de la dynastie Tang)"
+ },
+ {
+  "hanzi": "武则天",
+  "trad": "武則天",
+  "pinyin": "Wǔ Zétiān",
+  "sens": "Wu Zetian (unique impératrice régnante de l'histoire chinoise)"
+ },
+ {
+  "hanzi": "康熙",
+  "trad": "",
+  "pinyin": "Kāngxī",
+  "sens": "Empereur Kangxi (dynastie Qing, plus long règne impérial)"
+ },
+ {
+  "hanzi": "乾隆",
+  "trad": "",
+  "pinyin": "Qiánlóng",
+  "sens": "Empereur Qianlong (dynastie Qing, expansion de l'empire)"
+ },
+ {
+  "hanzi": "孙中山",
+  "trad": "孫中山",
+  "pinyin": "Sūn Zhōngshān",
+  "sens": "Sun Yat-sen (père de la République de Chine)"
+ },
+ {
+  "hanzi": "毛泽东",
+  "trad": "毛澤東",
+  "pinyin": "Máo Zédōng",
+  "sens": "Mao Zedong (fondateur de la République populaire de Chine)"
+ },
+ {
+  "hanzi": "周恩来",
+  "trad": "周恩來",
+  "pinyin": "Zhōu Ēnlái",
+  "sens": "Zhou Enlai (premier Premier ministre de la RPC, diplomate)"
+ },
+ {
+  "hanzi": "邓小平",
+  "trad": "鄧小平",
+  "pinyin": "Dèng Xiǎopíng",
+  "sens": "Deng Xiaoping (artisan des réformes et de l'ouverture économique)"
+ },
+ {
+  "hanzi": "习近平",
+  "trad": "習近平",
+  "pinyin": "Xí Jìnpíng",
+  "sens": "Xi Jinping (président de la République populaire de Chine)"
+ },
+ {
+  "hanzi": "李强",
+  "trad": "李強",
+  "pinyin": "Lǐ Qiáng",
+  "sens": "Li Qiang (Premier ministre de la RPC)"
+ },
+ {
+  "hanzi": "李白",
+  "trad": "",
+  "pinyin": "Lǐ Bái",
+  "sens": "Li Bai / Li Po (illustre poète romantique de la dynastie Tang)"
+ },
+ {
+  "hanzi": "杜甫",
+  "trad": "",
+  "pinyin": "Dù Fǔ",
+  "sens": "Du Fu (grand poète réaliste de la dynastie Tang)"
+ },
+ {
+  "hanzi": "苏轼",
+  "trad": "蘇軾",
+  "pinyin": "Sū Shì",
+  "sens": "Su Dongpo / Su Shi (maître de la littérature et de la poésie Song)"
+ },
+ {
+  "hanzi": "鲁迅",
+  "trad": "魯迅",
+  "pinyin": "Lǔ Xùn",
+  "sens": "Lu Xun (père de la littérature chinoise moderne)"
+ },
+ {
+  "hanzi": "莫言",
+  "trad": "",
+  "pinyin": "Mò Yán",
+  "sens": "Mo Yan (écrivain, prix Nobel de littérature 2012)"
+ },
+ {
+  "hanzi": "刘慈欣",
+  "trad": "劉慈欣",
+  "pinyin": "Liú Cíxīn",
+  "sens": "Liu Cixin (auteur de science-fiction, Le Problème à trois corps)"
+ },
+ {
+  "hanzi": "马云",
+  "trad": "馬雲",
+  "pinyin": "Mǎ Yún",
+  "sens": "Jack Ma (fondateur d'Alibaba Group)"
+ },
+ {
+  "hanzi": "马化腾",
+  "trad": "馬化騰",
+  "pinyin": "Mǎ Huàténg",
+  "sens": "Pony Ma (fondateur et président de Tencent)"
+ },
+ {
+  "hanzi": "任正非",
+  "trad": "",
+  "pinyin": "Rén Zhèngfēi",
+  "sens": "Ren Zhengfei (fondateur et PDG de Huawei)"
+ },
+ {
+  "hanzi": "雷军",
+  "trad": "雷軍",
+  "pinyin": "Léi Jūn",
+  "sens": "Lei Jun (fondateur et PDG de Xiaomi)"
+ },
+ {
+  "hanzi": "王传福",
+  "trad": "王傳福",
+  "pinyin": "Wáng Chuánfú",
+  "sens": "Wang Chuanfu (fondateur et président de BYD)"
+ },
+ {
+  "hanzi": "张一鸣",
+  "trad": "張一鳴",
+  "pinyin": "Zhāng Yīmíng",
+  "sens": "Zhang Yiming (fondateur de ByteDance / TikTok)"
+ },
+ {
+  "hanzi": "合同",
+  "trad": "",
+  "pinyin": "hétong",
+  "sens": "contrat officiel"
+ },
+ {
+  "hanzi": "协议",
+  "trad": "協議",
+  "pinyin": "xiéyì",
+  "sens": "accord, convention, protocole"
+ },
+ {
+  "hanzi": "采购",
+  "trad": "採購",
+  "pinyin": "cǎigòu",
+  "sens": "achats, approvisionnement"
+ },
+ {
+  "hanzi": "订单",
+  "trad": "訂單",
+  "pinyin": "dìngdān",
+  "sens": "bon de commande, commande"
+ },
+ {
+  "hanzi": "报价单",
+  "trad": "報價單",
+  "pinyin": "bàojiàdān",
+  "sens": "devis, offre de prix, cotation"
+ },
+ {
+  "hanzi": "发票",
+  "trad": "發票",
+  "pinyin": "fāpiào",
+  "sens": "facture officielle fiscale chinoise"
+ },
+ {
+  "hanzi": "形式发票",
+  "trad": "",
+  "pinyin": "xíngshì fāpiào",
+  "sens": "facture pro forma"
+ },
+ {
+  "hanzi": "装箱单",
+  "trad": "裝箱單",
+  "pinyin": "zhuāngxiāngdān",
+  "sens": "liste de colisage (packing list)"
+ },
+ {
+  "hanzi": "提单",
+  "trad": "提單",
+  "pinyin": "tídān",
+  "sens": "connaissement maritime (Bill of Lading / B/L)"
+ },
+ {
+  "hanzi": "原产地证书",
+  "trad": "原產地證書",
+  "pinyin": "yuánchǎndì zhèngshū",
+  "sens": "certificat d'origine"
+ },
+ {
+  "hanzi": "信用证",
+  "trad": "信用證",
+  "pinyin": "xìnyòngzhèng",
+  "sens": "lettre de crédit bancaire (L/C)"
+ },
+ {
+  "hanzi": "电汇",
+  "trad": "電匯",
+  "pinyin": "diànhuì",
+  "sens": "virement télégraphique / bancaire (T/T)"
+ },
+ {
+  "hanzi": "定金",
+  "trad": "",
+  "pinyin": "dìngjīn",
+  "sens": "acompte, arrhes de réservation"
+ },
+ {
+  "hanzi": "尾款",
+  "trad": "",
+  "pinyin": "wěikuǎn",
+  "sens": "solde final de paiement"
+ },
+ {
+  "hanzi": "单价",
+  "trad": "單價",
+  "pinyin": "dānjià",
+  "sens": "prix unitaire"
+ },
+ {
+  "hanzi": "总额",
+  "trad": "總額",
+  "pinyin": "zǒng'é",
+  "sens": "montant total, somme globale"
+ },
+ {
+  "hanzi": "含税",
+  "trad": "",
+  "pinyin": "hánshuì",
+  "sens": "toutes taxes comprises (TTC)"
+ },
+ {
+  "hanzi": "不含税",
+  "trad": "",
+  "pinyin": "bù hánshuì",
+  "sens": "hors taxes (HT)"
+ },
+ {
+  "hanzi": "汇率",
+  "trad": "匯率",
+  "pinyin": "huìlǜ",
+  "sens": "taux de change monétaire"
+ },
+ {
+  "hanzi": "人民币",
+  "trad": "人民幣",
+  "pinyin": "rénmínbì",
+  "sens": "monnaie chinoise (RMB / Yuan)"
+ },
+ {
+  "hanzi": "美元",
+  "trad": "",
+  "pinyin": "měiyuán",
+  "sens": "dollar américain (USD)"
+ },
+ {
+  "hanzi": "欧元",
+  "trad": "歐元",
+  "pinyin": "ōuyuán",
+  "sens": "euro (EUR)"
+ },
+ {
+  "hanzi": "样品",
+  "trad": "樣品",
+  "pinyin": "yàngpǐn",
+  "sens": "échantillon de produit"
+ },
+ {
+  "hanzi": "打样",
+  "trad": "打樣",
+  "pinyin": "dǎyàng",
+  "sens": "prototypage, réalisation d'échantillons"
+ },
+ {
+  "hanzi": "模具",
+  "trad": "",
+  "pinyin": "mújù",
+  "sens": "moule industriel, matrice"
+ },
+ {
+  "hanzi": "生产线",
+  "trad": "生產線",
+  "pinyin": "shēngchǎnxiàn",
+  "sens": "ligne de production / d'assemblage"
+ },
+ {
+  "hanzi": "工厂",
+  "trad": "工廠",
+  "pinyin": "gōngchǎng",
+  "sens": "usine, manufacture"
+ },
+ {
+  "hanzi": "交期",
+  "trad": "",
+  "pinyin": "jiāoqī",
+  "sens": "délai de livraison, date d'échéance"
+ },
+ {
+  "hanzi": "交货期",
+  "trad": "交貨期",
+  "pinyin": "jiāohuòqī",
+  "sens": "délai de livraison de la marchandise"
+ },
+ {
+  "hanzi": "起订量",
+  "trad": "起訂量",
+  "pinyin": "qǐdìngliàng",
+  "sens": "quantité minimale de commande (MOQ)"
+ },
+ {
+  "hanzi": "规格",
+  "trad": "規格",
+  "pinyin": "guīgé",
+  "sens": "spécifications techniques, gabarit"
+ },
+ {
+  "hanzi": "原材料",
+  "trad": "",
+  "pinyin": "yuáncáiliào",
+  "sens": "matières premières"
+ },
+ {
+  "hanzi": "质量控制",
+  "trad": "質量控制",
+  "pinyin": "zhìliàng kòngzhì",
+  "sens": "contrôle qualité (QC)"
+ },
+ {
+  "hanzi": "品质",
+  "trad": "品質",
+  "pinyin": "pǐnzhì",
+  "sens": "qualité d'un produit ou d'un matériau"
+ },
+ {
+  "hanzi": "不良率",
+  "trad": "",
+  "pinyin": "bùliánglǜ",
+  "sens": "taux de rebut, taux de défectuosité"
+ },
+ {
+  "hanzi": "检验报告",
+  "trad": "檢驗報告",
+  "pinyin": "jiǎnyàn bàogào",
+  "sens": "rapport d'inspection / de test"
+ },
+ {
+  "hanzi": "出货检验",
+  "trad": "出貨檢驗",
+  "pinyin": "chūhuò jiǎnyàn",
+  "sens": "inspection avant expédition"
+ },
+ {
+  "hanzi": "海运",
+  "trad": "海運",
+  "pinyin": "hǎiyùn",
+  "sens": "transport maritime, fret maritime"
+ },
+ {
+  "hanzi": "空运",
+  "trad": "空運",
+  "pinyin": "kōngyùn",
+  "sens": "transport aérien, fret aérien"
+ },
+ {
+  "hanzi": "清关",
+  "trad": "清關",
+  "pinyin": "qīngguān",
+  "sens": "dédouanement à l'arrivée"
+ },
+ {
+  "hanzi": "报关",
+  "trad": "報關",
+  "pinyin": "bàoguān",
+  "sens": "déclaration en douane"
+ },
+ {
+  "hanzi": "关税",
+  "trad": "關稅",
+  "pinyin": "guānshuì",
+  "sens": "droits de douane, tarif douanier"
+ },
+ {
+  "hanzi": "集装箱",
+  "trad": "集裝箱",
+  "pinyin": "jízhuāngxiāng",
+  "sens": "conteneur maritime"
+ },
+ {
+  "hanzi": "整箱",
+  "trad": "",
+  "pinyin": "zhěngxiāng",
+  "sens": "conteneur complet (FCL)"
+ },
+ {
+  "hanzi": "拼箱",
+  "trad": "",
+  "pinyin": "pīnxiāng",
+  "sens": "groupage de conteneur (LCL)"
+ },
+ {
+  "hanzi": "仓储",
+  "trad": "倉儲",
+  "pinyin": "cāngchǔ",
+  "sens": "entreposage, stockage"
+ },
+ {
+  "hanzi": "供应链",
+  "trad": "供應鏈",
+  "pinyin": "gōngyìngliàn",
+  "sens": "chaîne d'approvisionnement (supply chain)"
+ },
+ {
+  "hanzi": "离岸价",
+  "trad": "離岸價",
+  "pinyin": "lí'ànjià",
+  "sens": "prix FOB (franco à bord)"
+ },
+ {
+  "hanzi": "到岸价",
+  "trad": "到岸價",
+  "pinyin": "dào'ànjià",
+  "sens": "prix CIF (coût, assurance et fret)"
+ },
+ {
+  "hanzi": "出厂价",
+  "trad": "出廠價",
+  "pinyin": "chūchǎngjià",
+  "sens": "prix départ usine (EXW)"
+ },
+ {
+  "hanzi": "商标",
+  "trad": "商標",
+  "pinyin": "shāngbiāo",
+  "sens": "marque commerciale déposée"
+ },
+ {
+  "hanzi": "专利",
+  "trad": "專利",
+  "pinyin": "zhuānlì",
+  "sens": "brevet d'invention ou modèle"
+ },
+ {
+  "hanzi": "版权",
+  "trad": "版權",
+  "pinyin": "bǎnquán",
+  "sens": "droit d'auteur, copyright"
+ },
+ {
+  "hanzi": "保密协议",
+  "trad": "保密協議",
+  "pinyin": "bǎomì xiéyì",
+  "sens": "accord de non-divulgation / confidentialité (NDA)"
+ },
+ {
+  "hanzi": "违约金",
+  "trad": "違約金",
+  "pinyin": "wéiyuējīn",
+  "sens": "indemnité de rupture / pénalité contractuelle"
+ },
+ {
+  "hanzi": "不可抗力",
+  "trad": "",
+  "pinyin": "bùkěkànglì",
+  "sens": "force majeure (clause contractuelle)"
+ },
+ {
+  "hanzi": "仲裁",
+  "trad": "",
+  "pinyin": "zhòngcái",
+  "sens": "arbitrage commercial"
+ },
+ {
+  "hanzi": "客户",
+  "trad": "客戶",
+  "pinyin": "kèhù",
+  "sens": "client, compte commercial"
+ },
+ {
+  "hanzi": "供应商",
+  "trad": "供應商",
+  "pinyin": "gōngyìngshāng",
+  "sens": "fournisseur officiel"
+ },
+ {
+  "hanzi": "合作伙伴",
+  "trad": "合作夥伴",
+  "pinyin": "hézuò huǒbàn",
+  "sens": "partenaire commercial ou stratégique"
+ },
+ {
+  "hanzi": "代理商",
+  "trad": "",
+  "pinyin": "dàilǐshāng",
+  "sens": "agent commercial, distributeur agréé"
+ },
+ {
+  "hanzi": "董事长",
+  "trad": "董事長",
+  "pinyin": "dǒngshìzhǎng",
+  "sens": "président du conseil d'administration"
+ },
+ {
+  "hanzi": "总经理",
+  "trad": "總經理",
+  "pinyin": "zǒngjīnglǐ",
+  "sens": "directeur général (DG / CEO)"
+ },
+ {
+  "hanzi": "经理",
+  "trad": "經理",
+  "pinyin": "jīnglǐ",
+  "sens": "directeur, manager, responsable"
+ },
+ {
+  "hanzi": "工程师",
+  "trad": "工程師",
+  "pinyin": "gōngchéngshī",
+  "sens": "ingénieur qualifié"
+ },
+ {
+  "hanzi": "车间主任",
+  "trad": "車間主任",
+  "pinyin": "chējiān zhǔrèn",
+  "sens": "chef d'atelier de fabrication"
+ },
+ {
+  "hanzi": "谈判",
+  "trad": "談判",
+  "pinyin": "tánpàn",
+  "sens": "négociation commerciale"
+ },
+ {
+  "hanzi": "让步",
+  "trad": "讓步",
+  "pinyin": "ràngbù",
+  "sens": "concession, compromis"
+ },
+ {
+  "hanzi": "折扣",
+  "trad": "",
+  "pinyin": "zhékòu",
+  "sens": "remise commerciale, rabais"
+ },
+ {
+  "hanzi": "退款",
+  "trad": "",
+  "pinyin": "tuìkuǎn",
+  "sens": "remboursement, avoir financier"
+ },
+ {
+  "hanzi": "保修期",
+  "trad": "",
+  "pinyin": "bǎoxiūqī",
+  "sens": "période de garantie contractuelle"
+ },
+ {
+  "hanzi": "售后服务",
+  "trad": "售後服務",
+  "pinyin": "shòuhòu fúwù",
+  "sens": "service après-vente (SAV)"
+ },
+ {
+  "hanzi": "关系",
+  "trad": "關係",
+  "pinyin": "guānxi",
+  "sens": "réseau de relations interpersonnelles"
+ },
+ {
+  "hanzi": "面子",
+  "trad": "",
+  "pinyin": "miànzi",
+  "sens": "prestige personnel, réputation, 'la face'"
+ },
+ {
+  "hanzi": "客气",
+  "trad": "客氣",
+  "pinyin": "kèqi",
+  "sens": "poli, courtois, cérémonieux"
+ },
+ {
+  "hanzi": "你好",
+  "trad": "",
+  "pinyin": "nǐ hǎo",
+  "sens": "bonjour, salut"
+ },
+ {
+  "hanzi": "谢谢",
+  "trad": "謝謝",
+  "pinyin": "xièxie",
+  "sens": "merci beaucoup"
+ },
+ {
+  "hanzi": "不客气",
+  "trad": "不客氣",
+  "pinyin": "bú kèqi",
+  "sens": "de rien, je vous en prie"
+ },
+ {
+  "hanzi": "再见",
+  "trad": "再見",
+  "pinyin": "zàijiàn",
+  "sens": "au revoir"
+ },
+ {
+  "hanzi": "对不起",
+  "trad": "對不起",
+  "pinyin": "duìbuqǐ",
+  "sens": "pardon, désolé, excusez-moi"
+ },
+ {
+  "hanzi": "没关系",
+  "trad": "沒關係",
+  "pinyin": "méi guānxi",
+  "sens": "ce n'est rien, sans importance"
+ },
+ {
+  "hanzi": "请问",
+  "trad": "請問",
+  "pinyin": "qǐngwèn",
+  "sens": "puis-je vous demander, s'il vous plaît"
+ },
+ {
+  "hanzi": "没问题",
+  "trad": "沒問題",
+  "pinyin": "méi wèntí",
+  "sens": "pas de problème, aucun souci"
+ },
+ {
+  "hanzi": "加油",
+  "trad": "",
+  "pinyin": "jiāyóu",
+  "sens": "courage !, allez !, persévérez !"
+ },
+ {
+  "hanzi": "干杯",
+  "trad": "乾杯",
+  "pinyin": "gānbēi",
+  "sens": "cul sec !, santé ! (toast)"
+ },
+ {
+  "hanzi": "恭喜",
+  "trad": "",
+  "pinyin": "gōngxǐ",
+  "sens": "félicitations, tous mes vœux"
+ },
+ {
+  "hanzi": "春节",
+  "trad": "春節",
+  "pinyin": "Chūnjié",
+  "sens": "Fête du printemps (Nouvel An chinois)"
+ },
+ {
+  "hanzi": "中秋节",
+  "trad": "中秋節",
+  "pinyin": "Zhōngqiūjié",
+  "sens": "Fête de la mi-automne"
+ },
+ {
+  "hanzi": "端午节",
+  "trad": "端午節",
+  "pinyin": "Duānwǔjié",
+  "sens": "Fête des bateaux-dragons"
+ },
+ {
+  "hanzi": "国庆节",
+  "trad": "國慶節",
+  "pinyin": "Guóqìngjié",
+  "sens": "Fête nationale chinoise (1er octobre)"
+ },
+ {
+  "hanzi": "清明节",
+  "trad": "清明節",
+  "pinyin": "Qīngmíngjié",
+  "sens": "Fête de Qingming (hommage aux ancêtres)"
+ },
+ {
+  "hanzi": "红包",
+  "trad": "紅包",
+  "pinyin": "hóngbāo",
+  "sens": "enveloppe rouge avec étrennes monétaires"
+ },
+ {
+  "hanzi": "功夫",
+  "trad": "",
+  "pinyin": "gōngfu",
+  "sens": "kung-fu, art martial traditionnel"
+ },
+ {
+  "hanzi": "太极拳",
+  "trad": "太極拳",
+  "pinyin": "tàijíquán",
+  "sens": "tai-chi-chuan, gymnastique énergétique"
+ },
+ {
+  "hanzi": "风水",
+  "trad": "風水",
+  "pinyin": "fēngshuǐ",
+  "sens": "feng shui (art d'harmonisation spatiale)"
+ },
+ {
+  "hanzi": "阴阳",
+  "trad": "陰陽",
+  "pinyin": "yīnyáng",
+  "sens": "yin et yang (dualité fondamentale)"
+ },
+ {
+  "hanzi": "道",
+  "trad": "",
+  "pinyin": "dào",
+  "sens": "la Voie, le Principe suprême (taoïsme)"
+ },
+ {
+  "hanzi": "气",
+  "trad": "氣",
+  "pinyin": "qì",
+  "sens": "énergie vitale, souffle vital (MTC)"
+ },
+ {
+  "hanzi": "中医",
+  "trad": "中醫",
+  "pinyin": "zhōngyī",
+  "sens": "médecine traditionnelle chinoise (MTC)"
+ },
+ {
+  "hanzi": "针灸",
+  "trad": "針灸",
+  "pinyin": "zhēnjiǔ",
+  "sens": "acupuncture et moxibustion"
+ },
+ {
+  "hanzi": "普通话",
+  "trad": "普通話",
+  "pinyin": "Pǔtōnghuà",
+  "sens": "mandarin standard national"
+ },
+ {
+  "hanzi": "汉字",
+  "trad": "漢字",
+  "pinyin": "hànzì",
+  "sens": "sinogramme, caractère d'écriture chinoise"
+ },
+ {
+  "hanzi": "拼音",
+  "trad": "",
+  "pinyin": "pīnyīn",
+  "sens": "pinyin (romanisation phonétique officielle)"
+ },
+ {
+  "hanzi": "中文",
+  "trad": "",
+  "pinyin": "Zhōngwén",
+  "sens": "langue chinoise écrite et parlée"
+ },
+ {
+  "hanzi": "汉语",
+  "trad": "漢語",
+  "pinyin": "Hànyǔ",
+  "sens": "langue chinoise des Hans"
+ },
+ {
+  "hanzi": "饺子",
+  "trad": "餃子",
+  "pinyin": "jiǎozi",
+  "sens": "raviolis traditionnels du nord"
+ },
+ {
+  "hanzi": "包子",
+  "trad": "",
+  "pinyin": "bāozi",
+  "sens": "brioche farcie cuite à la vapeur"
+ },
+ {
+  "hanzi": "火锅",
+  "trad": "火鍋",
+  "pinyin": "huǒguō",
+  "sens": "fondue chinoise traditionnelle"
+ },
+ {
+  "hanzi": "北京烤鸭",
+  "trad": "北京烤鴨",
+  "pinyin": "Běijīng kǎoyā",
+  "sens": "canard laqué de Pékin"
+ },
+ {
+  "hanzi": "麻婆豆腐",
+  "trad": "",
+  "pinyin": "mápó dòufu",
+  "sens": "tofu épicé au porc du Sichuan"
+ },
+ {
+  "hanzi": "茶",
+  "trad": "",
+  "pinyin": "chá",
+  "sens": "thé chinois (vert, noir, oolong, pu'er)"
+ },
+ {
+  "hanzi": "白酒",
+  "trad": "",
+  "pinyin": "báijiǔ",
+  "sens": "eau-de-vie traditionnelle de céréales"
+ },
+ {
+  "hanzi": "筷子",
+  "trad": "",
+  "pinyin": "kuàizi",
+  "sens": "baguettes pour manger"
+ },
+ {
+  "hanzi": "老师",
+  "trad": "老師",
+  "pinyin": "lǎoshī",
+  "sens": "enseignant, maître, professeur"
+ },
+ {
+  "hanzi": "老板",
+  "trad": "老闆",
+  "pinyin": "lǎobǎn",
+  "sens": "patron, dirigeant d'entreprise"
+ },
+ {
+  "hanzi": "师傅",
+  "trad": "師傅",
+  "pinyin": "shīfu",
+  "sens": "maître artisan, chauffeur, professionnel"
+ },
+ {
+  "hanzi": "朋友",
+  "trad": "",
+  "pinyin": "péngyou",
+  "sens": "ami, camarade"
+ },
+ {
+  "hanzi": "同事",
+  "trad": "",
+  "pinyin": "tóngshì",
+  "sens": "collègue de travail"
+ },
+ {
+  "hanzi": "高铁",
+  "trad": "高鐵",
+  "pinyin": "gāotiě",
+  "sens": "train à grande vitesse chinois (TGV / CRH)"
+ },
+ {
+  "hanzi": "动车",
+  "trad": "動車",
+  "pinyin": "dòngchē",
+  "sens": "train rapide interurbain"
+ },
+ {
+  "hanzi": "磁悬浮",
+  "trad": "磁懸浮",
+  "pinyin": "cíxuánfú",
+  "sens": "train à sustentation magnétique (Maglev)"
+ },
+ {
+  "hanzi": "首都机场",
+  "trad": "首都機場",
+  "pinyin": "Shǒudū Jīchǎng",
+  "sens": "Aéroport international de Pékin-Capitale"
+ },
+ {
+  "hanzi": "大兴机场",
+  "trad": "大興機場",
+  "pinyin": "Dàxīng Jīchǎng",
+  "sens": "Aéroport international de Pékin-Daxing"
+ },
+ {
+  "hanzi": "浦东机场",
+  "trad": "浦東機場",
+  "pinyin": "Pǔdōng Jīchǎng",
+  "sens": "Aéroport international de Shanghai-Pudong"
+ },
+ {
+  "hanzi": "虹桥机场",
+  "trad": "虹橋機場",
+  "pinyin": "Hóngqiáo Jīchǎng",
+  "sens": "Aéroport international de Shanghai-Hongqiao"
+ },
+ {
+  "hanzi": "白云机场",
+  "trad": "白雲機場",
+  "pinyin": "Báiyún Jīchǎng",
+  "sens": "Aéroport international de Canton-Baiyun"
+ },
+ {
+  "hanzi": "宝安机场",
+  "trad": "寶安機場",
+  "pinyin": "Bǎo'ān Jīchǎng",
+  "sens": "Aéroport international de Shenzhen-Bao'an"
+ },
+ {
+  "hanzi": "洋山港",
+  "trad": "",
+  "pinyin": "Yángshān Gǎng",
+  "sens": "Port en eau profonde de Yangshan (Shanghai)"
+ },
+ {
+  "hanzi": "盐田港",
+  "trad": "鹽田港",
+  "pinyin": "Yántián Gǎng",
+  "sens": "Port de conteneurs de Yantian (Shenzhen)"
+ },
+ {
+  "hanzi": "港珠澳大桥",
+  "trad": "港珠澳大橋",
+  "pinyin": "Gǎng-Zhū-Ào Dàqiáo",
+  "sens": "Pont maritime Hong Kong-Zhuhai-Macao"
+ },
+ {
+  "hanzi": "南水北调",
+  "trad": "南水北調",
+  "pinyin": "Nánshuǐ Běidiào",
+  "sens": "Grand projet de dérivation des eaux Sud-Nord"
+ },
+ {
+  "hanzi": "西气东输",
+  "trad": "西氣東輸",
+  "pinyin": "Xīqì Dōngshū",
+  "sens": "Gazoducs Ouest-Est de transport énergétique"
+ },
+ {
+  "hanzi": "一带一路",
+  "trad": "一帶一路",
+  "pinyin": "Yīdài Yīlù",
+  "sens": "Initiative 'la Ceinture et la Route' (Nouvelles routes de la soie)"
+ },
+ {
+  "hanzi": "人工智能",
+  "trad": "",
+  "pinyin": "réngōng zhìnéng",
+  "sens": "intelligence artificielle (IA)"
+ },
+ {
+  "hanzi": "大模型",
+  "trad": "",
+  "pinyin": "dà móxíng",
+  "sens": "grand modèle de langage / modèle d'IA (LLM)"
+ },
+ {
+  "hanzi": "机器学习",
+  "trad": "機器學習",
+  "pinyin": "jīqì xuéxí",
+  "sens": "apprentissage automatique (machine learning)"
+ },
+ {
+  "hanzi": "深度学习",
+  "trad": "深度學習",
+  "pinyin": "shēndù xuéxí",
+  "sens": "apprentissage profond (deep learning)"
+ },
+ {
+  "hanzi": "芯片",
+  "trad": "",
+  "pinyin": "xīnpiàn",
+  "sens": "puce électronique, circuit intégré (chip)"
+ },
+ {
+  "hanzi": "半导体",
+  "trad": "半導體",
+  "pinyin": "bàndǎotǐ",
+  "sens": "semi-conducteur"
+ },
+ {
+  "hanzi": "光刻机",
+  "trad": "光刻機",
+  "pinyin": "guāngkèjī",
+  "sens": "machine de lithographie pour puces (DUV/EUV)"
+ },
+ {
+  "hanzi": "晶圆",
+  "trad": "晶圓",
+  "pinyin": "jīngyuán",
+  "sens": "wafer de silicium, tranche de semi-conducteur"
+ },
+ {
+  "hanzi": "光伏",
+  "trad": "",
+  "pinyin": "guāngfú",
+  "sens": "énergie solaire photovoltaïque"
+ },
+ {
+  "hanzi": "储能",
+  "trad": "儲能",
+  "pinyin": "chǔnéng",
+  "sens": "stockage d'énergie par batteries"
+ },
+ {
+  "hanzi": "新能源",
+  "trad": "",
+  "pinyin": "xīn néngyuán",
+  "sens": "énergies nouvelles, technologies vertes"
+ },
+ {
+  "hanzi": "电动汽车",
+  "trad": "電動汽車",
+  "pinyin": "diàndòng qìchē",
+  "sens": "véhicule électrique (VE)"
+ },
+ {
+  "hanzi": "动力电池",
+  "trad": "動力電池",
+  "pinyin": "dònglì diànchí",
+  "sens": "batterie de traction pour véhicules électriques"
+ },
+ {
+  "hanzi": "自动驾驶",
+  "trad": "自動駕駛",
+  "pinyin": "zìdòng jiàshǐ",
+  "sens": "conduite autonome, véhicule autonome"
+ },
+ {
+  "hanzi": "云计算",
+  "trad": "雲計算",
+  "pinyin": "yúnsuàn",
+  "sens": "informatique en nuage (cloud computing)"
+ },
+ {
+  "hanzi": "大数据",
+  "trad": "大數據",
+  "pinyin": "dàshùjù",
+  "sens": "mégadonnées (big data)"
+ },
+ {
+  "hanzi": "物联网",
+  "trad": "物聯網",
+  "pinyin": "wùliánwǎng",
+  "sens": "Internet des objets (IoT)"
+ },
+ {
+  "hanzi": "量子计算",
+  "trad": "量子計算",
+  "pinyin": "liàngzǐ jìsuàn",
+  "sens": "calcul et informatique quantique"
+ },
+ {
+  "hanzi": "夏朝",
+  "trad": "",
+  "pinyin": "Xià Cháo",
+  "sens": "dynastie Xia (première dynastie légendaire)"
+ },
+ {
+  "hanzi": "商朝",
+  "trad": "",
+  "pinyin": "Shāng Cháo",
+  "sens": "dynastie Shang (première dynastie historique)"
+ },
+ {
+  "hanzi": "周朝",
+  "trad": "",
+  "pinyin": "Zhōu Cháo",
+  "sens": "dynastie Zhou (Zhou occidentaux et orientaux)"
+ },
+ {
+  "hanzi": "春秋",
+  "trad": "",
+  "pinyin": "Chūnqiū",
+  "sens": "Période des Printemps et Automnes"
+ },
+ {
+  "hanzi": "战国",
+  "trad": "戰國",
+  "pinyin": "Zhànguó",
+  "sens": "Période des Royaumes combattants"
+ },
+ {
+  "hanzi": "秦朝",
+  "trad": "",
+  "pinyin": "Qín Cháo",
+  "sens": "dynastie Qin (unification de l'empire)"
+ },
+ {
+  "hanzi": "汉朝",
+  "trad": "漢朝",
+  "pinyin": "Hàn Cháo",
+  "sens": "dynastie Han (âge d'or impérial antique)"
+ },
+ {
+  "hanzi": "三国",
+  "trad": "三國",
+  "pinyin": "Sānguó",
+  "sens": "Période des Trois Royaumes (Wei, Shu, Wu)"
+ },
+ {
+  "hanzi": "唐朝",
+  "trad": "",
+  "pinyin": "Táng Cháo",
+  "sens": "dynastie Tang (apogée cosmopolite et poétique)"
+ },
+ {
+  "hanzi": "宋朝",
+  "trad": "",
+  "pinyin": "Sòng Cháo",
+  "sens": "dynastie Song (renaissance culturelle et scientifique)"
+ },
+ {
+  "hanzi": "元朝",
+  "trad": "",
+  "pinyin": "Yuán Cháo",
+  "sens": "dynastie Yuan (dynastie mongole, Kubilai Khan)"
+ },
+ {
+  "hanzi": "明朝",
+  "trad": "",
+  "pinyin": "Míng Cháo",
+  "sens": "dynastie Ming (construction de la Cité interdite)"
+ },
+ {
+  "hanzi": "清朝",
+  "trad": "",
+  "pinyin": "Qīng Cháo",
+  "sens": "dynastie Qing (dernière dynastie impériale mandchoue)"
+ },
+ {
+  "hanzi": "中华民国",
+  "trad": "中華民國",
+  "pinyin": "Zhōnghuá Mínguó",
+  "sens": "République de Chine (1912-1949, Taïwan)"
+ },
+ {
+  "hanzi": "中华人民共和国",
+  "trad": "中華人民共和國",
+  "pinyin": "Zhōnghuá Rénmín Gònghéguó",
+  "sens": "République populaire de Chine (RPC, 1949)"
+ },
+ {
+  "hanzi": "王",
+  "trad": "",
+  "pinyin": "Wáng",
+  "sens": "patronyme Wang (premier nom le plus porté en Chine)"
+ },
+ {
+  "hanzi": "李",
+  "trad": "",
+  "pinyin": "Lǐ",
+  "sens": "patronyme Li (nom impérial de la dynastie Tang)"
+ },
+ {
+  "hanzi": "张",
+  "trad": "張",
+  "pinyin": "Zhāng",
+  "sens": "patronyme Zhang (troisième patronyme de Chine)"
+ },
+ {
+  "hanzi": "刘",
+  "trad": "劉",
+  "pinyin": "Liú",
+  "sens": "patronyme Liu (nom impérial de la dynastie Han)"
+ },
+ {
+  "hanzi": "陈",
+  "trad": "陳",
+  "pinyin": "Chén",
+  "sens": "patronyme Chen (très répandu dans le sud et la diaspora)"
+ },
+ {
+  "hanzi": "杨",
+  "trad": "楊",
+  "pinyin": "Yáng",
+  "sens": "patronyme Yang"
+ },
+ {
+  "hanzi": "黄",
+  "trad": "黃",
+  "pinyin": "Huáng",
+  "sens": "patronyme Huang"
+ },
+ {
+  "hanzi": "赵",
+  "trad": "趙",
+  "pinyin": "Zhào",
+  "sens": "patronyme Zhao (nom impérial de la dynastie Song)"
+ },
+ {
+  "hanzi": "吴",
+  "trad": "吳",
+  "pinyin": "Wú",
+  "sens": "patronyme Wu"
+ },
+ {
+  "hanzi": "周",
+  "trad": "",
+  "pinyin": "Zhōu",
+  "sens": "patronyme Zhou"
+ },
+ {
+  "hanzi": "徐",
+  "trad": "",
+  "pinyin": "Xú",
+  "sens": "patronyme Xu"
+ },
+ {
+  "hanzi": "孙",
+  "trad": "孫",
+  "pinyin": "Sūn",
+  "sens": "patronyme Sun"
+ },
+ {
+  "hanzi": "马",
+  "trad": "馬",
+  "pinyin": "Mǎ",
+  "sens": "patronyme Ma"
+ },
+ {
+  "hanzi": "朱",
+  "trad": "",
+  "pinyin": "Zhū",
+  "sens": "patronyme Zhu (nom impérial de la dynastie Ming)"
+ },
+ {
+  "hanzi": "胡",
+  "trad": "",
+  "pinyin": "Hú",
+  "sens": "patronyme Hu"
+ },
+ {
+  "hanzi": "郭",
+  "trad": "",
+  "pinyin": "Guō",
+  "sens": "patronyme Guo"
+ },
+ {
+  "hanzi": "何",
+  "trad": "",
+  "pinyin": "Hé",
+  "sens": "patronyme He"
+ },
+ {
+  "hanzi": "高",
+  "trad": "",
+  "pinyin": "Gāo",
+  "sens": "patronyme Gao"
+ },
+ {
+  "hanzi": "林",
+  "trad": "",
+  "pinyin": "Lín",
+  "sens": "patronyme Lin (très fréquent au Fujian, Taïwan et Guangdong)"
+ },
+ {
+  "hanzi": "郑",
+  "trad": "鄭",
+  "pinyin": "Zhèng",
+  "sens": "patronyme Zheng"
+ },
+ {
+  "hanzi": "谢",
+  "trad": "謝",
+  "pinyin": "Xiè",
+  "sens": "patronyme Xie"
+ },
+ {
+  "hanzi": "罗",
+  "trad": "羅",
+  "pinyin": "Luó",
+  "sens": "patronyme Luo"
+ },
+ {
+  "hanzi": "梁",
+  "trad": "",
+  "pinyin": "Liáng",
+  "sens": "patronyme Liang"
+ },
+ {
+  "hanzi": "宋",
+  "trad": "",
+  "pinyin": "Sòng",
+  "sens": "patronyme Song"
+ },
+ {
+  "hanzi": "唐",
+  "trad": "",
+  "pinyin": "Táng",
+  "sens": "patronyme Tang"
+ },
+ {
+  "hanzi": "许",
+  "trad": "許",
+  "pinyin": "Xǔ",
+  "sens": "patronyme Xu"
+ },
+ {
+  "hanzi": "韩",
+  "trad": "韓",
+  "pinyin": "Hán",
+  "sens": "patronyme Han"
+ },
+ {
+  "hanzi": "冯",
+  "trad": "馮",
+  "pinyin": "Féng",
+  "sens": "patronyme Feng"
+ },
+ {
+  "hanzi": "邓",
+  "trad": "鄧",
+  "pinyin": "Dèng",
+  "sens": "patronyme Deng"
+ },
+ {
+  "hanzi": "曹",
+  "trad": "",
+  "pinyin": "Cáo",
+  "sens": "patronyme Cao"
+ },
+ {
+  "hanzi": "彭",
+  "trad": "",
+  "pinyin": "Péng",
+  "sens": "patronyme Peng"
+ },
+ {
+  "hanzi": "曾",
+  "trad": "",
+  "pinyin": "Zēng",
+  "sens": "patronyme Zeng"
+ },
+ {
+  "hanzi": "肖",
+  "trad": "",
+  "pinyin": "Xiào",
+  "sens": "patronyme Xiao / Qiao"
+ },
+ {
+  "hanzi": "田",
+  "trad": "",
+  "pinyin": "Tián",
+  "sens": "patronyme Tian"
+ },
+ {
+  "hanzi": "董",
+  "trad": "",
+  "pinyin": "Dǒng",
+  "sens": "patronyme Dong"
+ },
+ {
+  "hanzi": "袁",
+  "trad": "",
+  "pinyin": "Yuán",
+  "sens": "patronyme Yuan"
+ },
+ {
+  "hanzi": "潘",
+  "trad": "",
+  "pinyin": "Pān",
+  "sens": "patronyme Pan"
+ },
+ {
+  "hanzi": "于",
+  "trad": "",
+  "pinyin": "Yú",
+  "sens": "patronyme Yu"
+ },
+ {
+  "hanzi": "蒋",
+  "trad": "蔣",
+  "pinyin": "Jiǎng",
+  "sens": "patronyme Jiang"
+ },
+ {
+  "hanzi": "蔡",
+  "trad": "",
+  "pinyin": "Cài",
+  "sens": "patronyme Cai"
+ },
+ {
+  "hanzi": "余",
+  "trad": "",
+  "pinyin": "Yú",
+  "sens": "patronyme Yu"
+ },
+ {
+  "hanzi": "杜",
+  "trad": "",
+  "pinyin": "Dù",
+  "sens": "patronyme Du"
+ },
+ {
+  "hanzi": "叶",
+  "trad": "葉",
+  "pinyin": "Yè",
+  "sens": "patronyme Ye"
+ },
+ {
+  "hanzi": "程",
+  "trad": "",
+  "pinyin": "Chéng",
+  "sens": "patronyme Cheng"
+ },
+ {
+  "hanzi": "苏",
+  "trad": "蘇",
+  "pinyin": "Sū",
+  "sens": "patronyme Su"
+ },
+ {
+  "hanzi": "魏",
+  "trad": "",
+  "pinyin": "Wèi",
+  "sens": "patronyme Wei"
+ },
+ {
+  "hanzi": "吕",
+  "trad": "呂",
+  "pinyin": "Lǚ",
+  "sens": "patronyme Lu"
+ },
+ {
+  "hanzi": "丁",
+  "trad": "",
+  "pinyin": "Dīng",
+  "sens": "patronyme Ding"
+ },
+ {
+  "hanzi": "任",
+  "trad": "",
+  "pinyin": "Rèn",
+  "sens": "patronyme Ren"
+ },
+ {
+  "hanzi": "沈",
+  "trad": "",
+  "pinyin": "Shěn",
+  "sens": "patronyme Shen"
+ },
+ {
+  "hanzi": "姚",
+  "trad": "",
+  "pinyin": "Yáo",
+  "sens": "patronyme Yao"
+ },
+ {
+  "hanzi": "卢",
+  "trad": "盧",
+  "pinyin": "Lú",
+  "sens": "patronyme Lu"
+ },
+ {
+  "hanzi": "姜",
+  "trad": "",
+  "pinyin": "Jiāng",
+  "sens": "patronyme Jiang"
+ },
+ {
+  "hanzi": "崔",
+  "trad": "",
+  "pinyin": "Cuī",
+  "sens": "patronyme Cui"
+ },
+ {
+  "hanzi": "钟",
+  "trad": "鍾",
+  "pinyin": "Zhōng",
+  "sens": "patronyme Zhong"
+ },
+ {
+  "hanzi": "谭",
+  "trad": "譚",
+  "pinyin": "Tán",
+  "sens": "patronyme Tan"
+ },
+ {
+  "hanzi": "陆",
+  "trad": "陸",
+  "pinyin": "Lù",
+  "sens": "patronyme Lu"
+ },
+ {
+  "hanzi": "汪",
+  "trad": "",
+  "pinyin": "Wāng",
+  "sens": "patronyme Wang"
+ },
+ {
+  "hanzi": "范",
+  "trad": "",
+  "pinyin": "Fàn",
+  "sens": "patronyme Fan"
+ },
+ {
+  "hanzi": "金",
+  "trad": "",
+  "pinyin": "Jīn",
+  "sens": "patronyme Jin"
+ },
+ {
+  "hanzi": "石",
+  "trad": "",
+  "pinyin": "Shí",
+  "sens": "patronyme Shi"
+ },
+ {
+  "hanzi": "廖",
+  "trad": "",
+  "pinyin": "Liào",
+  "sens": "patronyme Liao"
+ },
+ {
+  "hanzi": "贾",
+  "trad": "賈",
+  "pinyin": "Jiǎ",
+  "sens": "patronyme Jia"
+ },
+ {
+  "hanzi": "夏",
+  "trad": "",
+  "pinyin": "Xià",
+  "sens": "patronyme Xia"
+ },
+ {
+  "hanzi": "韦",
+  "trad": "韋",
+  "pinyin": "Wéi",
+  "sens": "patronyme Wei"
+ },
+ {
+  "hanzi": "付",
+  "trad": "",
+  "pinyin": "Fù",
+  "sens": "patronyme Fu"
+ },
+ {
+  "hanzi": "方",
+  "trad": "",
+  "pinyin": "Fāng",
+  "sens": "patronyme Fang"
+ },
+ {
+  "hanzi": "白",
+  "trad": "",
+  "pinyin": "Bái",
+  "sens": "patronyme Bai"
+ },
+ {
+  "hanzi": "邹",
+  "trad": "鄒",
+  "pinyin": "Zōu",
+  "sens": "patronyme Zou"
+ },
+ {
+  "hanzi": "孟",
+  "trad": "",
+  "pinyin": "Mèng",
+  "sens": "patronyme Meng"
+ },
+ {
+  "hanzi": "熊",
+  "trad": "",
+  "pinyin": "Xióng",
+  "sens": "patronyme Xiong"
+ },
+ {
+  "hanzi": "秦",
+  "trad": "",
+  "pinyin": "Qín",
+  "sens": "patronyme Qin"
+ },
+ {
+  "hanzi": "邱",
+  "trad": "",
+  "pinyin": "Qiū",
+  "sens": "patronyme Qiu"
+ },
+ {
+  "hanzi": "江",
+  "trad": "",
+  "pinyin": "Jiāng",
+  "sens": "patronyme Jiang"
+ },
+ {
+  "hanzi": "尹",
+  "trad": "",
+  "pinyin": "Yǐn",
+  "sens": "patronyme Yin"
+ },
+ {
+  "hanzi": "毛",
+  "trad": "",
+  "pinyin": "Máo",
+  "sens": "patronyme Mao"
+ },
+ {
+  "hanzi": "段",
+  "trad": "",
+  "pinyin": "Duàn",
+  "sens": "patronyme Duan"
+ },
+ {
+  "hanzi": "雷",
+  "trad": "",
+  "pinyin": "Léi",
+  "sens": "patronyme Lei"
+ },
+ {
+  "hanzi": "钱",
+  "trad": "錢",
+  "pinyin": "Qián",
+  "sens": "patronyme Qian"
+ },
+ {
+  "hanzi": "汤",
+  "trad": "湯",
+  "pinyin": "Tāng",
+  "sens": "patronyme Tang"
+ },
+ {
+  "hanzi": "黎",
+  "trad": "",
+  "pinyin": "Lí",
+  "sens": "patronyme Li"
+ },
+ {
+  "hanzi": "易",
+  "trad": "",
+  "pinyin": "Yì",
+  "sens": "patronyme Yi"
+ },
+ {
+  "hanzi": "常",
+  "trad": "",
+  "pinyin": "Cháng",
+  "sens": "patronyme Chang"
+ },
+ {
+  "hanzi": "武",
+  "trad": "",
+  "pinyin": "Wǔ",
+  "sens": "patronyme Wu"
+ },
+ {
+  "hanzi": "乔",
+  "trad": "喬",
+  "pinyin": "Qiáo",
+  "sens": "patronyme Qiao"
+ },
+ {
+  "hanzi": "贺",
+  "trad": "賀",
+  "pinyin": "Hè",
+  "sens": "patronyme He"
+ },
+ {
+  "hanzi": "赖",
+  "trad": "賴",
+  "pinyin": "Lài",
+  "sens": "patronyme Lai"
+ },
+ {
+  "hanzi": "龚",
+  "trad": "龔",
+  "pinyin": "Gōng",
+  "sens": "patronyme Gong"
+ },
+ {
+  "hanzi": "文",
+  "trad": "",
+  "pinyin": "Wén",
+  "sens": "patronyme Wen"
+ },
+ {
+  "hanzi": "萧",
+  "trad": "蕭",
+  "pinyin": "Xiāo",
+  "sens": "Xiao (nom de famille chinois)"
+ },
+ {
+  "hanzi": "薛",
+  "pinyin": "Xuē",
+  "sens": "Xue (nom de famille chinois)"
+ },
+ {
+  "hanzi": "闫",
+  "trad": "閆",
+  "pinyin": "Yán",
+  "sens": "Yan (nom de famille chinois)"
+ },
+ {
+  "hanzi": "侯",
+  "pinyin": "Hóu",
+  "sens": "Hou (nom de famille chinois)"
+ },
+ {
+  "hanzi": "龙",
+  "trad": "龍",
+  "pinyin": "Lóng",
+  "sens": "Long (nom de famille, signifiant dragon)"
+ },
+ {
+  "hanzi": "史",
+  "pinyin": "Shǐ",
+  "sens": "Shi (nom de famille chinois)"
+ },
+ {
+  "hanzi": "陶",
+  "pinyin": "Táo",
+  "sens": "Tao (nom de famille chinois)"
+ },
+ {
+  "hanzi": "顾",
+  "trad": "顧",
+  "pinyin": "Gù",
+  "sens": "Gu (nom de famille chinois)"
+ },
+ {
+  "hanzi": "郝",
+  "pinyin": "Hǎo",
+  "sens": "Hao (nom de famille chinois)"
+ },
+ {
+  "hanzi": "邵",
+  "pinyin": "Shào",
+  "sens": "Shao (nom de famille chinois)"
+ },
+ {
+  "hanzi": "万",
+  "trad": "萬",
+  "pinyin": "Wàn",
+  "sens": "Wan (nom de famille chinois)"
+ },
+ {
+  "hanzi": "严",
+  "trad": "嚴",
+  "pinyin": "Yán",
+  "sens": "Yan (nom de famille chinois)"
+ },
+ {
+  "hanzi": "覃",
+  "pinyin": "Tán",
+  "sens": "Tan / Qin (nom de famille chinois)"
+ },
+ {
+  "hanzi": "戴",
+  "pinyin": "Dài",
+  "sens": "Dai (nom de famille chinois)"
+ },
+ {
+  "hanzi": "莫",
+  "pinyin": "Mò",
+  "sens": "Mo (nom de famille chinois)"
+ },
+ {
+  "hanzi": "孔",
+  "pinyin": "Kǒng",
+  "sens": "Kong (nom de famille de Confucius)"
+ },
+ {
+  "hanzi": "向",
+  "pinyin": "Xiàng",
+  "sens": "Xiang (nom de famille chinois)"
+ },
+ {
+  "hanzi": "副董事长",
+  "trad": "副董事長",
+  "pinyin": "fù dǒngshìzhǎng",
+  "sens": "Vice-président du conseil d'administration"
+ },
+ {
+  "hanzi": "总裁",
+  "trad": "總裁",
+  "pinyin": "zǒngcái",
+  "sens": "Président-directeur général (CEO / President)"
+ },
+ {
+  "hanzi": "副总裁",
+  "trad": "副總裁",
+  "pinyin": "fù zǒngcái",
+  "sens": "Vice-président (VP)"
+ },
+ {
+  "hanzi": "副总经理",
+  "trad": "副總經理",
+  "pinyin": "fù zǒngjīnglǐ",
+  "sens": "Directeur général adjoint (DGA)"
+ },
+ {
+  "hanzi": "总监",
+  "trad": "總監",
+  "pinyin": "zǒngjiān",
+  "sens": "Directeur de département (Director)"
+ },
+ {
+  "hanzi": "技术总监",
+  "trad": "技術總監",
+  "pinyin": "jìshù zǒngjiān",
+  "sens": "Directeur technique (CTO)"
+ },
+ {
+  "hanzi": "运营总监",
+  "trad": "運營總監",
+  "pinyin": "yùnyíng zǒngjiān",
+  "sens": "Directeur des opérations (COO)"
+ },
+ {
+  "hanzi": "财务总监",
+  "trad": "財務總監",
+  "pinyin": "cáiwù zǒngjiān",
+  "sens": "Directeur financier (CFO)"
+ },
+ {
+  "hanzi": "市场总监",
+  "trad": "市場總監",
+  "pinyin": "shìchǎng zǒngjiān",
+  "sens": "Directeur marketing (CMO)"
+ },
+ {
+  "hanzi": "人力资源总监",
+  "trad": "人力資源總監",
+  "pinyin": "rénlì zīyuán zǒngjiān",
+  "sens": "Directeur des ressources humaines (DRH)"
+ },
+ {
+  "hanzi": "项目经理",
+  "trad": "項目經理",
+  "pinyin": "xiàngmù jīnglǐ",
+  "sens": "Chef de projet (Project Manager)"
+ },
+ {
+  "hanzi": "产品经理",
+  "trad": "產品經理",
+  "pinyin": "chǎnpǐn jīnglǐ",
+  "sens": "Chef de produit (Product Manager)"
+ },
+ {
+  "hanzi": "客户经理",
+  "trad": "客戶經理",
+  "pinyin": "kèhù jīnglǐ",
+  "sens": "Responsable de compte client (Account Manager)"
+ },
+ {
+  "hanzi": "部门主管",
+  "trad": "部門主管",
+  "pinyin": "bùmén zhǔguǎn",
+  "sens": "Responsable de département / superviseur"
+ },
+ {
+  "hanzi": "高级工程师",
+  "trad": "高級工程師",
+  "pinyin": "gāojí gōngchéngshī",
+  "sens": "Ingénieur senior"
+ },
+ {
+  "hanzi": "架构师",
+  "trad": "架構師",
+  "pinyin": "jiàgòushī",
+  "sens": "Architecte logiciel / système"
+ },
+ {
+  "hanzi": "分析师",
+  "trad": "分析師",
+  "pinyin": "fēnxīshī",
+  "sens": "Analyste (financier, données, etc.)"
+ },
+ {
+  "hanzi": "顾问",
+  "trad": "顧問",
+  "pinyin": "gùwèn",
+  "sens": "Consultant / conseiller"
+ },
+ {
+  "hanzi": "专家",
+  "trad": "專家",
+  "pinyin": "zhuānjiā",
+  "sens": "Expert / spécialiste"
+ },
+ {
+  "hanzi": "审计师",
+  "trad": "審計師",
+  "pinyin": "shěnjìshī",
+  "sens": "Auditeur / commissaire aux comptes"
+ },
+ {
+  "hanzi": "会计师",
+  "trad": "會計師",
+  "pinyin": "kuàijìshī",
+  "sens": "Expert-comptable"
+ },
+ {
+  "hanzi": "律师",
+  "trad": "律師",
+  "pinyin": "lǜshī",
+  "sens": "Avocat / juriste"
+ },
+ {
+  "hanzi": "法务代表",
+  "trad": "法務代表",
+  "pinyin": "fǎwù dàibiǎo",
+  "sens": "Représentant juridique"
+ },
+ {
+  "hanzi": "法人代表",
+  "trad": "法人代表",
+  "pinyin": "fǎrén dàibiǎo",
+  "sens": "Représentant légal de l'entreprise"
+ },
+ {
+  "hanzi": "创始人",
+  "trad": "創始人",
+  "pinyin": "chuàngshǐrén",
+  "sens": "Fondateur / cofondateur"
+ },
+ {
+  "hanzi": "合伙人",
+  "trad": "合夥人",
+  "pinyin": "héhuǒrén",
+  "sens": "Associé / partenaire"
+ },
+ {
+  "hanzi": "股东",
+  "trad": "股東",
+  "pinyin": "gǔdōng",
+  "sens": "Actionnaire"
+ },
+ {
+  "hanzi": "临沂",
+  "trad": "臨沂",
+  "pinyin": "Línyí",
+  "sens": "Linyi (centre logistique du nord, Shandong)"
+ },
+ {
+  "hanzi": "唐山",
+  "pinyin": "Tángshān",
+  "sens": "Tangshan (grand centre sidérurgique du Hebei)"
+ },
+ {
+  "hanzi": "保定",
+  "pinyin": "Bǎodìng",
+  "sens": "Baoding (ville historique du Hebei, proche de Xiong'an)"
+ },
+ {
+  "hanzi": "雄安新区",
+  "trad": "雄安新區",
+  "pinyin": "Xióng'ān Xīnqū",
+  "sens": "Nouvelle zone de Xiong'an (ville du futur près de Pékin)"
+ },
+ {
+  "hanzi": "江门",
+  "trad": "江門",
+  "pinyin": "Jiāngmén",
+  "sens": "Jiangmen (foyer de la diaspora chinoise, Guangdong)"
+ },
+ {
+  "hanzi": "营业执照",
+  "trad": "營業執照",
+  "pinyin": "yíngyè zhízhào",
+  "sens": "Licence commerciale d'entreprise (Kbis chinois)"
+ },
+ {
+  "hanzi": "统一社会信用代码",
+  "trad": "統一社會信用代碼",
+  "pinyin": "tǒngyī shèhuì xìnyòng dàimǎ",
+  "sens": "Code unifié de crédit social (numéro Siren/SIRET d'entreprise chinoise)"
+ },
+ {
+  "hanzi": "合同法",
+  "pinyin": "hétong fǎ",
+  "sens": "Droit des contrats"
+ },
+ {
+  "hanzi": "知识产权",
+  "trad": "知識產權",
+  "pinyin": "zhīshi chǎnquán",
+  "sens": "Propriété intellectuelle (PI)"
+ },
+ {
+  "hanzi": "战略合作协议",
+  "trad": "戰略合作協議",
+  "pinyin": "zhànlüè hézuò xiéyì",
+  "sens": "Accord de coopération stratégique"
+ },
+ {
+  "hanzi": "谅解备忘录",
+  "trad": "諒解備忘錄",
+  "pinyin": "liàngjiě bèiwànglù",
+  "sens": "Protocole d'accord (MoU)"
+ },
+ {
+  "hanzi": "采购订单",
+  "trad": "採購訂單",
+  "pinyin": "cǎigòu dìngdān",
+  "sens": "Bon de commande d'achat (PO)"
+ },
+ {
+  "hanzi": "商业发票",
+  "trad": "商業發票",
+  "pinyin": "shāngyè fāpiào",
+  "sens": "Facture commerciale"
+ },
+ {
+  "hanzi": "原产地证明",
+  "trad": "原產地證明",
+  "pinyin": "yuánchǎndì zhèngmíng",
+  "sens": "Certificat d'origine (CO)"
+ },
+ {
+  "hanzi": "质检报告",
+  "trad": "質檢報告",
+  "pinyin": "zhìjiǎn bàogào",
+  "sens": "Rapport de contrôle de qualité (QC report)"
+ },
+ {
+  "hanzi": "海关总署",
+  "trad": "海關總署",
+  "pinyin": "Hǎiguān Zǒngshǔ",
+  "sens": "Administration générale des douanes de Chine"
+ },
+ {
+  "hanzi": "报关行",
+  "trad": "報關行",
+  "pinyin": "bàoguānháng",
+  "sens": "Courtier en douane / déclarant"
+ },
+ {
+  "hanzi": "进出口权",
+  "trad": "進出口權",
+  "pinyin": "jìnchūkǒu quán",
+  "sens": "Droits d'importation et d'exportation"
+ },
+ {
+  "hanzi": "争议解决",
+  "trad": "爭議解決",
+  "pinyin": "zhēngyì jiějué",
+  "sens": "Règlement des différends / litiges"
+ },
+ {
+  "hanzi": "仲裁委员会",
+  "trad": "仲裁委員會",
+  "pinyin": "zhòngcái wěiyuánhuì",
+  "sens": "Commission d'arbitrage (ex: CIETAC)"
+ },
+ {
+  "hanzi": "管辖法院",
+  "trad": "管轄法院",
+  "pinyin": "guǎnxiá fǎyuàn",
+  "sens": "Tribunal compétent / juridiction compétente"
+ },
+ {
+  "hanzi": "公章",
+  "pinyin": "gōngzhāng",
+  "sens": "Sceau officiel d'entreprise (obligatoire pour valider tout contrat en Chine)"
+ },
+ {
+  "hanzi": "合同专用章",
+  "trad": "合同專用章",
+  "pinyin": "hétong zhuānyòngzhāng",
+  "sens": "Tampon officiel dédié aux contrats"
+ },
+ {
+  "hanzi": "财务专用章",
+  "trad": "財務專用章",
+  "pinyin": "cáiwù zhuānyòngzhāng",
+  "sens": "Tampon dédié aux opérations financières"
+ },
+ {
+  "hanzi": "集成电路",
+  "trad": "集成電路",
+  "pinyin": "jíchéng diànlù",
+  "sens": "Circuit intégré (IC)"
+ },
+ {
+  "hanzi": "新能源汽车",
+  "trad": "新能源汽車",
+  "pinyin": "xīn néngyuán qìchē",
+  "sens": "Véhicules à énergie nouvelle (NEV / VE)"
+ },
+ {
+  "hanzi": "蔚来汽车",
+  "trad": "蔚來汽車",
+  "pinyin": "Wèilái Qìchē",
+  "sens": "NIO (constructeur chinois de VE haut de gamme)"
+ },
+ {
+  "hanzi": "小鹏汽车",
+  "trad": "小鵬汽車",
+  "pinyin": "Xiǎopéng Qìchē",
+  "sens": "XPeng Motors (constructeur chinois de voitures intelligentes)"
+ },
+ {
+  "hanzi": "吉利汽车",
+  "trad": "吉利汽車",
+  "pinyin": "Jílì Qìchē",
+  "sens": "Geely (groupe automobile propriétaire de Volvo, Polestar, Lotus)"
+ },
+ {
+  "hanzi": "广汽集团",
+  "trad": "廣汽集團",
+  "pinyin": "Guǎngqì Jítuán",
+  "sens": "GAC Group (grand groupe automobile de Guangzhou)"
+ },
+ {
+  "hanzi": "大疆创新",
+  "trad": "大疆創新",
+  "pinyin": "Dàjiāng Chuàngxīn",
+  "sens": "DJI (leader mondial des drones civils et stabilisateurs)"
+ },
+ {
+  "hanzi": "海康威视",
+  "trad": "海康威視",
+  "pinyin": "Hǎikāng Wēishì",
+  "sens": "Hikvision (géant mondial de la vidéosurveillance)"
+ },
+ {
+  "hanzi": "立讯精密",
+  "trad": "立訊精密",
+  "pinyin": "Lìxùn Jīngmì",
+  "sens": "Luxshare Precision (assembleur clé pour Apple et électronique)"
+ },
+ {
+  "hanzi": "联想集团",
+  "trad": "聯想集團",
+  "pinyin": "Liánxiǎng Jítuán",
+  "sens": "Lenovo Group (premier fabricant mondial d'ordinateurs personnels)"
+ },
+ {
+  "hanzi": "中兴通讯",
+  "trad": "中興通訊",
+  "pinyin": "Zhōngxīng Tōngxùn",
+  "sens": "ZTE Corporation (équipementier télécoms international)"
+ },
+ {
+  "hanzi": "顺祝商祺",
+  "trad": "順祝商祺",
+  "pinyin": "shùn zhù shāngqí",
+  "sens": "Formule de politesse commerciale chinoise (« Avec mes salutations distinguées »)"
+ },
+ {
+  "hanzi": "此致敬礼",
+  "trad": "此致敬禮",
+  "pinyin": "cǐzhì jìnglǐ",
+  "sens": "Veuillez agréer mes salutations respectueuses (conclusion formelle)"
+ },
+ {
+  "hanzi": "合作愉快",
+  "pinyin": "hézuò yúkuài",
+  "sens": "Au plaisir d'une excellente collaboration"
+ },
+ {
+  "hanzi": "期待回复",
+  "trad": "期待回復",
+  "pinyin": "qīdài huífù",
+  "sens": "Dans l'attente de votre réponse"
+ },
+ {
+  "hanzi": "收到请回复",
+  "trad": "收到請回復",
+  "pinyin": "shōudào qǐng huífù",
+  "sens": "Merci d'accuser réception de ce message"
+ },
+ {
+  "hanzi": "请查收附件",
+  "trad": "請查收附件",
+  "pinyin": "qǐng cháshōu fùjiàn",
+  "sens": "Veuillez trouver la pièce jointe ci-incluse"
+ },
+ {
+  "hanzi": "如有疑问请随时联系",
+  "trad": "如有疑問請隨時聯繫",
+  "pinyin": "rú yǒu yíwèn qǐng suíshí liánxì",
+  "sens": "Si vous avez la moindre question, n'hésitez pas à nous contacter"
+ },
+ {
+  "hanzi": "零",
+  "pinyin": "líng",
+  "sens": "Zéro"
+ },
+ {
+  "hanzi": "一",
+  "pinyin": "yī",
+  "sens": "Un (1)"
+ },
+ {
+  "hanzi": "二",
+  "pinyin": "èr",
+  "sens": "Deux (2)"
+ },
+ {
+  "hanzi": "三",
+  "pinyin": "sān",
+  "sens": "Trois (3)"
+ },
+ {
+  "hanzi": "四",
+  "pinyin": "sì",
+  "sens": "Quatre (4)"
+ },
+ {
+  "hanzi": "五",
+  "pinyin": "wǔ",
+  "sens": "Cinq (5)"
+ },
+ {
+  "hanzi": "六",
+  "pinyin": "liù",
+  "sens": "Six (6)"
+ },
+ {
+  "hanzi": "七",
+  "pinyin": "qī",
+  "sens": "Sept (7)"
+ },
+ {
+  "hanzi": "八",
+  "pinyin": "bā",
+  "sens": "Huit (8, symbole de prospérité)"
+ },
+ {
+  "hanzi": "九",
+  "pinyin": "jiǔ",
+  "sens": "Neuf (9)"
+ },
+ {
+  "hanzi": "十",
+  "pinyin": "shí",
+  "sens": "Dix (10)"
+ },
+ {
+  "hanzi": "百",
+  "pinyin": "bǎi",
+  "sens": "Cent (100)"
+ },
+ {
+  "hanzi": "千",
+  "pinyin": "qiān",
+  "sens": "Mille (1 000)"
+ },
+ {
+  "hanzi": "亿",
+  "pinyin": "yì",
+  "sens": "Cent millions (100 000 000)"
+ },
+ {
+  "hanzi": "个",
+  "pinyin": "gè",
+  "sens": "Spécificatif général / individu"
+ },
+ {
+  "hanzi": "台",
+  "pinyin": "tái",
+  "sens": "Spécificatif des machines, ordinateurs et équipements"
+ },
+ {
+  "hanzi": "辆",
+  "pinyin": "liàng",
+  "sens": "Spécificatif des véhicules et automobiles"
+ },
+ {
+  "hanzi": "件",
+  "pinyin": "jiàn",
+  "sens": "Spécificatif des affaires, vêtements et colis"
+ },
+ {
+  "hanzi": "本",
+  "pinyin": "běn",
+  "sens": "Spécificatif des livres, registres et rapports"
+ },
+ {
+  "hanzi": "套",
+  "pinyin": "tào",
+  "sens": "Spécificatif des ensembles, séries et logements"
+ },
+ {
+  "hanzi": "批",
+  "pinyin": "pī",
+  "sens": "Lot / cargaison / arrivage"
+ },
+ {
+  "hanzi": "份",
+  "pinyin": "fèn",
+  "sens": "Exemplaire / part / document"
+ },
+ {
+  "hanzi": "今天",
+  "pinyin": "jīntiān",
+  "sens": "Aujourd'hui"
+ },
+ {
+  "hanzi": "明天",
+  "pinyin": "míngtiān",
+  "sens": "Demain"
+ },
+ {
+  "hanzi": "后天",
+  "pinyin": "hòutiān",
+  "sens": "Après-demain"
+ },
+ {
+  "hanzi": "昨天",
+  "pinyin": "zuótiān",
+  "sens": "Hier"
+ },
+ {
+  "hanzi": "前天",
+  "pinyin": "qiántiān",
+  "sens": "Avant-hier"
+ },
+ {
+  "hanzi": "早上",
+  "pinyin": "zǎoshang",
+  "sens": "Matin"
+ },
+ {
+  "hanzi": "下午",
+  "pinyin": "xiàwǔ",
+  "sens": "Après-midi"
+ },
+ {
+  "hanzi": "晚上",
+  "pinyin": "wǎnshang",
+  "sens": "Soir"
+ },
+ {
+  "hanzi": "工作日",
+  "pinyin": "gōngzuòrì",
+  "sens": "Jour ouvré"
+ },
+ {
+  "hanzi": "周末",
+  "pinyin": "zhōumò",
+  "sens": "Week-end"
+ },
+ {
+  "hanzi": "节假日",
+  "pinyin": "jiéjiàrì",
+  "sens": "Jours fériés"
+ },
+ {
+  "hanzi": "截止日期",
+  "pinyin": "jiézhǐ rìqī",
+  "sens": "Date limite (deadline)"
+ },
+ {
+  "hanzi": "排期",
+  "pinyin": "páiqī",
+  "sens": "Planning / calendrier de production"
+ },
+ {
+  "hanzi": "周期",
+  "pinyin": "zhōuqī",
+  "sens": "Cycle / durée de rotation"
+ },
+ {
+  "hanzi": "会议",
+  "pinyin": "huìyì",
+  "sens": "Réunion / conférence"
+ },
+ {
+  "hanzi": "开会",
+  "pinyin": "kāihuì",
+  "sens": "Tenir une réunion"
+ },
+ {
+  "hanzi": "议程",
+  "pinyin": "yìchéng",
+  "sens": "Ordre du jour"
+ },
+ {
+  "hanzi": "会议纪要",
+  "pinyin": "huìyì jìyào",
+  "sens": "Compte-rendu de réunion (Minutes)"
+ },
+ {
+  "hanzi": "报告",
+  "pinyin": "bàogào",
+  "sens": "Rapport / compte-rendu"
+ },
+ {
+  "hanzi": "汇报",
+  "pinyin": "huìbào",
+  "sens": "Faire un rapport hiérarchique"
+ },
+ {
+  "hanzi": "讨论",
+  "pinyin": "tǎolùn",
+  "sens": "Discuter / débattre"
+ },
+ {
+  "hanzi": "决策",
+  "pinyin": "juécè",
+  "sens": "Prendre une décision stratégique"
+ },
+ {
+  "hanzi": "执行",
+  "pinyin": "zhíxíng",
+  "sens": "Exécuter / mettre en œuvre"
+ },
+ {
+  "hanzi": "进度",
+  "pinyin": "jìndù",
+  "sens": "Avancement / état d'avancement"
+ },
+ {
+  "hanzi": "里程碑",
+  "pinyin": "lǐchéngbēi",
+  "sens": "Jalon de projet (Milestone)"
+ },
+ {
+  "hanzi": "验收",
+  "pinyin": "yànshōu",
+  "sens": "Recette / contrôle de conformité"
+ },
+ {
+  "hanzi": "交付物",
+  "pinyin": "jiāofùwù",
+  "sens": "Livrables du projet"
+ },
+ {
+  "hanzi": "延期",
+  "pinyin": "yánqī",
+  "sens": "Reporter / accuser du retard"
+ },
+ {
+  "hanzi": "提前",
+  "pinyin": "tíqián",
+  "sens": "Avancer la date / en avance"
+ },
+ {
+  "hanzi": "按时",
+  "pinyin": "ànshí",
+  "sens": "À temps / dans les délais prévus"
+ },
+ {
+  "hanzi": "厂商",
+  "pinyin": "chǎngshāng",
+  "sens": "Fabricant / constructeur"
+ },
+ {
+  "hanzi": "销售",
+  "pinyin": "xiàoshòu",
+  "sens": "Vente / commercialisation"
+ },
+ {
+  "hanzi": "渠道",
+  "pinyin": "qúdào",
+  "sens": "Canal de distribution"
+ },
+ {
+  "hanzi": "批发",
+  "pinyin": "pīfā",
+  "sens": "Vente en gros"
+ },
+ {
+  "hanzi": "零售",
+  "pinyin": "língshòu",
+  "sens": "Vente au détail"
+ },
+ {
+  "hanzi": "电商",
+  "pinyin": "diànshāng",
+  "sens": "Commerce électronique (E-commerce)"
+ },
+ {
+  "hanzi": "询价",
+  "pinyin": "xúnjià",
+  "sens": "Demande de prix / demande de devis (RFQ)"
+ },
+ {
+  "hanzi": "成本",
+  "pinyin": "chéngběn",
+  "sens": "Coût / prix de revient"
+ },
+ {
+  "hanzi": "利润",
+  "pinyin": "lìrùn",
+  "sens": "Bénéfice / marge bénéficiaire"
+ },
+ {
+  "hanzi": "返利",
+  "pinyin": "fǎnlì",
+  "sens": "Ristourne / rétrocommission"
+ },
+ {
+  "hanzi": "达成协议",
+  "pinyin": "dáchéng xiéyì",
+  "sens": "Parvenir à un accord"
+ },
+ {
+  "hanzi": "签约",
+  "pinyin": "qiānyuē",
+  "sens": "Signer un contrat"
+ },
+ {
+  "hanzi": "履行合同",
+  "pinyin": "lǚxíng hétong",
+  "sens": "Exécuter les termes d'un contrat"
+ },
+ {
+  "hanzi": "续约",
+  "pinyin": "xùyuē",
+  "sens": "Renouveler un contrat"
+ },
+ {
+  "hanzi": "解约",
+  "pinyin": "jiěyuē",
+  "sens": "Résilier un contrat"
+ },
+ {
+  "hanzi": "赔偿",
+  "pinyin": "péicháng",
+  "sens": "Dédommagement / indemnisation"
+ },
+ {
+  "hanzi": "元",
+  "pinyin": "yuán",
+  "sens": "Yuan (unité monétaire principale)"
+ },
+ {
+  "hanzi": "角",
+  "pinyin": "jiǎo",
+  "sens": "Jiao (dixième de yuan)"
+ },
+ {
+  "hanzi": "分",
+  "pinyin": "fēn",
+  "sens": "Fen (centième de yuan)"
+ },
+ {
+  "hanzi": "港币",
+  "pinyin": "gǎngbì",
+  "sens": "Dollar de Hong Kong (HKD)"
+ },
+ {
+  "hanzi": "汇款",
+  "pinyin": "huìkuǎn",
+  "sens": "Virement bancaire"
+ },
+ {
+  "hanzi": "账户",
+  "pinyin": "zhànghù",
+  "sens": "Compte bancaire"
+ },
+ {
+  "hanzi": "开户行",
+  "pinyin": "kāihùháng",
+  "sens": "Banque domiciliataire du compte"
+ },
+ {
+  "hanzi": "账号",
+  "pinyin": "zhànghào",
+  "sens": "Numéro de compte bancaire"
+ },
+ {
+  "hanzi": "转账",
+  "pinyin": "zhuǎnzhàng",
+  "sens": "Effectuer un transfert bancaire"
+ },
+ {
+  "hanzi": "增值税专用发票",
+  "pinyin": "zēngzhíshuì zhuānyòng fāpiào",
+  "sens": "Facture officielle dédiée à la TVA déductible"
+ },
+ {
+  "hanzi": "税务局",
+  "pinyin": "shuìwùjú",
+  "sens": "Administration fiscale (bureau des impôts)"
+ },
+ {
+  "hanzi": "报税",
+  "pinyin": "bàoshuì",
+  "sens": "Déclaration fiscale"
+ },
+ {
+  "hanzi": "退税",
+  "pinyin": "tuìshuì",
+  "sens": "Remboursement de taxe à l'exportation"
+ },
+ {
+  "hanzi": "融资",
+  "pinyin": "róngzī",
+  "sens": "Financement / levée de fonds"
+ },
+ {
+  "hanzi": "贷款",
+  "pinyin": "dàikuǎn",
+  "sens": "Prêt / emprunt bancaire"
+ },
+ {
+  "hanzi": "抵押",
+  "pinyin": "dǐyā",
+  "sens": "Hypothèque / nantissement"
+ },
+ {
+  "hanzi": "利息",
+  "pinyin": "lìxī",
+  "sens": "Intérêts financiers"
+ },
+ {
+  "hanzi": "首付款",
+  "pinyin": "shǒufùkuǎn",
+  "sens": "Acompte / apport initial"
+ },
+ {
+  "hanzi": "分期付款",
+  "pinyin": "fēnqī fùkuǎn",
+  "sens": "Paiement échelonné"
+ },
+ {
+  "hanzi": "物流",
+  "pinyin": "wùliú",
+  "sens": "Logistique"
+ },
+ {
+  "hanzi": "货代",
+  "pinyin": "huòdài",
+  "sens": "Transitaire international (Freight Forwarder)"
+ },
+ {
+  "hanzi": "仓库",
+  "pinyin": "cāngkù",
+  "sens": "Entrepôt"
+ },
+ {
+  "hanzi": "库存",
+  "pinyin": "kùcún",
+  "sens": "Stock disponible"
+ },
+ {
+  "hanzi": "入库",
+  "pinyin": "rùkù",
+  "sens": "Entrée en stock"
+ },
+ {
+  "hanzi": "出库",
+  "pinyin": "chūkù",
+  "sens": "Sortie de stock"
+ },
+ {
+  "hanzi": "盘点",
+  "pinyin": "pándiǎn",
+  "sens": "Inventaire des stocks"
+ },
+ {
+  "hanzi": "铁运",
+  "pinyin": "tiěyùn",
+  "sens": "Fret ferroviaire (ex: train Chine-Europe)"
+ },
+ {
+  "hanzi": "陆运",
+  "pinyin": "lùyùn",
+  "sens": "Transport routier"
+ },
+ {
+  "hanzi": "快递",
+  "pinyin": "kuàidì",
+  "sens": "Livraison express (colis)"
+ },
+ {
+  "hanzi": "中通快递",
+  "pinyin": "Zhōngtōng Kuàidì",
+  "sens": "ZTO Express (grand réseau de livraison chinois)"
+ },
+ {
+  "hanzi": "运费",
+  "pinyin": "yùnfèi",
+  "sens": "Frais de transport"
+ },
+ {
+  "hanzi": "提货单",
+  "pinyin": "tíhuòdān",
+  "sens": "Bon d'enlèvement / bon de livraison"
+ },
+ {
+  "hanzi": "查验",
+  "pinyin": "cháyàn",
+  "sens": "Inspection douanière"
+ },
+ {
+  "hanzi": "海关编码",
+  "pinyin": "hǎiguān biānmǎ",
+  "sens": "Code HS douanier"
+ },
+ {
+  "hanzi": "区块链",
+  "pinyin": "qūkuàiliàn",
+  "sens": "Chaîne de blocs (Blockchain)"
+ },
+ {
+  "hanzi": "算法",
+  "pinyin": "suànfǎ",
+  "sens": "Algorithme"
+ },
+ {
+  "hanzi": "大语言模型",
+  "pinyin": "dà yǔyán móxíng",
+  "sens": "Grand modèle de langage (LLM)"
+ },
+ {
+  "hanzi": "神经网络",
+  "pinyin": "shénjīng wǎngluò",
+  "sens": "Réseau de neurones artificiels"
+ },
+ {
+  "hanzi": "开源",
+  "pinyin": "kāiyuán",
+  "sens": "Open Source / code source ouvert"
+ },
+ {
+  "hanzi": "代码",
+  "pinyin": "dàimǎ",
+  "sens": "Code informatique"
+ },
+ {
+  "hanzi": "数据库",
+  "pinyin": "shùjùkù",
+  "sens": "Base de données (SQL/NoSQL)"
+ },
+ {
+  "hanzi": "服务器",
+  "pinyin": "fúwùqì",
+  "sens": "Serveur informatique"
+ },
+ {
+  "hanzi": "网络安全",
+  "pinyin": "wǎngluò ānquán",
+  "sens": "Cybersécurité"
+ },
+ {
+  "hanzi": "智慧城市",
+  "pinyin": "zhìhuì chéngshì",
+  "sens": "Ville intelligente (Smart City)"
+ },
+ {
+  "hanzi": "智能制造",
+  "pinyin": "zhìnéng zhìzào",
+  "sens": "Industrie 4.0 / fabrication intelligente"
+ },
+ {
+  "hanzi": "机器人",
+  "pinyin": "jīqìrén",
+  "sens": "Robotique / robot"
+ },
+ {
+  "hanzi": "互利共赢",
+  "pinyin": "hùlì gòngyíng",
+  "sens": "Bénéfice mutuel et partenariat gagnant-gagnant"
+ },
+ {
+  "hanzi": "合作共赢",
+  "pinyin": "hézuò gòngyíng",
+  "sens": "Coopération et réussite partagée"
+ },
+ {
+  "hanzi": "精益求精",
+  "pinyin": "jīngyìqiújīng",
+  "sens": "Recherche constante de la perfection et de l'excellence"
+ },
+ {
+  "hanzi": "脚踏实地",
+  "pinyin": "jiǎotàshídì",
+  "sens": "Avoir les pieds sur terre / travailler avec pragmatisme"
+ },
+ {
+  "hanzi": "实事求是",
+  "pinyin": "shíshìqiúshì",
+  "sens": "Rechercher la vérité à partir des faits concrets"
+ },
+ {
+  "hanzi": "同心协力",
+  "pinyin": "tóngxīn xiélì",
+  "sens": "Unir les forces et les volontés pour un même objectif"
+ },
+ {
+  "hanzi": "未雨绸缪",
+  "pinyin": "wèiyǔchóumóu",
+  "sens": "Anticiper et se préparer avant les difficultés"
+ },
+ {
+  "hanzi": "继往开来",
+  "pinyin": "jìwǎngkāilái",
+  "sens": "S'appuyer sur les acquis passés pour ouvrir l'avenir"
+ },
+ {
+  "hanzi": "一丝不苟",
+  "pinyin": "yīsībùgǒu",
+  "sens": "Méticuleux, rigoureux et attentif au moindre détail"
+ },
+ {
+  "hanzi": "集思广益",
+  "pinyin": "jísīguǎngyì",
+  "sens": "Mettre en commun les idées pour enrichir la réflexion collective"
+ },
+ {
+  "hanzi": "请",
+  "trad": "",
+  "pinyin": "qǐng",
+  "sens": "s'il vous plaît, inviter"
+ },
+ {
+  "hanzi": "是",
+  "trad": "",
+  "pinyin": "shì",
+  "sens": "être (copule), oui"
+ },
+ {
+  "hanzi": "报价",
+  "trad": "",
+  "pinyin": "bàojià",
+  "sens": "devis, cotation"
+ },
+ {
+  "hanzi": "质量",
+  "trad": "",
+  "pinyin": "zhìliàng",
+  "sens": "qualité"
+ },
+ {
+  "hanzi": "交货",
+  "trad": "",
+  "pinyin": "jiāohuò",
+  "sens": "livraison"
+ },
+ {
+  "hanzi": "海关",
+  "trad": "",
+  "pinyin": "hǎiguān",
+  "sens": "douane"
+ },
+ {
+  "hanzi": "付款",
+  "trad": "",
+  "pinyin": "fùkuǎn",
+  "sens": "paiement"
+ },
+ {
+  "hanzi": "银行",
+  "trad": "",
+  "pinyin": "yínháng",
+  "sens": "banque"
+ },
+ {
+  "hanzi": "产品",
+  "trad": "",
+  "pinyin": "chǎnpǐn",
+  "sens": "produit"
+ },
+ {
+  "hanzi": "生产",
+  "trad": "",
+  "pinyin": "shēngchǎn",
+  "sens": "production"
+ },
+ {
+  "hanzi": "检验",
+  "trad": "",
+  "pinyin": "jiǎnyàn",
+  "sens": "inspection, contrôle"
+ },
+ {
+  "hanzi": "中国",
+  "trad": "",
+  "pinyin": "Zhōngguó",
+  "sens": "Chine"
+ },
+ {
+  "hanzi": "水",
+  "trad": "",
+  "pinyin": "shuǐ",
+  "sens": "eau"
+ },
+ {
+  "hanzi": "好",
+  "trad": "",
+  "pinyin": "hǎo",
+  "sens": "bien, bon"
+ },
+ {
+  "hanzi": "大",
+  "trad": "",
+  "pinyin": "dà",
+  "sens": "grand"
+ },
+ {
+  "hanzi": "小",
+  "trad": "",
+  "pinyin": "xiǎo",
+  "sens": "petit"
+ },
+ {
+  "hanzi": "你",
+  "trad": "",
+  "pinyin": "nǐ",
+  "sens": "tu, toi"
+ },
+ {
+  "hanzi": "想",
+  "trad": "",
+  "pinyin": "xiǎng",
+  "sens": "vouloir, penser"
+ },
+ {
+  "hanzi": "学习",
+  "trad": "",
+  "pinyin": "xuéxí",
+  "sens": "étudier, apprendre"
+ },
+ {
+  "hanzi": "工作",
+  "trad": "",
+  "pinyin": "gōngzuò",
+  "sens": "travail, travailler"
+ },
+ {
+  "hanzi": "武帝",
+  "trad": "",
+  "pinyin": "Wǔdì",
+  "sens": "Empereur martial (Guan Yu divinisé)"
+ },
+ {
+  "hanzi": "支",
+  "trad": "",
+  "pinyin": "zhī",
+  "sens": "Branche, rameau généalogique"
+ },
+ {
+  "hanzi": "义",
+  "trad": "",
+  "pinyin": "yì",
+  "sens": "Droiture, justice"
+ },
+ {
+  "hanzi": "礼",
+  "trad": "",
+  "pinyin": "lǐ",
+  "sens": "Rites, bienséance"
+ },
+ {
+  "hanzi": "民国",
+  "trad": "",
+  "pinyin": "Mínguó",
+  "sens": "République de Chine (1912-1949)"
+ },
+ {
+  "hanzi": "里",
+  "trad": "",
+  "pinyin": "lǐ",
+  "sens": "Li, unité de distance (environ 500 m) ou unité rurale de 110 foyers"
+ },
+ {
+  "hanzi": "字",
+  "trad": "",
+  "pinyin": "zì",
+  "sens": "Prénom social (nom de majorité)"
+ },
+ {
+  "hanzi": "号",
+  "trad": "",
+  "pinyin": "hào",
+  "sens": "Nom de plume (surnom)"
+ }
+]

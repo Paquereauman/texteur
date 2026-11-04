@@ -1,0 +1,15 @@
+/target
+# Données du livre Suhou (droits d auteur) et sorties de mesure
+ressources/rapport_complet.tsv
+ressources/_*
+fautes_livre.txt
+*.stackdump
+# Personnel : termes relevés dans le livre, journaux de conversation avec les agents
+ressources/base_chinois_perso.json
+ressources/user_prompts_dump.txt
+ressources/steps_analysis/
+*.test_tmp
+ressources/dump_prompts.py
+ressources/analyze_rules.py
+ressources/extract_steps.py
+ressources/print_steps.py
