@@ -115,6 +115,8 @@ def main():
     with open(os.path.join(ICI, "_ratees.txt"), "w", encoding="utf-8") as f:
         for r in ratees:
             f.write(" | ".join(map(str, r)) + "\n")
+    import graphique_progres  # courbe jour par jour (progres.csv, progres.svg)
+    graphique_progres.ajouter(100 * trouvees / total, 100 * impaires[0] / max(1, impaires[1]))
 
 
 if __name__ == "__main__":

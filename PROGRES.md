@@ -1,5 +1,7 @@
 # Progrès de Texteur
 
+![Progrès de Texteur jour par jour](progres.svg)
+
 **Mesure :** part des 345 fautes de langue (grammaire, style, syntaxe, ponctuation) d'un rapport de relecture
 professionnelle que Texteur repère. Les erreurs hors de portée d'un correcteur ne sont pas comptées : sens, faits
 historiques, caractères chinois. Script : `ressources/mesure_rapport.py`.
