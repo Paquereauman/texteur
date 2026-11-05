@@ -8,6 +8,7 @@
 mod dico;
 mod docx;
 mod ecriture;
+mod editions;
 mod grammaire;
 mod ia;
 mod maj;
@@ -21,6 +22,7 @@ use pedagogie::explication_pedagogique_approfondie;
 
 use std::collections::HashSet;
 use std::path::PathBuf;
+use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::{Arc, Mutex};
 use std::time::{Duration, Instant};
 
@@ -165,6 +167,7 @@ pub enum PanneauLateral {
     Aucun,
     Detections,
     Dictionnaires,
+    Editions,
 }
 
 struct App {
@@ -192,6 +195,13 @@ struct App {
     saisie_mot_rapide: String,
     message: String,
     fermeture_confirmee: bool,
+    /// Fichier à ouvrir malgré un texte non enregistré (deuxième demande = confirmation)
+    ouverture_en_attente: Option<PathBuf>,
+    /// Titre affiché par la fenêtre (envoyé seulement quand il change)
+    titre_fenetre: String,
+    /// Volet ouvert avant le mode écriture, rouvert à la sortie
+    panneau_avant_ecriture: PanneauLateral,
+    nouveau_confirme: bool,
     /// Règles Grammalecte, appliquées en direct : seuls les paragraphes modifiés repartent au serveur
     alertes_gl: Vec<AlerteG>,
     rx_gl: Option<std::sync::mpsc::Receiver<Result<Vec<AlerteG>, String>>>,
@@ -215,6 +225,14 @@ struct App {
     rx_maj: Option<std::sync::mpsc::Receiver<bool>>,
     maj_signalee: bool,
     prochaine_verif_maj: Instant,
+    /// Règles d'édition (maisons d'édition et leurs conventions)
+    editions: editions::Editions,
+    edition_ouverte: usize,
+    nouvelle_edition: String,
+    nouvelle_regle: editions::RegleEdition,
+    collage_regles: Option<String>,
+    filtre_regles: String,
+    regle_ouverte: Option<usize>,
 }
 
 /// Action demandée depuis le plan (appliquée après l'affichage du panneau).
@@ -239,6 +257,118 @@ fn abrege(t: &str, n: usize) -> String {
     } else {
         format!("{}…", t.chars().take(n.saturating_sub(1)).collect::<String>().trim_end())
     }
+}
+
+/// Mode clair doux (papier crème, encre brune) ou mode sombre ; lu par rgb() à chaque image.
+static CLAIR: AtomicBool = AtomicBool::new(false);
+
+fn clair() -> bool {
+    CLAIR.load(Ordering::Relaxed)
+}
+
+/// Couleur de l'interface. Les couleurs sont pensées pour le mode sombre ; en mode clair elles sont traduites :
+/// les fonds sombres deviennent un papier crème (jamais blanc pur), les textes clairs une encre brune,
+/// les couleurs vives sont assombries pour rester lisibles sur le papier.
+fn rgb(r: u8, g: u8, b: u8) -> Color32 {
+    if !clair() {
+        return Color32::from_rgb(r, g, b);
+    }
+    let (h, s, l) = vers_tsl(r, g, b);
+    let chroma = (r.max(g).max(b) - r.min(g).min(b)) as f32 / 255.0; // vivacité réelle (un blanc bleuté n'est pas vif)
+    let (h2, s2, l2) = if chroma >= 0.25 && l >= 0.4 {
+        (h, s * 0.85, (l * 0.62).clamp(0.26, 0.45)) // couleur vive : assombrie
+    } else if l < 0.4 {
+        if chroma >= 0.12 { (h, s.min(0.6) * 0.45, 0.93 - l * 0.4) } else { (40.0, 0.24, 0.945 - l * 0.45) } // fond : papier
+    } else if l > 0.6 {
+        (30.0, 0.12, 1.0 - l * 0.85) // texte clair : encre
+    } else {
+        (35.0, 0.08, 0.92 - l * 0.9) // gris moyen
+    };
+    depuis_tsl(h2, s2, l2)
+}
+
+fn vers_tsl(r: u8, g: u8, b: u8) -> (f32, f32, f32) {
+    let (r, g, b) = (r as f32 / 255.0, g as f32 / 255.0, b as f32 / 255.0);
+    let (max, min) = (r.max(g).max(b), r.min(g).min(b));
+    let l = (max + min) / 2.0;
+    let d = max - min;
+    if d < 1e-6 {
+        return (0.0, 0.0, l);
+    }
+    let s = d / (1.0 - (2.0 * l - 1.0).abs());
+    let h = if max == r { ((g - b) / d).rem_euclid(6.0) } else if max == g { (b - r) / d + 2.0 } else { (r - g) / d + 4.0 };
+    (h * 60.0, s.min(1.0), l)
+}
+
+fn depuis_tsl(h: f32, s: f32, l: f32) -> Color32 {
+    let c = (1.0 - (2.0 * l - 1.0).abs()) * s;
+    let x = c * (1.0 - ((h / 60.0).rem_euclid(2.0) - 1.0).abs());
+    let m = l - c / 2.0;
+    let (r, g, b) = match (h / 60.0) as u32 % 6 {
+        0 => (c, x, 0.0),
+        1 => (x, c, 0.0),
+        2 => (0.0, c, x),
+        3 => (0.0, x, c),
+        4 => (x, 0.0, c),
+        _ => (c, 0.0, x),
+    };
+    let v = |t: f32| ((t + m) * 255.0).round().clamp(0.0, 255.0) as u8;
+    Color32::from_rgb(v(r), v(g), v(b))
+}
+
+fn appliquer_theme(ctx: &egui::Context) {
+        ctx.style_mut(|s| {
+            s.visuals = if clair() { egui::Visuals::light() } else { egui::Visuals::dark() };
+            s.text_styles.insert(egui::TextStyle::Heading, FontId::proportional(17.5));
+            s.text_styles.insert(egui::TextStyle::Body, FontId::proportional(15.5));
+            s.text_styles.insert(egui::TextStyle::Button, FontId::proportional(13.5));
+            s.text_styles.insert(egui::TextStyle::Small, FontId::proportional(12.5));
+
+            s.spacing.item_spacing = egui::vec2(8.0, 6.0);
+            s.spacing.button_padding = egui::vec2(10.0, 5.0);
+
+            s.visuals.dark_mode = !clair();
+            s.visuals.panel_fill = rgb(16, 18, 24); // #101218 ardoise sombre
+            s.visuals.window_fill = rgb(22, 26, 35); // #161A23 cartes de surface
+            s.visuals.extreme_bg_color = rgb(13, 15, 20);
+
+            // Widgets inactifs
+            s.visuals.widgets.inactive.bg_fill = rgb(26, 31, 41);
+            s.visuals.widgets.inactive.weak_bg_fill = rgb(22, 26, 35);
+            s.visuals.widgets.inactive.bg_stroke = Stroke::new(1.0_f32, rgb(40, 48, 63));
+            s.visuals.widgets.inactive.corner_radius = egui::CornerRadius::same(6);
+            s.visuals.widgets.inactive.fg_stroke = Stroke::new(1.0_f32, rgb(215, 222, 235));
+
+            // Widgets survolés
+            s.visuals.widgets.hovered.bg_fill = rgb(38, 45, 60);
+            s.visuals.widgets.hovered.weak_bg_fill = rgb(32, 38, 51);
+            s.visuals.widgets.hovered.bg_stroke = Stroke::new(1.0_f32, rgb(65, 77, 102));
+            s.visuals.widgets.hovered.corner_radius = egui::CornerRadius::same(6);
+            s.visuals.widgets.hovered.fg_stroke = Stroke::new(1.0_f32, rgb(245, 248, 255));
+
+            // Widgets actifs / cliqués
+            s.visuals.widgets.active.bg_fill = rgb(48, 58, 78);
+            s.visuals.widgets.active.weak_bg_fill = rgb(42, 51, 68);
+            s.visuals.widgets.active.bg_stroke = Stroke::new(1.0_f32, rgb(99, 102, 241));
+            s.visuals.widgets.active.corner_radius = egui::CornerRadius::same(6);
+            s.visuals.widgets.active.fg_stroke = Stroke::new(1.0_f32, rgb(255, 255, 255));
+
+            // Widgets déroulés
+            s.visuals.widgets.open.bg_fill = rgb(32, 38, 51);
+            s.visuals.widgets.open.corner_radius = egui::CornerRadius::same(6);
+
+            // Sélection de texte moderne
+            s.visuals.selection.bg_fill = if clair() { Color32::from_rgba_unmultiplied(99, 102, 241, 70) } else { Color32::from_rgba_unmultiplied(79, 70, 229, 130) };
+            s.visuals.selection.stroke = Stroke::new(1.0_f32, rgb(129, 140, 248));
+            if clair() {
+                // cases à cocher, champs et bordures bien visibles sur le papier
+                s.visuals.widgets.inactive.bg_fill = Color32::from_rgb(252, 250, 245);
+                s.visuals.widgets.inactive.bg_stroke = Stroke::new(1.0_f32, Color32::from_rgb(196, 186, 168));
+                s.visuals.widgets.hovered.bg_stroke = Stroke::new(1.0_f32, Color32::from_rgb(160, 146, 120));
+                s.visuals.widgets.noninteractive.bg_stroke = Stroke::new(1.0_f32, Color32::from_rgb(218, 209, 192));
+                s.visuals.extreme_bg_color = Color32::from_rgb(252, 250, 245);
+            }
+        });
 }
 
 fn polices(ctx: &egui::Context) {
@@ -438,16 +568,16 @@ fn colore(
         color: ui.visuals().text_color(),
         ..Default::default()
     };
-    // Surlignage doux et reposant pour les répétitions (fond pastel lavande clair)
+    // Répétitions : surligneur jaune fluo
     let repet_douce = TextFormat {
-        color: if sombre { Color32::from_rgb(222, 214, 250) } else { Color32::from_rgb(90, 65, 140) },
-        background: if sombre { Color32::from_rgba_unmultiplied(167, 139, 250, 48) } else { Color32::from_rgba_unmultiplied(167, 139, 250, 55) },
+        color: if sombre { rgb(235, 228, 205) } else { Color32::from_rgb(40, 34, 20) },
+        background: if sombre { Color32::from_rgba_unmultiplied(250, 204, 21, 40) } else { Color32::from_rgba_unmultiplied(255, 226, 70, 80) },
         ..normal.clone()
     };
     // Surlignage accentué pour la répétition activement sélectionnée
     let repet_active = TextFormat {
-        color: if sombre { Color32::from_rgb(245, 240, 255) } else { Color32::from_rgb(75, 45, 145) },
-        background: if sombre { Color32::from_rgba_unmultiplied(167, 139, 250, 95) } else { Color32::from_rgba_unmultiplied(167, 139, 250, 110) },
+        color: if sombre { Color32::from_rgb(255, 245, 205) } else { Color32::from_rgb(40, 34, 20) },
+        background: if sombre { Color32::from_rgba_unmultiplied(250, 204, 21, 95) } else { Color32::from_rgba_unmultiplied(255, 214, 40, 150) },
         ..normal.clone()
     };
 
@@ -460,8 +590,8 @@ fn colore(
         if let Some((niv, _)) = ecriture::titre(l) {
             let m = niv as usize + 1;
             let taille = [24.0, 21.0, 19.0].get(niv as usize - 1).copied().unwrap_or(18.0);
-            let couleur = if sombre { Color32::from_rgb(240, 244, 255) } else { Color32::BLACK };
-            let marque = TextFormat { font_id: FontId::proportional(taille), color: Color32::from_rgb(90, 100, 125), ..normal.clone() };
+            let couleur = rgb(240, 244, 255);
+            let marque = TextFormat { font_id: FontId::proportional(taille), color: rgb(90, 100, 125), ..normal.clone() };
             let fmt = TextFormat { font_id: FontId::proportional(taille), color: couleur, ..normal.clone() };
             morceaux.push((c, c + m, marque));
             morceaux.push((c + m, c + n, fmt));
@@ -520,16 +650,25 @@ fn colore(
 
 /// Soulignement ondulé avec couleur dédiée selon le type de faute :
 /// - Rouge pour l'orthographe
-/// - Vert pour la grammaire / accords
-/// - Orange pour les doublons
+/// - Orange pour la grammaire / accords
+/// - Jaune pour les doublons et répétitions
 /// - Violet pour les répétitions de style
+/// Faute de typographie (espaces, guillemets, tirets, ponctuation) : soulignée en bleu.
+fn est_typo(a: &AlerteG) -> bool {
+    let r = a.regle.to_lowercase();
+    ["espace", "guillemet", "apostrophe", "tiret", "ponctuation", "typo", "insécable", "nbsp", "esp_", "indent", "alinéa"]
+        .iter()
+        .any(|m| r.contains(m))
+}
+
 fn vagues(peintre: &egui::Painter, galley: &egui::Galley, origine: egui::Pos2, alertes: &[AlerteG]) {
     for a in alertes {
         let couleur = match a.type_alerte {
-            TypeAlerte::Orthographe => Color32::from_rgb(235, 65, 65), // Rouge franc
-            TypeAlerte::Grammaire => Color32::from_rgb(45, 185, 130),   // Vert émeraude
-            TypeAlerte::Doublon => Color32::from_rgb(245, 160, 30),     // Orange vif
-            TypeAlerte::Repetition => Color32::from_rgba_unmultiplied(155, 145, 205, 180), // Lavande doux et reposant
+            TypeAlerte::Orthographe => rgb(235, 65, 65), // Rouge franc
+            TypeAlerte::Grammaire if est_typo(a) => rgb(59, 130, 246), // Bleu : typographie
+            TypeAlerte::Grammaire => rgb(240, 135, 45),   // Orange
+            TypeAlerte::Doublon => rgb(234, 179, 8), // jaune, comme les répétitions
+            TypeAlerte::Repetition => rgb(234, 179, 8), // jaune
         };
 
         let mut lignes: Vec<(f32, f32, f32)> = Vec::new();
@@ -620,50 +759,9 @@ impl App {
 
     fn new(cc: &eframe::CreationContext) -> Self {
         polices(&cc.egui_ctx);
-        cc.egui_ctx.style_mut(|s| {
-            s.text_styles.insert(egui::TextStyle::Heading, FontId::proportional(17.5));
-            s.text_styles.insert(egui::TextStyle::Body, FontId::proportional(15.5));
-            s.text_styles.insert(egui::TextStyle::Button, FontId::proportional(13.5));
-            s.text_styles.insert(egui::TextStyle::Small, FontId::proportional(12.5));
-
-            s.spacing.item_spacing = egui::vec2(8.0, 6.0);
-            s.spacing.button_padding = egui::vec2(10.0, 5.0);
-
-            s.visuals.dark_mode = true;
-            s.visuals.panel_fill = Color32::from_rgb(16, 18, 24); // #101218 ardoise sombre
-            s.visuals.window_fill = Color32::from_rgb(22, 26, 35); // #161A23 cartes de surface
-            s.visuals.extreme_bg_color = Color32::from_rgb(13, 15, 20);
-
-            // Widgets inactifs
-            s.visuals.widgets.inactive.bg_fill = Color32::from_rgb(26, 31, 41);
-            s.visuals.widgets.inactive.weak_bg_fill = Color32::from_rgb(22, 26, 35);
-            s.visuals.widgets.inactive.bg_stroke = Stroke::new(1.0_f32, Color32::from_rgb(40, 48, 63));
-            s.visuals.widgets.inactive.corner_radius = egui::CornerRadius::same(6);
-            s.visuals.widgets.inactive.fg_stroke = Stroke::new(1.0_f32, Color32::from_rgb(215, 222, 235));
-
-            // Widgets survolés
-            s.visuals.widgets.hovered.bg_fill = Color32::from_rgb(38, 45, 60);
-            s.visuals.widgets.hovered.weak_bg_fill = Color32::from_rgb(32, 38, 51);
-            s.visuals.widgets.hovered.bg_stroke = Stroke::new(1.0_f32, Color32::from_rgb(65, 77, 102));
-            s.visuals.widgets.hovered.corner_radius = egui::CornerRadius::same(6);
-            s.visuals.widgets.hovered.fg_stroke = Stroke::new(1.0_f32, Color32::from_rgb(245, 248, 255));
-
-            // Widgets actifs / cliqués
-            s.visuals.widgets.active.bg_fill = Color32::from_rgb(48, 58, 78);
-            s.visuals.widgets.active.weak_bg_fill = Color32::from_rgb(42, 51, 68);
-            s.visuals.widgets.active.bg_stroke = Stroke::new(1.0_f32, Color32::from_rgb(99, 102, 241));
-            s.visuals.widgets.active.corner_radius = egui::CornerRadius::same(6);
-            s.visuals.widgets.active.fg_stroke = Stroke::new(1.0_f32, Color32::WHITE);
-
-            // Widgets déroulés
-            s.visuals.widgets.open.bg_fill = Color32::from_rgb(32, 38, 51);
-            s.visuals.widgets.open.corner_radius = egui::CornerRadius::same(6);
-
-            // Sélection de texte moderne
-            s.visuals.selection.bg_fill = Color32::from_rgba_unmultiplied(79, 70, 229, 130);
-            s.visuals.selection.stroke = Stroke::new(1.0_f32, Color32::from_rgb(129, 140, 248));
-        });
         let biblio = Bibliotheque::charge();
+        CLAIR.store(biblio.reglages.theme_clair || std::env::var("TEXTEUR_THEME").is_ok_and(|t| t == "clair"), Ordering::Relaxed);
+        appliquer_theme(&cc.egui_ctx);
         let masque = Arc::new(Masque::new(biblio.formes_actives(), biblio.reglages.proteger_ecritures));
         let mut app = App {
             texte: TEXTE_ESSAI.into(),
@@ -672,6 +770,13 @@ impl App {
             selection_demandee: None,
             ortho: Orthographe::new(cc.egui_ctx.clone(), &biblio.reglages.langue),
             grammaire: CorrecteurGrammaire::new(),
+            editions: editions::Editions::charge(),
+            edition_ouverte: 0,
+            nouvelle_edition: String::new(),
+            nouvelle_regle: Default::default(),
+            collage_regles: None,
+            filtre_regles: String::new(),
+            regle_ouverte: None,
             style: AnalyseurStyle::new(),
             biblio,
             masque,
@@ -690,6 +795,10 @@ impl App {
             saisie_mot_rapide: String::new(),
             message: String::new(),
             fermeture_confirmee: false,
+            ouverture_en_attente: None,
+            titre_fenetre: String::new(),
+            panneau_avant_ecriture: PanneauLateral::Detections,
+            nouveau_confirme: false,
             alertes_gl: Vec::new(),
             rx_gl: None,
             cache_gl: Default::default(),
@@ -711,6 +820,7 @@ impl App {
         };
         app.mots_ouverture = nb_mots(&app.texte);
         app.edite = app.biblio.cible().unwrap_or(0);
+        app.grammaire.edition = app.editions.edition_active().cloned();
         if let Some(chemin) = std::env::args().nth(1) {
             app.ouvre(PathBuf::from(chemin));
         }
@@ -718,6 +828,13 @@ impl App {
     }
 
     fn ouvre(&mut self, chemin: PathBuf) {
+        if self.modifie && self.ouverture_en_attente.as_ref() != Some(&chemin) {
+            self.message = format!("⚠ Modifications non enregistrées : Ctrl+S pour les garder, ou rouvrez « {} » pour les abandonner.",
+                chemin.file_name().unwrap_or_default().to_string_lossy());
+            self.ouverture_en_attente = Some(chemin);
+            return;
+        }
+        self.ouverture_en_attente = None;
         let est_docx = chemin.extension().is_some_and(|e| e.eq_ignore_ascii_case("docx"));
         let lu = if est_docx {
             docx::lis_plan(&chemin)
@@ -842,11 +959,30 @@ impl App {
         let (a, b) = (octet(&self.texte, debut), octet(&self.texte, fin));
         self.texte.replace_range(a..b, par);
         self.modifie = true;
+        self.fermeture_confirmee = false;
         let curseur = debut + par.chars().count();
         self.selection_demandee = Some((curseur, curseur));
     }
 
     /// Génère et copie dans le presse-papiers le rapport d'anomalies avec leurs phrases de contexte
+    /// Copie les phrases fautives (avec une consigne) pour les faire corriger par une IA.
+    fn copier_passages_ia(&mut self) {
+        let texte = ecriture::sans_marques(&self.texte);
+        // les alertes affichées (Grammalecte et détecteur compris) ; sinon une analyse locale
+        let alertes = match &self.cache_analyse {
+            Some((_, (_, a, _))) => a.clone(),
+            None => analyse_unifiee(&texte, &self.masque, &self.ortho.etat, &self.grammaire, &self.style, &self.ignores,
+                OngletActif::Correction, None).1,
+        };
+        let alertes: Vec<AlerteG> = alertes.into_iter().filter(|a| a.type_alerte != TypeAlerte::Repetition).collect();
+        let n = alertes.len();
+        let contenu = RapportIA::generer(&texte, &alertes, &[], &self.titre).vers_passages();
+        self.message = match arboard::Clipboard::new().and_then(|mut c| c.set_text(contenu)) {
+            Ok(()) => format!("✔ Passages à corriger copiés ({n} fautes) : collez-les dans ChatGPT, Claude, DeepSeek…"),
+            Err(e) => format!("Erreur presse-papiers : {e}"),
+        };
+    }
+
     fn copier_rapport_ia(&mut self, format_json: bool) {
         let (_plages, alertes, repetitions) = analyse_unifiee(
             &self.texte,
@@ -912,12 +1048,24 @@ impl App {
     /// le reste (fichiers, rapport, langue, surlignage) est rangé dans des menus.
     fn barre(&mut self, ui: &mut egui::Ui, nb_fautes: usize, nb_repet: usize) {
         ui.horizontal(|ui| {
-            let (rect, _) = ui.allocate_exact_size(egui::vec2(24.0, 24.0), egui::Sense::hover());
-            ui.painter().rect_filled(rect, egui::CornerRadius::same(5), Color32::from_rgb(16, 185, 129));
-            ui.painter().text(rect.center(), egui::Align2::CENTER_CENTER, "✍", egui::FontId::proportional(15.0), Color32::WHITE);
-            ui.add_space(4.0);
-
             ui.menu_button("📂 Fichier", |ui| {
+                if ui.button("Nouveau document     Ctrl+N").clicked() {
+                    ui.close_menu();
+                    self.nouveau(String::new(), "Sans titre");
+                }
+                if ui.button("Nouveau livre (plan type)").on_hover_text("Introduction, 5 chapitres de deux parties, conclusion ; mode écriture").clicked() {
+                    ui.close_menu();
+                    if self.nouveau(ecriture::modele_livre(5), "Nouveau livre") {
+                        if self.onglet != OngletActif::Ecriture {
+                            self.bascule_ecriture();
+                        }
+                        if self.biblio.reglages.pages_visees == 0 {
+                            self.biblio.reglages.pages_visees = 200;
+                            let _ = self.biblio.sauve_reglages();
+                        }
+                    }
+                }
+                ui.separator();
                 if ui.button("Ouvrir…                Ctrl+O").clicked() {
                     ui.close_menu();
                     if let Some(f) = rfd::FileDialog::new().add_filter("Documents", &["docx", "txt", "md"]).pick_file() {
@@ -933,34 +1081,37 @@ impl App {
                     self.enregistre(true);
                 }
                 ui.separator();
-                if ui.button("🤖 Copier le rapport pour une IA")
-                    .on_hover_text("Fautes + phrases de contexte, prêtes à coller dans ChatGPT, Claude, Gemini…")
+                if ui.button("📋 Copier les passages à corriger pour une IA")
+                    .on_hover_text("Chaque phrase fautive avec ses fautes et une consigne : collez dans ChatGPT, Claude, DeepSeek…")
                     .clicked()
                 {
                     ui.close_menu();
-                    self.copier_rapport_ia(false);
+                    self.copier_passages_ia();
                 }
+                ui.menu_button("🤖 Rapport complet pour une IA", |ui| {
+                    if ui.button("📋 Copier (Markdown)").on_hover_text("Fautes + phrases de contexte, prêtes à coller dans ChatGPT, Claude, Gemini…").clicked() {
+                        ui.close_menu();
+                        self.copier_rapport_ia(false);
+                    }
+                    if ui.button("📋 Copier (JSON)").clicked() {
+                        ui.close_menu();
+                        self.copier_rapport_ia(true);
+                    }
+                    if ui.button("💾 Enregistrer dans un fichier…").clicked() {
+                        ui.close_menu();
+                        self.exporter_rapport_ia_fichier();
+                    }
+                });
             });
             ui.separator();
 
-            // Mode : correction ou style (le surlignage ne concerne que le style)
-            if ui.selectable_label(self.onglet == OngletActif::Correction, format!("✓ Correction  {nb_fautes}")).clicked() {
-                self.onglet = OngletActif::Correction;
-            }
-            if ui.selectable_label(self.onglet == OngletActif::Repetitions, format!("◈ Style  {nb_repet}")).clicked() {
-                self.onglet = OngletActif::Repetitions;
-            }
-            if ui.selectable_label(self.onglet == OngletActif::Ecriture, "✎ Écriture")
-                .on_hover_text("Plan des chapitres, déplacement des sections, concentration, objectif de mots")
+            let ecriture = self.onglet == OngletActif::Ecriture;
+            if ui.selectable_label(ecriture, "✎ Écriture")
+                .on_hover_text("Mode écriture (Ctrl+E) : page centrée sans distraction, plan des chapitres, objectif de mots")
                 .clicked()
             {
-                self.onglet = OngletActif::Ecriture;
+                self.bascule_ecriture();
             }
-            if self.onglet == OngletActif::Repetitions {
-                ui.checkbox(&mut self.surligner_repetitions, "surligner")
-                    .on_hover_text("Surligner les répétitions dans le texte");
-            }
-            ui.separator();
 
             // À droite : les volets, puis les réglages
             ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
@@ -972,6 +1123,15 @@ impl App {
                     if ui.button("⟳ Vérifier les mises à jour").on_hover_text("Texteur recompilé, nouveau modèle du détecteur").clicked() {
                         ui.close_menu();
                         self.verifier_maj(true);
+                    }
+                    let mut c = self.biblio.reglages.theme_clair;
+                    if ui.checkbox(&mut c, "☀ Mode clair (papier, doux pour les yeux)").changed() {
+                        self.biblio.reglages.theme_clair = c;
+                        CLAIR.store(c, Ordering::Relaxed);
+                        appliquer_theme(ui.ctx());
+                        if let Err(e) = self.biblio.sauve_reglages() {
+                            self.message = format!("Réglage non enregistré : {e}");
+                        }
                     }
                     ui.separator();
                     ui.label(egui::RichText::new("Langue du correcteur").weak());
@@ -990,7 +1150,7 @@ impl App {
                 }
 
                 if self.maj_texteur.is_some() || self.maj_modele {
-                    let bouton = egui::RichText::new("⬆ Mise à jour").strong().color(Color32::from_rgb(52, 211, 153));
+                    let bouton = egui::RichText::new("⬆ Mise à jour").strong().color(rgb(52, 211, 153));
                     ui.menu_button(bouton, |ui| {
                         if let Some((_, age)) = self.maj_texteur {
                             let quand = if age < 120 { format!("il y a {age} min") } else { format!("il y a {} h", age / 60) };
@@ -1015,10 +1175,15 @@ impl App {
                     let actif = self.panneau_lateral == panneau;
                     if ui.selectable_label(actif, libelle).on_hover_text(aide).clicked() {
                         self.panneau_lateral = if actif { PanneauLateral::Aucun } else { panneau };
+                        if self.onglet == OngletActif::Ecriture {
+                            self.onglet = OngletActif::Correction; // un volet ouvert quitte le mode écriture
+                        }
                     }
                 };
+                let ed = if self.editions.active.is_empty() { "📘 Règles éditeurs".to_string() } else { format!("📘 {}", abrege(&self.editions.active, 14)) };
+                volet(ui, PanneauLateral::Editions, ed, "Règles éditeurs : les conventions de chaque maison d'édition");
                 volet(ui, PanneauLateral::Dictionnaires, "📖 Dico".into(), "Dictionnaires personnels, mots et caractères chinois protégés (Ctrl+D : ajouter la sélection)");
-                volet(ui, PanneauLateral::Detections, format!("🎯 Fautes  {nb_fautes}"), "F9 — liste des fautes (Ctrl+B)");
+                volet(ui, PanneauLateral::Detections, format!("🎯 Fautes  {}", nb_fautes + nb_repet), "F9 — fautes et répétitions (Ctrl+B)");
             });
         });
     }
@@ -1043,9 +1208,9 @@ impl App {
 
         if let Some(ref sel) = texte_selectionne {
             ui.horizontal(|ui| {
-                let btn_sel = egui::Button::new(egui::RichText::new(format!("✔ Protéger « {} » au dictionnaire (Ctrl+D)", sel)).strong().color(Color32::from_rgb(56, 189, 248)))
-                    .fill(Color32::from_rgb(20, 36, 48))
-                    .stroke(Stroke::new(1.0_f32, Color32::from_rgb(14, 165, 233)));
+                let btn_sel = egui::Button::new(egui::RichText::new(format!("✔ Protéger « {} » au dictionnaire (Ctrl+D)", sel)).strong().color(rgb(56, 189, 248)))
+                    .fill(rgb(20, 36, 48))
+                    .stroke(Stroke::new(1.0_f32, rgb(14, 165, 233)));
                 if ui.add(btn_sel).on_hover_text("Ajouter au dictionnaire personnel pour ne plus le compter comme faute").clicked() {
                     self.ajoute_selection();
                 }
@@ -1059,10 +1224,10 @@ impl App {
         if self.onglet == OngletActif::Repetitions {
             // MODE RÉPÉTITIONS & STYLE (Lavande doux, reposant et élégant)
             ui.horizontal_wrapped(|ui| {
-                ui.colored_label(Color32::from_rgb(196, 181, 253), egui::RichText::new("◈ Style & Répétitions").strong());
+                ui.colored_label(rgb(250, 204, 21), egui::RichText::new("◈ Style & Répétitions").strong());
 
                 if repetitions.is_empty() {
-                    ui.label(egui::RichText::new("✨ Vocabulaire riche et varié — aucune répétition lourde détectée.").color(Color32::from_rgb(52, 211, 153)));
+                    ui.label(egui::RichText::new("✨ Vocabulaire riche et varié — aucune répétition lourde détectée.").color(rgb(52, 211, 153)));
                     return;
                 }
 
@@ -1079,9 +1244,9 @@ impl App {
                     let est_choisi = rep_active.map_or(false, |ra| ra.racine == rep.racine);
                     let label = format!("{} ({})", rep.mot, rep.nombre);
                     let btn = if est_choisi {
-                        egui::Button::new(egui::RichText::new(label).strong().color(Color32::from_rgb(196, 181, 253)))
-                            .fill(Color32::from_rgb(44, 38, 64))
-                            .stroke(Stroke::new(1.0_f32, Color32::from_rgb(139, 120, 195)))
+                        egui::Button::new(egui::RichText::new(label).strong().color(rgb(250, 204, 21)))
+                            .fill(rgb(44, 38, 64))
+                            .stroke(Stroke::new(1.0_f32, rgb(139, 120, 195)))
                     } else {
                         egui::Button::new(label)
                     };
@@ -1095,7 +1260,7 @@ impl App {
 
                 if let Some(rep) = rep_active {
                     ui.separator();
-                    ui.label(egui::RichText::new(format!("« {} »", rep.mot)).strong().color(Color32::from_rgb(196, 181, 253)));
+                    ui.label(egui::RichText::new(format!("« {} »", rep.mot)).strong().color(rgb(250, 204, 21)));
 
                     // Navigation entre les occurrences
                     let occ_idx = rep.occurrences.iter().position(|&(d, f)| d <= curseur && curseur <= f);
@@ -1111,9 +1276,9 @@ impl App {
                     if !rep.alternatives.is_empty() {
                         ui.label(egui::RichText::new("Remplacer par :").weak().small());
                         for alt in &rep.alternatives {
-                            let btn_alt = egui::Button::new(egui::RichText::new(alt).color(Color32::from_rgb(216, 206, 253)))
-                                .fill(Color32::from_rgb(36, 32, 50))
-                                .stroke(Stroke::new(1.0_f32, Color32::from_rgb(90, 80, 125)));
+                            let btn_alt = egui::Button::new(egui::RichText::new(alt).color(rgb(216, 206, 253)))
+                                .fill(rgb(36, 32, 50))
+                                .stroke(Stroke::new(1.0_f32, rgb(90, 80, 125)));
                             if ui.add(btn_alt).clicked() {
                                 let occ_actuelle = occ_idx.map_or_else(|| rep.occurrences.first().copied(), |i| Some(rep.occurrences[i]));
                                 if let Some((deb, fin)) = occ_actuelle {
@@ -1136,10 +1301,11 @@ impl App {
             if let Some(ref a) = sous_curseur {
                 // Badge de couleur selon le type
                 let (couleur_badge, titre_badge) = match a.type_alerte {
-                    TypeAlerte::Orthographe => (Color32::from_rgb(248, 113, 113), "Orthographe"),
-                    TypeAlerte::Grammaire => (Color32::from_rgb(52, 211, 153), "Grammaire"),
-                    TypeAlerte::Doublon => (Color32::from_rgb(245, 158, 11), "Doublon"),
-                    TypeAlerte::Repetition => (Color32::from_rgb(196, 181, 253), "Style"),
+                    TypeAlerte::Orthographe => (rgb(248, 113, 113), "Orthographe"),
+                    TypeAlerte::Grammaire if est_typo(a) => (rgb(96, 165, 250), "Typographie"),
+                    TypeAlerte::Grammaire => (rgb(251, 146, 60), "Grammaire"),
+                    TypeAlerte::Doublon => (rgb(250, 204, 21), "Doublon"),
+                    TypeAlerte::Repetition => (rgb(250, 204, 21), "Style"),
                 };
 
                 ui.colored_label(couleur_badge, egui::RichText::new(format!("● {titre_badge}")).strong());
@@ -1147,7 +1313,7 @@ impl App {
                 ui.label(egui::RichText::new(&a.explication).weak());
 
                 if a.type_alerte == TypeAlerte::Doublon {
-                    if ui.button(egui::RichText::new("🗑 Supprimer le doublon").strong().color(Color32::from_rgb(245, 158, 11))).clicked() {
+                    if ui.button(egui::RichText::new("🗑 Supprimer le doublon").strong().color(rgb(250, 204, 21))).clicked() {
                         let car: Vec<char> = self.texte.chars().collect();
                         let mut deb = a.debut;
                         while deb > 0 && car[deb - 1].is_whitespace() {
@@ -1157,9 +1323,9 @@ impl App {
                     }
                 } else {
                     for s in &a.suggestions {
-                        let btn_sugg = egui::Button::new(egui::RichText::new(s).strong().color(Color32::from_rgb(56, 189, 248)))
-                            .fill(Color32::from_rgb(22, 34, 46))
-                            .stroke(Stroke::new(1.0_f32, Color32::from_rgb(40, 80, 110)));
+                        let btn_sugg = egui::Button::new(egui::RichText::new(s).strong().color(rgb(56, 189, 248)))
+                            .fill(rgb(22, 34, 46))
+                            .stroke(Stroke::new(1.0_f32, rgb(40, 80, 110)));
                         if ui.add(btn_sugg).clicked() {
                             self.remplace(a.debut, a.fin, s);
                         }
@@ -1167,10 +1333,12 @@ impl App {
                 }
 
                 ui.separator();
-                let btn_info = egui::Button::new(egui::RichText::new(if self.plus_infos_barre { "▲ Moins d'infos" } else { "ℹ Plus d'infos" }).small().color(Color32::from_rgb(147, 197, 253)))
-                    .fill(Color32::from_rgb(25, 30, 45));
-                if ui.add(btn_info).clicked() {
-                    self.plus_infos_barre = !self.plus_infos_barre;
+                if explication_pedagogique_approfondie(&a.regle, &a.mot, &a.explication).utile() {
+                    let btn_info = egui::Button::new(egui::RichText::new(if self.plus_infos_barre { "▲ Moins d'infos" } else { "ℹ Plus d'infos" }).small().color(rgb(147, 197, 253)))
+                        .fill(rgb(25, 30, 45));
+                    if ui.add(btn_info).clicked() {
+                        self.plus_infos_barre = !self.plus_infos_barre;
+                    }
                 }
 
                 if ui.button("Ignorer").clicked() {
@@ -1183,15 +1351,15 @@ impl App {
                     }
                 }
             } else if let Some(rep) = repetitions.iter().find(|r| r.occurrences.iter().any(|&(d, f)| d <= curseur && curseur <= f)) {
-                ui.colored_label(Color32::from_rgb(196, 181, 253), egui::RichText::new("◈ Répétition").strong());
+                ui.colored_label(rgb(250, 204, 21), egui::RichText::new("◈ Répétition").strong());
                 ui.label(egui::RichText::new(format!("« {} » ({} fois) :", rep.mot, rep.nombre)).strong());
                 let occ_idx = rep.occurrences.iter().position(|&(d, f)| d <= curseur && curseur <= f);
                 if !rep.alternatives.is_empty() {
                     ui.label(egui::RichText::new("Remplacer par :").weak().small());
                     for alt in &rep.alternatives {
-                        let btn_alt = egui::Button::new(egui::RichText::new(alt).color(Color32::from_rgb(216, 206, 253)))
-                            .fill(Color32::from_rgb(36, 32, 50))
-                            .stroke(Stroke::new(1.0_f32, Color32::from_rgb(90, 80, 125)));
+                        let btn_alt = egui::Button::new(egui::RichText::new(alt).color(rgb(216, 206, 253)))
+                            .fill(rgb(36, 32, 50))
+                            .stroke(Stroke::new(1.0_f32, rgb(90, 80, 125)));
                         if ui.add(btn_alt).clicked() {
                             let occ_actuelle = occ_idx.map_or_else(|| rep.occurrences.first().copied(), |i| Some(rep.occurrences[i]));
                             if let Some((deb, fin)) = occ_actuelle {
@@ -1203,43 +1371,296 @@ impl App {
             } else {
                 let n = alertes.len();
                 if n == 0 {
-                    ui.colored_label(Color32::from_rgb(52, 211, 153), egui::RichText::new("✨ Document impeccable — aucune anomalie détectée.").strong());
+                    ui.colored_label(rgb(52, 211, 153), egui::RichText::new("✨ Document impeccable — aucune anomalie détectée.").strong());
                 } else {
-                    ui.label(egui::RichText::new(format!("💡 {n} alertes détectées — vert pour grammaire, rouge pour orthographe (F8 pour naviguer).")).weak());
+                    ui.label(egui::RichText::new(format!("💡 Orange : grammaire · bleu : typographie · rouge : orthographe · jaune : répétitions · F8 : faute suivante")).weak());
                 }
             }
         });
 
         // Volet pédagogique dépliable « Plus d'infos » dans la barre inférieure
         if self.plus_infos_barre {
-            if let Some(ref a) = sous_curseur {
-                let fiche = explication_pedagogique_approfondie(&a.regle, &a.mot, &a.explication);
+            if let Some(fiche) = sous_curseur.as_ref().map(|a| explication_pedagogique_approfondie(&a.regle, &a.mot, &a.explication)).filter(|f| f.utile()) {
                 egui::Frame::NONE
-                    .fill(Color32::from_rgb(18, 22, 32))
-                    .stroke(Stroke::new(1.0_f32, Color32::from_rgb(55, 75, 110)))
+                    .fill(rgb(18, 22, 32))
+                    .stroke(Stroke::new(1.0_f32, rgb(55, 75, 110)))
                     .corner_radius(egui::CornerRadius::same(6))
                     .inner_margin(egui::Margin::symmetric(10, 8))
                     .show(ui, |ui| {
                         ui.horizontal_wrapped(|ui| {
-                            ui.label(egui::RichText::new(format!("📘 {}", fiche.titre)).strong().color(Color32::from_rgb(147, 197, 253)));
+                            ui.label(egui::RichText::new(format!("📘 {}", fiche.titre)).strong().color(rgb(147, 197, 253)));
                             ui.label(egui::RichText::new(format!("— {}", fiche.regle_complete)).weak().small());
                         });
                         ui.add_space(4.0);
                         ui.horizontal_wrapped(|ui| {
                             egui::Frame::NONE
-                                .fill(Color32::from_rgb(22, 34, 28))
-                                .stroke(Stroke::new(1.0_f32, Color32::from_rgb(34, 197, 94)))
+                                .fill(rgb(22, 34, 28))
+                                .stroke(Stroke::new(1.0_f32, rgb(34, 197, 94)))
                                 .corner_radius(egui::CornerRadius::same(5))
                                 .inner_margin(egui::Margin::symmetric(8, 4))
                                 .show(ui, |ui| {
                                     ui.label(egui::RichText::new(format!("💡 Astuce mnémotechnique :
-{}", fiche.astuce)).strong().color(Color32::from_rgb(134, 239, 172)).small());
+{}", fiche.astuce)).strong().color(rgb(134, 239, 172)).small());
                                 });
                             ui.label(egui::RichText::new(format!("Exemple : {}", fiche.exemple_correct)).small());
                         });
                     });
             }
         }
+    }
+
+
+    /// Volet « Éditions » : choisir l'édition appliquée, créer des éditions et leurs règles maison.
+    fn panneau_editions(&mut self, ui: &mut egui::Ui) {
+        let mut change = false;
+        ui.horizontal(|ui| {
+            ui.label(egui::RichText::new("📘 Règles éditeurs").size(17.0).strong());
+            ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
+                if ui.button("✕").on_hover_text("Fermer le panneau").clicked() {
+                    self.panneau_lateral = PanneauLateral::Aucun;
+                }
+            });
+        });
+        ui.label(egui::RichText::new("Les conventions de chaque éditeur, signalées comme des fautes dans le texte.").weak().small());
+        ui.add_space(6.0);
+
+        // Édition appliquée au texte
+        ui.horizontal(|ui| {
+            ui.label("Appliquer :");
+            let actuelle = if self.editions.active.is_empty() { "Aucune".to_string() } else { self.editions.active.clone() };
+            egui::ComboBox::from_id_salt("edition_active").selected_text(actuelle).width(200.0).show_ui(ui, |ui| {
+                change |= ui.selectable_value(&mut self.editions.active, String::new(), "Aucune").changed();
+                for e in &self.editions.liste {
+                    change |= ui.selectable_value(&mut self.editions.active, e.nom.clone(), &e.nom).changed();
+                }
+            });
+        });
+        ui.separator();
+
+        // Liste des éditions
+        ui.horizontal(|ui| {
+            let champ = ui.add(egui::TextEdit::singleline(&mut self.nouvelle_edition).hint_text("Nouvel éditeur…").desired_width(190.0));
+            let nom = self.nouvelle_edition.trim().to_string();
+            let libre = !nom.is_empty() && !self.editions.liste.iter().any(|e| e.nom.eq_ignore_ascii_case(&nom));
+            let entree = champ.lost_focus() && ui.input(|i| i.key_pressed(Key::Enter));
+            if (ui.add_enabled(libre, egui::Button::new("＋ Créer")).clicked() || entree && libre) {
+                self.editions.liste.push(crate::editions::Edition { nom, regles: vec![] });
+                self.edition_ouverte = self.editions.liste.len() - 1;
+                self.nouvelle_edition.clear();
+                change = true;
+            }
+        });
+        if self.editions.liste.is_empty() {
+            ui.label(egui::RichText::new("Aucun éditeur : créez-en un ci-dessus.").weak());
+            if change {
+                self.editions_modifiees();
+            }
+            return;
+        }
+        self.edition_ouverte = self.edition_ouverte.min(self.editions.liste.len() - 1);
+        ui.horizontal_wrapped(|ui| {
+            for (i, e) in self.editions.liste.iter().enumerate() {
+                let n = e.regles.len();
+                if ui.selectable_label(i == self.edition_ouverte, format!("{}  ({n})", e.nom)).clicked() {
+                    self.edition_ouverte = i;
+                }
+            }
+        });
+        ui.add_space(4.0);
+
+        let i = self.edition_ouverte;
+        let mut supprimer_edition = false;
+        ui.horizontal(|ui| {
+            ui.label("Nom :");
+            let ancien = self.editions.liste[i].nom.clone();
+            let r = ui.add(egui::TextEdit::singleline(&mut self.editions.liste[i].nom).desired_width(170.0));
+            if r.changed() {
+                if self.editions.active == ancien {
+                    self.editions.active = self.editions.liste[i].nom.clone();
+                }
+                change = true;
+            }
+            if ui.button("🗑").on_hover_text("Supprimer cet éditeur et ses règles").clicked() {
+                supprimer_edition = true;
+            }
+        });
+        if supprimer_edition {
+            let nom = self.editions.liste.remove(i).nom;
+            if self.editions.active == nom {
+                self.editions.active.clear();
+            }
+            self.editions_modifiees();
+            return;
+        }
+
+        // Ajouter une règle : une ligne, Entrée pour valider
+        egui::Frame::NONE
+            .fill(rgb(22, 26, 35))
+            .stroke(Stroke::new(1.0_f32, rgb(40, 48, 63)))
+            .corner_radius(8)
+            .inner_margin(egui::Margin::same(8))
+            .show(ui, |ui| {
+                ui.horizontal(|ui| {
+                    let l = ((ui.available_width() - 60.0) / 2.0).max(80.0);
+                    let a = ui.add(egui::TextEdit::singleline(&mut self.nouvelle_regle.motif).hint_text("à éviter (ex. Mr)").desired_width(l));
+                    ui.label("→");
+                    let b = ui.add(egui::TextEdit::singleline(&mut self.nouvelle_regle.remplacement).hint_text("à écrire (ex. M.)").desired_width(l));
+                    let entree = (a.lost_focus() || b.lost_focus()) && ui.input(|i| i.key_pressed(Key::Enter));
+                    let pret = !self.nouvelle_regle.motif.trim().is_empty();
+                    if (ui.add_enabled(pret, egui::Button::new("＋")).on_hover_text("Ajouter la règle (Entrée)").clicked() || entree) && pret {
+                        let r = std::mem::take(&mut self.nouvelle_regle);
+                        self.nouvelle_regle.mot_entier = r.mot_entier;
+                        self.nouvelle_regle.casse = r.casse;
+                        let lu = editions::regles_depuis(vec![vec![r.motif, r.remplacement, r.explication]]);
+                        let lu: Vec<_> = lu.into_iter().map(|x| editions::RegleEdition { casse: r.casse, ..x }).collect();
+                        let (aj, _) = editions::fusionne(&mut self.editions.liste[i], lu);
+                        self.message = if aj > 0 { "✔ Règle ajoutée.".into() } else { "✔ Règle mise à jour (motif déjà connu).".into() };
+                        change = true;
+                        a.request_focus();
+                    }
+                });
+                ui.add(egui::TextEdit::singleline(&mut self.nouvelle_regle.explication).hint_text("Pourquoi ? (facultatif, affiché avec la faute)").desired_width(f32::INFINITY));
+                ui.checkbox(&mut self.nouvelle_regle.casse, "Respecter les majuscules").on_hover_text("« Etat » est signalé, « état » non");
+            });
+
+        // Plusieurs règles d'un coup : collage ou fichier
+        ui.horizontal(|ui| {
+            if ui.button("📋 Coller une liste").on_hover_text("Copiez des lignes depuis Excel, Word ou un mail : une règle par ligne,\nà éviter → à écrire → explication (tabulation, →, = ou ; entre les colonnes)").clicked() {
+                self.collage_regles = Some(String::new());
+            }
+            if ui.button("📂 Importer…").on_hover_text("Classeur Excel (.xlsx) ou fichier .csv / .txt :\ncolonne A à éviter, B à écrire, C explication, D « oui » pour respecter les majuscules").clicked() {
+                if let Some(f) = rfd::FileDialog::new().add_filter("Excel, CSV", &["xlsx", "csv", "tsv", "txt"]).pick_file() {
+                    match editions::lire_tableau(&f) {
+                        Ok(l) => {
+                            let (aj, maj) = editions::fusionne(&mut self.editions.liste[i], editions::regles_depuis(l));
+                            self.message = format!("📘 Import : {aj} règle(s) ajoutée(s), {maj} mise(s) à jour.");
+                            change = true;
+                        }
+                        Err(e) => self.message = format!("Import impossible : {e}"),
+                    }
+                }
+            }
+            if ui.button("💾 Exporter").on_hover_text("Enregistrer les règles en CSV : à modifier dans Excel, puis à réimporter").clicked() {
+                let e = &self.editions.liste[i];
+                if let Some(f) = rfd::FileDialog::new().add_filter("CSV", &["csv"]).set_file_name(format!("{}.csv", e.nom)).save_file() {
+                    self.message = match std::fs::write(&f, editions::vers_csv(e)) {
+                        Ok(()) => format!("💾 {} règle(s) exportée(s).", e.regles.len()),
+                        Err(x) => format!("Export impossible : {x}"),
+                    };
+                }
+            }
+        });
+        let (mut valider, mut annuler) = (false, false);
+        if let Some(txt) = &mut self.collage_regles {
+            ui.add(egui::TextEdit::multiline(txt).hint_text("c'est-à-dire\tc.-à-d.\tAbréviation maison\nMr → M.").desired_rows(5).desired_width(f32::INFINITY));
+            let n = editions::regles_depuis(editions::lire_texte(txt)).len();
+            ui.horizontal(|ui| {
+                valider = ui.add_enabled(n > 0, egui::Button::new(format!("＋ Ajouter {n} règle(s)"))).clicked();
+                annuler = ui.button("Annuler").clicked();
+            });
+        }
+        if valider {
+            let t = self.collage_regles.take().unwrap_or_default();
+            let (aj, maj) = editions::fusionne(&mut self.editions.liste[i], editions::regles_depuis(editions::lire_texte(&t)));
+            self.message = format!("📘 {aj} règle(s) ajoutée(s), {maj} mise(s) à jour.");
+            change = true;
+        } else if annuler {
+            self.collage_regles = None;
+        }
+        ui.add_space(4.0);
+
+        // Règles de l'éditeur : une ligne chacune, détails à la demande
+        if self.editions.liste[i].regles.len() > 6 {
+            ui.add(egui::TextEdit::singleline(&mut self.filtre_regles).hint_text("🔍 Chercher une règle…").desired_width(f32::INFINITY));
+        }
+        let filtre = self.filtre_regles.to_lowercase();
+        let ouverte = self.regle_ouverte;
+        let (mut retirer, mut basculer) = (None, None);
+        egui::ScrollArea::vertical().auto_shrink([false, false]).show(ui, |ui| {
+            for (k, r) in self.editions.liste[i].regles.iter_mut().enumerate() {
+                let cherche = |t: &str| t.to_lowercase().contains(&filtre);
+                if !filtre.is_empty() && !(cherche(&r.motif) || cherche(&r.remplacement) || cherche(&r.explication)) {
+                    continue;
+                }
+                ui.horizontal(|ui| {
+                    change |= ui.checkbox(&mut r.active, "").on_hover_text("Règle active").changed();
+                    let l = ((ui.available_width() - 70.0) / 2.0).max(70.0);
+                    let m = ui.add(egui::TextEdit::singleline(&mut r.motif).desired_width(l));
+                    change |= m.changed();
+                    if !r.explication.is_empty() {
+                        m.on_hover_text(&r.explication);
+                    }
+                    ui.label("→");
+                    change |= ui.add(egui::TextEdit::singleline(&mut r.remplacement).hint_text("(à retirer)").desired_width(l)).changed();
+                    if ui.add(egui::Button::new(if ouverte == Some(k) { "▴" } else { "⋯" }).frame(false)).on_hover_text("Explication et options").clicked() {
+                        basculer = Some(k);
+                    }
+                    if ui.add(egui::Button::new("✕").frame(false)).on_hover_text("Supprimer la règle").clicked() {
+                        retirer = Some(k);
+                    }
+                });
+                if ouverte == Some(k) {
+                    ui.indent(k, |ui| {
+                        change |= ui.add(egui::TextEdit::singleline(&mut r.explication).hint_text("Explication (facultatif)").desired_width(f32::INFINITY)).changed();
+                        ui.horizontal(|ui| {
+                            change |= ui.checkbox(&mut r.mot_entier, "Mot entier").changed();
+                            change |= ui.checkbox(&mut r.casse, "Respecter les majuscules").changed();
+                        });
+                    });
+                }
+            }
+            if self.editions.liste[i].regles.is_empty() {
+                ui.label(egui::RichText::new("Aucune règle : ajoutez-en une ci-dessus, collez une liste ou importez un classeur Excel.").weak());
+            }
+        });
+        if let Some(k) = basculer {
+            self.regle_ouverte = if ouverte == Some(k) { None } else { Some(k) };
+        }
+        if let Some(k) = retirer {
+            self.editions.liste[i].regles.remove(k);
+            self.regle_ouverte = None;
+            change = true;
+        }
+        if change {
+            self.editions_modifiees();
+        }
+    }
+
+    /// Document vide ou plan type ; un texte non enregistré n'est remplacé qu'à la deuxième demande.
+    fn nouveau(&mut self, texte: String, titre: &str) -> bool {
+        if self.modifie && !self.nouveau_confirme {
+            self.nouveau_confirme = true;
+            self.message = "⚠ Modifications non enregistrées : Ctrl+S pour les garder, ou recommencez pour les abandonner.".into();
+            return false;
+        }
+        self.nouveau_confirme = false;
+        self.texte = texte;
+        self.titre = titre.into();
+        self.fichier = None;
+        self.modifie = false;
+        self.mots_ouverture = 0;
+        self.selection_demandee = Some((0, 0));
+        self.message = format!("Nouveau document : {titre}");
+        true
+    }
+
+    /// Entre dans le mode écriture (volets fermés, gardés pour le retour) ou en sort.
+    fn bascule_ecriture(&mut self) {
+        if self.onglet == OngletActif::Ecriture {
+            self.onglet = OngletActif::Correction;
+            self.panneau_lateral = std::mem::replace(&mut self.panneau_avant_ecriture, PanneauLateral::Aucun);
+        } else {
+            self.onglet = OngletActif::Ecriture;
+            self.panneau_avant_ecriture = std::mem::replace(&mut self.panneau_lateral, PanneauLateral::Aucun);
+        }
+    }
+
+    fn editions_modifiees(&mut self) {
+        if let Err(e) = self.editions.sauve() {
+            self.message = format!("Règles éditeurs non enregistrées : {e}");
+        }
+        self.grammaire.edition = self.editions.edition_active().cloned();
+        self.cache_analyse = None;
     }
 
         fn panneau_dictionnaires(&mut self, ui: &mut egui::Ui) {
@@ -1403,20 +1824,14 @@ impl App {
                 self.applique_plan(t, (plan[i].debut, plan[i].debut));
             }
             ActionPlan::SousPartie(i) => {
-                let base = ecriture::marque_tout(&self.texte, &plan);
-                let (t, sel) = ecriture::insere_titre(&base, plan[i].fin_ligne, plan[i].niveau + 1, "Nouvelle partie");
+                let (t, sel) = ecriture::ajoute_partie(&self.texte, i);
                 self.applique_plan(t, sel);
+                self.message = "✔ Partie ajoutée : tapez son titre, puis ↓ pour écrire dessous.".into();
             }
             ActionPlan::NouveauChapitre => {
-                // après le chapitre en cours (le plus haut niveau du plan), sinon à la fin
-                let haut = plan.iter().map(|s| s.niveau).min().unwrap_or(1);
-                let cour = ecriture::courante(&plan, self.selection.0);
-                let fin = cour
-                    .and_then(|c| plan[..=c].iter().rev().find(|s| s.niveau == haut))
-                    .map_or(self.texte.split('\n').count(), |s| s.fin_ligne);
-                let base = ecriture::marque_tout(&self.texte, &plan);
-                let (t, sel) = ecriture::insere_titre(&base, fin, haut, "Nouveau chapitre");
+                let (t, sel) = ecriture::ajoute_chapitre(&self.texte, self.selection.0);
                 self.applique_plan(t, sel);
+                self.message = "✔ Chapitre ajouté : tapez son titre, puis ↓ pour écrire dessous.".into();
             }
         }
     }
@@ -1426,33 +1841,48 @@ impl App {
         let plan = ecriture::plan(&self.texte);
         let cour = ecriture::courante(&plan, self.selection.0);
         let mut action = None;
-        ui.label(egui::RichText::new("✎ Plan").size(17.0).strong());
-        ui.horizontal_wrapped(|ui| {
-            let mut bouton = |ui: &mut egui::Ui, texte: &str, aide: &str, a: Option<ActionPlan>| {
-                if ui.add_enabled(a.is_some(), egui::Button::new(texte)).on_hover_text(aide).clicked() {
-                    action = a;
-                }
-            };
-            bouton(ui, "▲", "Monter la section en cours, avec ses sous-parties (Alt+↑)", cour.map(|c| ActionPlan::Deplacer(c, true)));
-            bouton(ui, "▼", "Descendre la section en cours (Alt+↓)", cour.map(|c| ActionPlan::Deplacer(c, false)));
-            bouton(ui, "◀", "Titre de niveau supérieur (## → #)", cour.filter(|&c| plan[c].niveau > 1).map(|c| ActionPlan::Niveau(c, -1)));
-            bouton(ui, "▶", "Titre de niveau inférieur (# → ##)", cour.map(|c| ActionPlan::Niveau(c, 1)));
-            bouton(ui, "➕ Chapitre", "Nouveau chapitre après celui en cours", Some(ActionPlan::NouveauChapitre));
-            bouton(ui, "➕ Partie", "Nouvelle sous-partie à la fin de la section en cours", cour.map(ActionPlan::SousPartie));
+
+        // En-tête : titre et ajout ; les déplacements n'apparaissent que pour une section en cours
+        ui.horizontal(|ui| {
+            ui.label(egui::RichText::new("Plan").size(17.0).strong());
+            ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
+                ui.toggle_value(&mut self.soulignements_ecriture, "〰").on_hover_text("Souligner les fautes pendant l'écriture");
+                ui.toggle_value(&mut self.concentration, "◎").on_hover_text("Concentration : estomper tout sauf la section en cours");
+            });
         });
-        ui.separator();
+        if let Some(c) = cour {
+            ui.horizontal(|ui| {
+                ui.spacing_mut().item_spacing.x = 2.0;
+                let mut outil = |ui: &mut egui::Ui, t: &str, aide: &str, a: Option<ActionPlan>| {
+                    if ui.add_enabled(a.is_some(), egui::Button::new(t).frame(false)).on_hover_text(aide).clicked() {
+                        action = a;
+                    }
+                };
+                outil(ui, "↑", "Monter la section (Alt+↑)", Some(ActionPlan::Deplacer(c, true)));
+                outil(ui, "↓", "Descendre la section (Alt+↓)", Some(ActionPlan::Deplacer(c, false)));
+                outil(ui, "←", "Niveau supérieur (## → #)", (plan[c].niveau > 1).then_some(ActionPlan::Niveau(c, -1)));
+                outil(ui, "→", "Niveau inférieur (# → ##)", Some(ActionPlan::Niveau(c, 1)));
+                ui.label(egui::RichText::new(abrege(&plan[c].titre, 24)).small().weak());
+            });
+        }
+        ui.add_space(4.0);
         if plan.is_empty() {
-            ui.label(egui::RichText::new(
-                "Aucun titre. Commencez une ligne par « # » pour un chapitre, « ## » pour une partie, ou cliquez « ➕ Chapitre ». \
-                 Dans un document Word, les styles de titre sont repris automatiquement.",
-            ).weak());
+            ui.label(egui::RichText::new("Pas encore de titre.").weak());
+            ui.label(egui::RichText::new("« # » en début de ligne : chapitre · « ## » : partie").small().weak());
+            if ui.button("＋ Premier chapitre").clicked() {
+                action = Some(ActionPlan::NouveauChapitre);
+            }
         }
         let fautes: Vec<usize> = alertes.iter().filter(|a| a.type_alerte != TypeAlerte::Repetition).map(|a| a.debut).collect();
-        let hauteur = (ui.available_height() - 190.0).max(120.0);
+        let mots_vises = self.biblio.reglages.pages_visees * self.biblio.reglages.mots_par_page.max(50);
+        let parts = ecriture::parts_ideales(&plan);
+        let hauteur = (ui.available_height() - 290.0).max(120.0);
         egui::ScrollArea::vertical().max_height(hauteur).auto_shrink([false, true]).show(ui, |ui| {
             for (i, s) in plan.iter().enumerate() {
                 let n = fautes.partition_point(|&d| d < s.fin) - fautes.partition_point(|&d| d < s.debut);
                 ui.horizontal(|ui| {
+                    let h = ui.spacing().interact_size.y;
+                    let survol = ui.rect_contains_pointer(egui::Rect::from_min_size(ui.cursor().min, egui::vec2(ui.available_width(), h)));
                     ui.add_space(14.0 * (s.niveau.saturating_sub(1)) as f32);
                     let mut libelle = egui::RichText::new(abrege(&s.titre, 42usize.saturating_sub(3 * s.niveau as usize)));
                     if s.niveau == 1 {
@@ -1462,6 +1892,14 @@ impl App {
                     if r.clicked() {
                         action = Some(ActionPlan::Aller(i));
                     }
+                    // barre fine sous le chapitre : avancement vers sa taille idéale
+                    let ideal = parts[i] * mots_vises as f32;
+                    if s.niveau == 1 && ideal > 0.0 {
+                        let f = (s.mots as f32 / ideal).min(1.0);
+                        let b = egui::Rect::from_min_size(r.rect.left_bottom() + egui::vec2(0.0, 1.0), egui::vec2(r.rect.width() * f, 2.0));
+                        let c = if s.mots as f32 > ideal * 1.15 { rgb(248, 113, 113) } else { rgb(52, 211, 153) };
+                        ui.painter().rect_filled(b, 1.0, c);
+                    }
                     r.context_menu(|ui| {
                         let mut choix = |ui: &mut egui::Ui, t: &str, a: ActionPlan| {
                             if ui.button(t).clicked() {
@@ -1469,50 +1907,150 @@ impl App {
                                 ui.close_menu();
                             }
                         };
-                        choix(ui, "▲ Monter", ActionPlan::Deplacer(i, true));
-                        choix(ui, "▼ Descendre", ActionPlan::Deplacer(i, false));
+                        choix(ui, "↑ Monter", ActionPlan::Deplacer(i, true));
+                        choix(ui, "↓ Descendre", ActionPlan::Deplacer(i, false));
                         if s.niveau > 1 {
-                            choix(ui, "◀ Niveau supérieur", ActionPlan::Niveau(i, -1));
+                            choix(ui, "← Niveau supérieur", ActionPlan::Niveau(i, -1));
                         }
-                        choix(ui, "▶ Niveau inférieur", ActionPlan::Niveau(i, 1));
-                        choix(ui, "➕ Ajouter une sous-partie", ActionPlan::SousPartie(i));
-                        choix(ui, "▭ Sélectionner toute la section", ActionPlan::Selectionner(i));
-                        choix(ui, "✕ Retirer le titre (devient du texte)", ActionPlan::RetirerTitre(i));
+                        choix(ui, "→ Niveau inférieur", ActionPlan::Niveau(i, 1));
+                        choix(ui, "＋ Ajouter une sous-partie", ActionPlan::SousPartie(i));
+                        choix(ui, "Sélectionner toute la section", ActionPlan::Selectionner(i));
+                        choix(ui, "Retirer le titre (devient du texte)", ActionPlan::RetirerTitre(i));
                     });
                     ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
-                        ui.label(egui::RichText::new(format!("{}", s.mots)).small().weak())
-                            .on_hover_text("mots de la section, sous-parties comprises");
+                        if (survol || cour == Some(i)) && s.niveau < ecriture::MAX_NIVEAU
+                            && ui.add(egui::Button::new(egui::RichText::new("＋").color(rgb(129, 140, 248))).frame(false))
+                                .on_hover_text(format!("Ajouter une partie à la fin de « {} »", abrege(&s.titre, 30))).clicked()
+                        {
+                            action = Some(ActionPlan::SousPartie(i));
+                        }
+                        let ideal = (parts[i] * mots_vises as f32) as usize;
+                        if s.niveau == 1 && ideal > 0 {
+                            ui.label(egui::RichText::new(format!("{} / {} · {:.0} %", s.mots, ideal, parts[i] * 100.0)).small().weak())
+                                .on_hover_text(format!("{} mots écrits sur {} visés (≈ {} pages, {:.0} % du livre)",
+                                    s.mots, ideal, ideal / self.biblio.reglages.mots_par_page.max(50), parts[i] * 100.0));
+                        } else {
+                            ui.label(egui::RichText::new(format!("{}", s.mots)).small().weak())
+                                .on_hover_text("mots de la section, sous-parties comprises");
+                        }
                         if n > 0 {
-                            ui.label(egui::RichText::new(format!("● {n}")).small().color(Color32::from_rgb(248, 113, 113)))
+                            ui.label(egui::RichText::new(format!("● {n}")).small().color(rgb(248, 113, 113)))
                                 .on_hover_text("fautes signalées dans la section");
                         }
                     });
                 });
             }
         });
-        ui.separator();
-        // Séance d'écriture
-        let mots = nb_mots(&self.texte);
-        let seance = mots as i64 - self.mots_ouverture as i64;
-        let lecture = mots / 230;
-        ui.label(format!("📄 {mots} mots · ≈ {} h {:02} min de lecture", lecture / 60, lecture % 60));
-        if let Some(c) = cour {
-            ui.label(egui::RichText::new(format!("Section en cours : {} mots", plan[c].mots)).weak());
-        }
-        let objectif = self.biblio.reglages.objectif_mots.max(1);
-        ui.add(
-            egui::ProgressBar::new((seance.max(0) as f32 / objectif as f32).min(1.0))
-                .text(format!("Séance : {seance:+} mots / objectif {objectif}")),
-        );
-        ui.horizontal(|ui| {
-            ui.label("Objectif de la séance");
-            if ui.add(egui::DragValue::new(&mut self.biblio.reglages.objectif_mots).range(50..=20000).speed(10.0).suffix(" mots")).changed() {
-                let _ = self.biblio.sauve_reglages();
+
+        if !plan.is_empty() {
+            ui.add_space(4.0);
+            let b = egui::Button::new(egui::RichText::new("＋  Nouveau chapitre").color(rgb(129, 140, 248)))
+                .fill(Color32::TRANSPARENT)
+                .stroke(Stroke::new(1.0_f32, rgb(55, 65, 90)))
+                .corner_radius(8);
+            if ui.add_sized([ui.available_width(), 28.0], b)
+                .on_hover_text("Après le chapitre en cours (avant la conclusion), numéroté à la suite — Ctrl+Maj+Entrée")
+                .clicked()
+            {
+                action = Some(ActionPlan::NouveauChapitre);
             }
+        }
+        // Carte d'écriture, en bas : chapitre en cours, livre, séance
+        let mots = nb_mots(&self.texte);
+        let par_page = self.biblio.reglages.mots_par_page.max(50);
+        ui.with_layout(egui::Layout::bottom_up(egui::Align::Min), |ui| {
+            egui::Frame::NONE
+                .fill(rgb(22, 26, 35))
+                .stroke(Stroke::new(1.0_f32, rgb(40, 48, 63)))
+                .corner_radius(12)
+                .inner_margin(egui::Margin::same(14))
+                .show(ui, |ui| {
+                    ui.with_layout(egui::Layout::top_down(egui::Align::Min), |ui| {
+                        ui.set_width(ui.available_width());
+                        ui.spacing_mut().item_spacing.y = 5.0;
+                        let titre = |ui: &mut egui::Ui, t: &str| {
+                            ui.label(egui::RichText::new(t.to_uppercase()).size(10.5).strong().color(rgb(120, 130, 155)));
+                        };
+                        let jauge = |ui: &mut egui::Ui, f: f32, c: Color32| {
+                            let (r, _) = ui.allocate_exact_size(egui::vec2(ui.available_width(), 6.0), egui::Sense::hover());
+                            ui.painter().rect_filled(r, 3.0, rgb(38, 45, 60));
+                            if f > 0.0 {
+                                ui.painter().rect_filled(egui::Rect::from_min_size(r.min, egui::vec2(r.width() * f.min(1.0), 6.0)), 3.0, c);
+                            }
+                        };
+                        let ligne = |ui: &mut egui::Ui, gauche: String, droite: String| {
+                            ui.horizontal(|ui| {
+                                ui.label(egui::RichText::new(gauche).size(13.0));
+                                ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
+                                    ui.label(egui::RichText::new(droite).size(12.0).weak());
+                                });
+                            });
+                        };
+
+                        // 1. Chapitre en cours
+                        let chap = cour.map(|c| (0..=c).rev().find(|&k| plan[k].niveau == 1).unwrap_or(c));
+                        let vises = self.biblio.reglages.pages_visees * par_page;
+                        let parts = ecriture::parts_ideales(&plan);
+                        if let Some(k) = chap {
+                            titre(ui, "Chapitre en cours");
+                            let ideal = (parts[k] * vises as f32) as usize;
+                            ligne(ui, abrege(&plan[k].titre, 26), if ideal > 0 {
+                                format!("{} / {} mots", plan[k].mots, ideal)
+                            } else {
+                                format!("{} mots", plan[k].mots)
+                            });
+                            if ideal > 0 {
+                                let f = plan[k].mots as f32 / ideal as f32;
+                                jauge(ui, f, if f > 1.15 { rgb(248, 113, 113) } else { rgb(52, 211, 153) });
+                            }
+                            ui.add_space(6.0);
+                        }
+
+                        // 2. Livre : pages visées, avancement, séances restantes
+                        titre(ui, "Livre");
+                        ui.horizontal(|ui| {
+                            let mut pages = self.biblio.reglages.pages_visees;
+                            if ui.add(egui::DragValue::new(&mut pages).range(0..=2000).speed(2.0).suffix(" pages visées"))
+                                .on_hover_text("Taille visée du livre (glisser pour changer ; 0 : pas d'objectif)").changed()
+                            {
+                                self.biblio.reglages.pages_visees = pages;
+                                let _ = self.biblio.sauve_reglages();
+                            }
+                            ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
+                                ui.label(egui::RichText::new(format!("{} p. écrites", mots / par_page)).size(12.0).weak());
+                            });
+                        });
+                        if vises > 0 {
+                            let f = mots as f32 / vises as f32;
+                            jauge(ui, f, rgb(129, 140, 248));
+                            let seance = self.biblio.reglages.objectif_mots.max(1);
+                            let reste = vises.saturating_sub(mots);
+                            ligne(ui, format!("{:.0} %", 100.0 * f.min(1.0)), if reste == 0 {
+                                "objectif atteint 🎉".into()
+                            } else {
+                                format!("encore ≈ {} séances", reste.div_ceil(seance))
+                            });
+                        }
+                        ui.add_space(6.0);
+
+                        // 3. Séance
+                        titre(ui, "Séance");
+                        let faits = mots.saturating_sub(self.mots_ouverture);
+                        ui.horizontal(|ui| {
+                            ui.label(egui::RichText::new(format!("{faits}")).size(22.0).strong());
+                            ui.label(egui::RichText::new("mots sur").weak());
+                            if ui.add(egui::DragValue::new(&mut self.biblio.reglages.objectif_mots).range(50..=20000).speed(10.0))
+                                .on_hover_text("Objectif de mots par séance (glisser pour changer)").changed()
+                            {
+                                let _ = self.biblio.sauve_reglages();
+                            }
+                        });
+                        jauge(ui, faits as f32 / self.biblio.reglages.objectif_mots.max(1) as f32, rgb(250, 204, 21));
+                        let lecture = mots / 230;
+                        ui.label(egui::RichText::new(format!("{mots} mots au total · {} h {:02} de lecture", lecture / 60, lecture % 60)).size(11.5).weak());
+                    });
+                });
         });
-        ui.checkbox(&mut self.concentration, "Concentration : estomper le reste du texte")
-            .on_hover_text("Seule la section où se trouve le curseur reste nette");
-        ui.checkbox(&mut self.soulignements_ecriture, "Souligner les fautes pendant l'écriture");
         if let Some(a) = action {
             self.action_plan(a);
             ui.ctx().memory_mut(|m| m.request_focus(egui::Id::new("editeur")));
@@ -1527,35 +2065,29 @@ impl App {
         id_editeur: egui::Id,
     ) {
         ui.horizontal(|ui| {
-            ui.label(egui::RichText::new("🎯 Détections & Analyse").size(17.0).strong());
+            ui.label(egui::RichText::new("🎯 Fautes").size(17.0).strong());
             ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
                 if ui.button("✕").on_hover_text("Fermer ce panneau latéral").clicked() {
                     self.panneau_lateral = PanneauLateral::Aucun;
                 }
             });
         });
-        ui.add_space(6.0);
-
-        // Carte d'action d'export automatique pour l'IA
-        egui::Frame::NONE
-            .fill(Color32::from_rgb(24, 28, 40))
-            .corner_radius(egui::CornerRadius::same(7))
-            .stroke(Stroke::new(1.0_f32, Color32::from_rgb(48, 56, 82)))
-            .inner_margin(egui::Margin::symmetric(10, 8))
-            .show(ui, |ui| {
-                ui.horizontal(|ui| {
-                    ui.label(egui::RichText::new("🤖 Export IA :").strong().color(Color32::from_rgb(165, 180, 252)));
-                    if ui.small_button("📋 Markdown").on_hover_text("Copier les anomalies avec phrases de contexte pour ChatGPT, Claude, Gemini...").clicked() {
-                        self.copier_rapport_ia(false);
-                    }
-                    if ui.small_button("💾 JSON").on_hover_text("Copier les anomalies en JSON").clicked() {
-                        self.copier_rapport_ia(true);
-                    }
-                    if ui.small_button("📁 Fichier…").on_hover_text("Enregistrer le rapport dans un fichier .md ou .json").clicked() {
-                        self.exporter_rapport_ia_fichier();
-                    }
-                });
-            });
+        let nb_corr = alertes.iter().filter(|a| a.type_alerte != TypeAlerte::Repetition).count();
+        ui.horizontal(|ui| {
+            if ui.selectable_label(self.onglet != OngletActif::Repetitions, format!("✓ Correction  {nb_corr}"))
+                .on_hover_text("Grammaire, orthographe, règles éditeurs").clicked()
+            {
+                self.onglet = OngletActif::Correction;
+            }
+            if ui.selectable_label(self.onglet == OngletActif::Repetitions, format!("◈ Style  {}", repetitions.len()))
+                .on_hover_text("Répétitions de mots").clicked()
+            {
+                self.onglet = OngletActif::Repetitions;
+            }
+            if self.onglet == OngletActif::Repetitions {
+                ui.checkbox(&mut self.surligner_repetitions, "surligner").on_hover_text("Surligner les répétitions dans le texte");
+            }
+        });
         ui.add_space(6.0);
 
         let grammaire_alertes: Vec<&AlerteG> = alertes.iter().filter(|a| a.type_alerte == TypeAlerte::Grammaire).collect();
@@ -1567,7 +2099,7 @@ impl App {
         if total_alertes == 0 && repetitions.is_empty() {
             ui.add_space(30.0);
             ui.vertical_centered(|ui| {
-                ui.label(egui::RichText::new("✨ Aucune anomalie détectée").color(Color32::from_rgb(52, 211, 153)).size(16.0).strong());
+                ui.label(egui::RichText::new("✨ Aucune anomalie détectée").color(rgb(52, 211, 153)).size(16.0).strong());
                 ui.add_space(4.0);
                 ui.label(egui::RichText::new("Votre texte est parfaitement rédigé.").weak());
             });
@@ -1577,7 +2109,7 @@ impl App {
         egui::ScrollArea::vertical().auto_shrink(false).show(ui, |ui| {
             // SECTION 1 : GRAMMAIRE & ACCORDS
             let label_gram = format!("● Grammaire & Accords ({})", grammaire_alertes.len());
-            egui::CollapsingHeader::new(egui::RichText::new(label_gram).strong().color(Color32::from_rgb(52, 211, 153)))
+            egui::CollapsingHeader::new(egui::RichText::new(label_gram).strong().color(rgb(251, 146, 60)))
                 .default_open(true)
                 .show(ui, |ui| {
                     if grammaire_alertes.is_empty() {
@@ -1586,13 +2118,13 @@ impl App {
                     for (idx, a) in grammaire_alertes.iter().enumerate() {
                         ui.push_id(("gram", idx), |ui| {
                             egui::Frame::NONE
-                                .fill(Color32::from_rgb(22, 26, 35))
+                                .fill(rgb(22, 26, 35))
                                 .corner_radius(egui::CornerRadius::same(7))
-                                .stroke(Stroke::new(1.0_f32, Color32::from_rgb(38, 44, 58)))
+                                .stroke(Stroke::new(1.0_f32, rgb(38, 44, 58)))
                                 .inner_margin(egui::Margin::symmetric(10, 8))
                                 .show(ui, |ui| {
                                     ui.horizontal(|ui| {
-                                        if ui.link(egui::RichText::new(&a.mot).strong().size(15.0).color(Color32::from_rgb(52, 211, 153))).on_hover_text("Cliquer pour localiser dans le texte").clicked() {
+                                        if ui.link(egui::RichText::new(&a.mot).strong().size(15.0).color(rgb(251, 146, 60))).on_hover_text("Cliquer pour localiser dans le texte").clicked() {
                                             self.selection_demandee = Some((a.debut, a.fin));
                                             ui.ctx().memory_mut(|m| m.request_focus(id_editeur));
                                         }
@@ -1603,17 +2135,18 @@ impl App {
                                         ui.horizontal_wrapped(|ui| {
                                             ui.label(egui::RichText::new("Corriger :").small().weak());
                                             for s in &a.suggestions {
-                                                if ui.small_button(egui::RichText::new(s).strong().color(Color32::from_rgb(56, 189, 248))).clicked() {
+                                                if ui.small_button(egui::RichText::new(s).strong().color(rgb(56, 189, 248))).clicked() {
                                                     self.remplace(a.debut, a.fin, s);
                                                 }
                                             }
                                         });
                                     }
 
-                                    let est_ouvert = self.alertes_plus_infos.contains(&a.debut);
-                                    ui.horizontal(|ui| {
+                                    let utile = explication_pedagogique_approfondie(&a.regle, &a.mot, &a.explication).utile();
+                                    let est_ouvert = utile && self.alertes_plus_infos.contains(&a.debut);
+                                    if utile { ui.horizontal(|ui| {
                                         let texte_btn = if est_ouvert { "▲ Masquer l'explication" } else { "ℹ Plus d'infos" };
-                                        if ui.button(egui::RichText::new(texte_btn).small().color(Color32::from_rgb(147, 197, 253)))
+                                        if ui.button(egui::RichText::new(texte_btn).small().color(rgb(147, 197, 253)))
                                             .on_hover_text("Afficher la règle complète, l'explication académique et l'astuce mnémotechnique")
                                             .clicked()
                                         {
@@ -1623,28 +2156,28 @@ impl App {
                                                 self.alertes_plus_infos.insert(a.debut);
                                             }
                                         }
-                                    });
+                                    }); }
 
                                     if est_ouvert {
                                         let fiche = explication_pedagogique_approfondie(&a.regle, &a.mot, &a.explication);
                                         egui::Frame::NONE
-                                            .fill(Color32::from_rgb(16, 20, 28))
-                                            .stroke(Stroke::new(1.0_f32, Color32::from_rgb(45, 60, 85)))
+                                            .fill(rgb(16, 20, 28))
+                                            .stroke(Stroke::new(1.0_f32, rgb(45, 60, 85)))
                                              .corner_radius(egui::CornerRadius::same(6))
                                              .inner_margin(egui::Margin::symmetric(8, 6))
                                              .show(ui, |ui| {
-                                                 ui.label(egui::RichText::new(format!("📘 {}", fiche.titre)).strong().color(Color32::from_rgb(147, 197, 253)).small());
+                                                 ui.label(egui::RichText::new(format!("📘 {}", fiche.titre)).strong().color(rgb(147, 197, 253)).small());
                                                  ui.add_space(2.0);
-                                                 ui.label(egui::RichText::new(fiche.regle_complete).small().color(Color32::from_rgb(220, 228, 240)));
+                                                 ui.label(egui::RichText::new(fiche.regle_complete).small().color(rgb(220, 228, 240)));
                                                  ui.add_space(4.0);
                                                  egui::Frame::NONE
-                                                     .fill(Color32::from_rgb(22, 32, 28))
-                                                     .stroke(Stroke::new(1.0_f32, Color32::from_rgb(34, 197, 94)))
+                                                     .fill(rgb(22, 32, 28))
+                                                     .stroke(Stroke::new(1.0_f32, rgb(34, 197, 94)))
                                                      .corner_radius(egui::CornerRadius::same(5))
                                                      .inner_margin(egui::Margin::symmetric(8, 5))
                                                      .show(ui, |ui| {
                                                          ui.label(egui::RichText::new(format!("💡 Astuce mnémotechnique :
-{}", fiche.astuce)).strong().color(Color32::from_rgb(134, 239, 172)).small());
+{}", fiche.astuce)).strong().color(rgb(134, 239, 172)).small());
                                                      });
                                                  ui.add_space(3.0);
                                                  ui.label(egui::RichText::new(format!("Exemple : {}", fiche.exemple_correct)).weak().small());
@@ -1662,7 +2195,7 @@ impl App {
 
             // SECTION 2 : ORTHOGRAPHE & LEXIQUE
             let label_ortho = format!("● Orthographe & Vocabulaire ({})", ortho_alertes.len());
-            egui::CollapsingHeader::new(egui::RichText::new(label_ortho).strong().color(Color32::from_rgb(248, 113, 113)))
+            egui::CollapsingHeader::new(egui::RichText::new(label_ortho).strong().color(rgb(248, 113, 113)))
                 .default_open(true)
                 .show(ui, |ui| {
                     if ortho_alertes.is_empty() {
@@ -1671,13 +2204,13 @@ impl App {
                     for (idx, a) in ortho_alertes.iter().enumerate() {
                         ui.push_id(("ortho", idx), |ui| {
                             egui::Frame::NONE
-                                .fill(Color32::from_rgb(22, 26, 35))
+                                .fill(rgb(22, 26, 35))
                                 .corner_radius(egui::CornerRadius::same(7))
-                                .stroke(Stroke::new(1.0_f32, Color32::from_rgb(38, 44, 58)))
+                                .stroke(Stroke::new(1.0_f32, rgb(38, 44, 58)))
                                 .inner_margin(egui::Margin::symmetric(10, 8))
                                 .show(ui, |ui| {
                                     ui.horizontal(|ui| {
-                                        if ui.link(egui::RichText::new(&a.mot).strong().size(15.0).color(Color32::from_rgb(248, 113, 113))).on_hover_text("Cliquer pour localiser").clicked() {
+                                        if ui.link(egui::RichText::new(&a.mot).strong().size(15.0).color(rgb(248, 113, 113))).on_hover_text("Cliquer pour localiser").clicked() {
                                             self.selection_demandee = Some((a.debut, a.fin));
                                             ui.ctx().memory_mut(|m| m.request_focus(id_editeur));
                                         }
@@ -1686,7 +2219,7 @@ impl App {
                                     if !a.suggestions.is_empty() {
                                         ui.horizontal_wrapped(|ui| {
                                             for s in a.suggestions.iter().take(3) {
-                                                if ui.small_button(egui::RichText::new(s).strong().color(Color32::from_rgb(56, 189, 248))).clicked() {
+                                                if ui.small_button(egui::RichText::new(s).strong().color(rgb(56, 189, 248))).clicked() {
                                                     self.remplace(a.debut, a.fin, s);
                                                 }
                                             }
@@ -1700,36 +2233,38 @@ impl App {
                                             self.ajoute_mot(&a.mot);
                                         }
                                         let est_ouvert = self.alertes_plus_infos.contains(&a.debut);
+                                        if explication_pedagogique_approfondie(&a.regle, &a.mot, &a.explication).utile() {
                                         let texte_btn = if est_ouvert { "▲ Moins d'infos" } else { "ℹ Plus d'infos" };
-                                        if ui.button(egui::RichText::new(texte_btn).small().color(Color32::from_rgb(147, 197, 253))).clicked() {
+                                        if ui.button(egui::RichText::new(texte_btn).small().color(rgb(147, 197, 253))).clicked() {
                                             if est_ouvert {
                                                 self.alertes_plus_infos.remove(&a.debut);
                                             } else {
                                                 self.alertes_plus_infos.insert(a.debut);
                                             }
                                         }
+                                        }
                                     });
 
-                                    if self.alertes_plus_infos.contains(&a.debut) {
-                                        let fiche = explication_pedagogique_approfondie(&a.regle, &a.mot, &a.explication);
+                                    let fiche = explication_pedagogique_approfondie(&a.regle, &a.mot, &a.explication);
+                                    if fiche.utile() && self.alertes_plus_infos.contains(&a.debut) {
                                         egui::Frame::NONE
-                                            .fill(Color32::from_rgb(16, 20, 28))
-                                            .stroke(Stroke::new(1.0_f32, Color32::from_rgb(45, 60, 85)))
+                                            .fill(rgb(16, 20, 28))
+                                            .stroke(Stroke::new(1.0_f32, rgb(45, 60, 85)))
                                             .corner_radius(egui::CornerRadius::same(6))
                                             .inner_margin(egui::Margin::symmetric(8, 6))
                                             .show(ui, |ui| {
-                                                ui.label(egui::RichText::new(format!("📘 {}", fiche.titre)).strong().color(Color32::from_rgb(147, 197, 253)).small());
+                                                ui.label(egui::RichText::new(format!("📘 {}", fiche.titre)).strong().color(rgb(147, 197, 253)).small());
                                                 ui.add_space(2.0);
-                                                ui.label(egui::RichText::new(fiche.regle_complete).small().color(Color32::from_rgb(220, 228, 240)));
+                                                ui.label(egui::RichText::new(fiche.regle_complete).small().color(rgb(220, 228, 240)));
                                                 ui.add_space(4.0);
                                                 egui::Frame::NONE
-                                                    .fill(Color32::from_rgb(22, 32, 28))
-                                                    .stroke(Stroke::new(1.0_f32, Color32::from_rgb(34, 197, 94)))
+                                                    .fill(rgb(22, 32, 28))
+                                                    .stroke(Stroke::new(1.0_f32, rgb(34, 197, 94)))
                                                     .corner_radius(egui::CornerRadius::same(5))
                                                     .inner_margin(egui::Margin::symmetric(8, 5))
                                                     .show(ui, |ui| {
                                                          ui.label(egui::RichText::new(format!("💡 Conseil :
-{}", fiche.astuce)).strong().color(Color32::from_rgb(134, 239, 172)).small());
+{}", fiche.astuce)).strong().color(rgb(134, 239, 172)).small());
                                                     });
                                                 ui.add_space(3.0);
                                                 ui.label(egui::RichText::new(format!("Exemple : {}", fiche.exemple_correct)).weak().small());
@@ -1747,7 +2282,7 @@ impl App {
 
             // SECTION 3 : RÉPÉTITIONS DE STYLE
             let label_style = format!("● Répétitions & Style ({})", repetitions.len());
-            egui::CollapsingHeader::new(egui::RichText::new(label_style).strong().color(Color32::from_rgb(196, 181, 253)))
+            egui::CollapsingHeader::new(egui::RichText::new(label_style).strong().color(rgb(250, 204, 21)))
                 .default_open(true)
                 .show(ui, |ui| {
                     if repetitions.is_empty() {
@@ -1757,13 +2292,13 @@ impl App {
                         let est_sel = self.repetition_selectionnee.as_deref() == Some(&rep.racine);
                         ui.push_id(("rep", idx), |ui| {
                             egui::Frame::NONE
-                                .fill(Color32::from_rgb(22, 26, 35))
+                                .fill(rgb(22, 26, 35))
                                 .corner_radius(egui::CornerRadius::same(7))
-                                .stroke(Stroke::new(1.0_f32, Color32::from_rgb(38, 44, 58)))
+                                .stroke(Stroke::new(1.0_f32, rgb(38, 44, 58)))
                                 .inner_margin(egui::Margin::symmetric(10, 8))
                                 .show(ui, |ui| {
                                     ui.horizontal(|ui| {
-                                        if ui.selectable_label(est_sel, egui::RichText::new(format!("« {} »", rep.mot)).strong().color(Color32::from_rgb(196, 181, 253))).clicked() {
+                                        if ui.selectable_label(est_sel, egui::RichText::new(format!("« {} »", rep.mot)).strong().color(rgb(250, 204, 21))).clicked() {
                                             self.repetition_selectionnee = if est_sel { None } else { Some(rep.racine.clone()) };
                                             if let Some(&(deb, fin)) = rep.occurrences.first() {
                                                 self.selection_demandee = Some((deb, fin));
@@ -1787,7 +2322,7 @@ impl App {
                                         ui.label(egui::RichText::new("Alternatives :").small().weak());
                                         ui.horizontal_wrapped(|ui| {
                                             for alt in &rep.alternatives {
-                                                if ui.small_button(egui::RichText::new(alt).color(Color32::from_rgb(196, 181, 253))).clicked() {
+                                                if ui.small_button(egui::RichText::new(alt).color(rgb(250, 204, 21))).clicked() {
                                                     let curseur = self.selection.0;
                                                     let occ_cible = rep.occurrences.iter().find(|&&(d, f)| d <= curseur && curseur <= f)
                                                         .or(rep.occurrences.first())
@@ -1811,19 +2346,19 @@ impl App {
                 ui.separator();
                 ui.add_space(4.0);
                 let label_doublons = format!("● Mots doublons ({})", doublon_alertes.len());
-                egui::CollapsingHeader::new(egui::RichText::new(label_doublons).strong().color(Color32::from_rgb(245, 158, 11)))
+                egui::CollapsingHeader::new(egui::RichText::new(label_doublons).strong().color(rgb(250, 204, 21)))
                     .default_open(true)
                     .show(ui, |ui| {
                         for (idx, a) in doublon_alertes.iter().enumerate() {
                             ui.push_id(("doublon", idx), |ui| {
                                 egui::Frame::NONE
-                                    .fill(Color32::from_rgb(22, 26, 35))
+                                    .fill(rgb(22, 26, 35))
                                     .corner_radius(egui::CornerRadius::same(7))
-                                    .stroke(Stroke::new(1.0_f32, Color32::from_rgb(38, 44, 58)))
+                                    .stroke(Stroke::new(1.0_f32, rgb(38, 44, 58)))
                                     .inner_margin(egui::Margin::symmetric(10, 8))
                                     .show(ui, |ui| {
                                         ui.horizontal(|ui| {
-                                            if ui.link(egui::RichText::new(&a.mot).strong().color(Color32::from_rgb(245, 158, 11))).clicked() {
+                                            if ui.link(egui::RichText::new(&a.mot).strong().color(rgb(250, 204, 21))).clicked() {
                                                 self.selection_demandee = Some((a.debut, a.fin));
                                                 ui.ctx().memory_mut(|m| m.request_focus(id_editeur));
                                             }
@@ -1861,6 +2396,15 @@ impl eframe::App for App {
             };
         }
 
+        if ctx.input_mut(|i| i.consume_key(Modifiers::CTRL, Key::N)) {
+            self.nouveau(String::new(), "Sans titre");
+        }
+        if ctx.input_mut(|i| i.consume_key(Modifiers::CTRL | Modifiers::SHIFT, Key::Enter)) {
+            self.action_plan(ActionPlan::NouveauChapitre);
+        }
+        if ctx.input_mut(|i| i.consume_key(Modifiers::CTRL, Key::E)) {
+            self.bascule_ecriture();
+        }
         if ctx.input_mut(|i| i.consume_shortcut(&OUVRIR)) {
             if let Some(f) = rfd::FileDialog::new().add_filter("Documents", &["docx", "txt", "md"]).pick_file() {
                 self.ouvre(f);
@@ -1882,7 +2426,11 @@ impl eframe::App for App {
         // les correcteurs lisent le texte sans les marques de titre (« # »), aux mêmes positions
         let texte = ecriture::sans_marques(&self.texte);
         let marque = if self.modifie { "● " } else { "" };
-        ctx.send_viewport_cmd(egui::ViewportCommand::Title(format!("{marque}{} — Texteur", self.titre)));
+        let titre = format!("{marque}{} — Texteur", self.titre);
+        if titre != self.titre_fenetre {
+            ctx.send_viewport_cmd(egui::ViewportCommand::Title(titre.clone()));
+            self.titre_fenetre = titre;
+        }
 
         if ctx.input(|i| i.viewport().close_requested()) && self.modifie && !self.fermeture_confirmee {
             ctx.send_viewport_cmd(egui::ViewportCommand::CancelClose);
@@ -1944,7 +2492,7 @@ impl eframe::App for App {
             use std::hash::{Hash, Hasher};
             let mut h = std::collections::hash_map::DefaultHasher::new();
             texte.hash(&mut h);
-            self.masque.plages(&texte).hash(&mut h);
+            (Arc::as_ptr(&self.masque) as usize).hash(&mut h); // nouveau masque = dictionnaires modifiés
             let mut ign: Vec<&String> = self.ignores.iter().collect();
             ign.sort();
             ign.hash(&mut h);
@@ -1984,7 +2532,7 @@ impl eframe::App for App {
                             || !self.gl_indisponible && REGLES_COUVERTES_PAR_GRAMMALECTE.contains(&a.regle.as_str()))
                 });
                 let car: Vec<char> = texte.chars().collect();
-                let valide = |a: &AlerteG| a.fin <= car.len() && car[a.debut..a.fin].iter().collect::<String>() == a.mot;
+                let valide = |a: &AlerteG| a.debut <= a.fin && a.fin <= car.len() && car[a.debut..a.fin].iter().collect::<String>() == a.mot;
                 let gl = self.alertes_gl.iter().filter(|a| valide(a) && !zone_chinoise(&car, a.debut, a.fin));
                 for a in gl {
                     if !self.ignores.contains(&a.mot) && !alertes.iter().any(|x| chevauche((x.debut, x.fin), (a.debut, a.fin))) {
@@ -2054,17 +2602,17 @@ impl eframe::App for App {
                 .interactable(false)
                 .show(ctx, |ui| {
                     egui::Frame::NONE
-                        .fill(Color32::from_rgb(22, 27, 40))
-                        .stroke(Stroke::new(1.0_f32, Color32::from_rgb(56, 189, 248)))
+                        .fill(rgb(22, 27, 40))
+                        .stroke(Stroke::new(1.0_f32, rgb(56, 189, 248)))
                         .inner_margin(egui::Margin::symmetric(12, 6))
                         .corner_radius(8.0)
                         .show(ui, |ui| {
                             ui.horizontal(|ui| {
-                                ui.label(egui::RichText::new(format!("« {} »", a.mot)).strong().color(Color32::from_rgb(252, 165, 165)));
+                                ui.label(egui::RichText::new(format!("« {} »", a.mot)).strong().color(rgb(252, 165, 165)));
                                 for (n, s) in a.suggestions.iter().take(3).enumerate() {
-                                    ui.label(egui::RichText::new(format!("Alt+{} {}", n + 1, s)).color(Color32::from_rgb(134, 239, 172)));
+                                    ui.label(egui::RichText::new(format!("Alt+{} {}", n + 1, s)).color(rgb(134, 239, 172)));
                                 }
-                                ui.label(egui::RichText::new("· Alt+Entrée accepter · Alt+Suppr ignorer · F8 suivante").small().color(Color32::GRAY));
+                                ui.label(egui::RichText::new("· Alt+Entrée accepter · Alt+Suppr ignorer · F8 suivante").small().color(rgb(140, 148, 165)));
                             });
                         });
                 });
@@ -2074,8 +2622,8 @@ impl eframe::App for App {
         egui::TopBottomPanel::top("barre")
             .frame(
                 egui::Frame::NONE
-                    .fill(Color32::from_rgb(16, 18, 25))
-                    .stroke(Stroke::new(1.0_f32, Color32::from_rgb(32, 38, 52)))
+                    .fill(rgb(16, 18, 25))
+                    .stroke(Stroke::new(1.0_f32, rgb(32, 38, 52)))
                     .inner_margin(egui::Margin::symmetric(14, 8)),
             )
             .show(ctx, |ui| {
@@ -2086,38 +2634,31 @@ impl eframe::App for App {
         egui::TopBottomPanel::bottom("statut")
             .frame(
                 egui::Frame::NONE
-                    .fill(Color32::from_rgb(14, 16, 22))
-                    .stroke(Stroke::new(1.0_f32, Color32::from_rgb(28, 33, 46)))
+                    .fill(rgb(14, 16, 22))
+                    .stroke(Stroke::new(1.0_f32, rgb(28, 33, 46)))
                     .inner_margin(egui::Margin::symmetric(14, 7)),
             )
             .show(ctx, |ui| {
                 let mots = texte.split_whitespace().count();
                 let proteges = plages.len();
-                let nb_gram = alertes.iter().filter(|a| a.type_alerte == TypeAlerte::Grammaire).count();
-                let nb_ortho = alertes.iter().filter(|a| a.type_alerte == TypeAlerte::Orthographe).count();
-                let nb_rep = repetitions.len();
 
                 ui.horizontal_wrapped(|ui| {
                     ui.label(egui::RichText::new(format!("📄 {mots} mots")).strong());
                     ui.separator();
-                    if nb_gram > 0 {
-                        ui.colored_label(Color32::from_rgb(52, 211, 153), format!("● {nb_gram} grammaire"));
-                        ui.separator();
-                    }
-                    if nb_ortho > 0 {
-                        ui.colored_label(Color32::from_rgb(248, 113, 113), format!("● {nb_ortho} orthographe"));
-                        ui.separator();
-                    }
-                    if nb_rep > 0 {
-                        ui.colored_label(Color32::from_rgb(196, 181, 253), format!("● {nb_rep} répétitions"));
+                    if self.onglet == OngletActif::Ecriture {
+                        let faits = nb_mots(&self.texte).saturating_sub(self.mots_ouverture);
+                        let but = self.biblio.reglages.objectif_mots.max(1);
+                        ui.add(egui::ProgressBar::new((faits as f32 / but as f32).min(1.0)).desired_width(140.0)
+                            .text(format!("séance : {faits} / {but} mots")));
+                        ui.label(egui::RichText::new("Ctrl+E : quitter l'écriture").weak());
                         ui.separator();
                     }
                     let nb_cjk = texte.chars().filter(|&c| masque::est_cjk(c)).count();
                     if nb_cjk > 0 {
-                        ui.colored_label(Color32::from_rgb(56, 189, 248), format!("🇨🇳 {nb_cjk} car. chinois reconnus"));
+                        ui.colored_label(rgb(56, 189, 248), format!("🇨🇳 {nb_cjk} car. chinois reconnus"));
                         ui.separator();
                     } else if proteges > 0 {
-                        ui.colored_label(Color32::from_rgb(56, 189, 248), format!("🛡️ {proteges} protégé(s)"));
+                        ui.colored_label(rgb(56, 189, 248), format!("🛡️ {proteges} protégé(s)"));
                         ui.separator();
                     }
                     ui.label(egui::RichText::new(&self.message).weak().italics());
@@ -2133,8 +2674,8 @@ impl eframe::App for App {
                     .max_width(520.0)
                     .frame(
                         egui::Frame::NONE
-                            .fill(Color32::from_rgb(16, 19, 26))
-                            .stroke(Stroke::new(1.0_f32, Color32::from_rgb(32, 38, 52)))
+                            .fill(rgb(16, 19, 26))
+                            .stroke(Stroke::new(1.0_f32, rgb(32, 38, 52)))
                             .inner_margin(egui::Margin::symmetric(14, 12)),
                     )
                     .show(ctx, |ui| {
@@ -2148,8 +2689,8 @@ impl eframe::App for App {
                     .max_width(550.0)
                     .frame(
                         egui::Frame::NONE
-                            .fill(Color32::from_rgb(16, 19, 26))
-                            .stroke(Stroke::new(1.0_f32, Color32::from_rgb(32, 38, 52)))
+                            .fill(rgb(16, 19, 26))
+                            .stroke(Stroke::new(1.0_f32, rgb(32, 38, 52)))
                             .inner_margin(egui::Margin::symmetric(14, 12)),
                     )
                     .show(ctx, |ui| {
@@ -2165,6 +2706,20 @@ impl eframe::App for App {
                         self.panneau_dictionnaires(ui);
                     });
             }
+            PanneauLateral::Editions => {
+                egui::SidePanel::right("panneau_lateral_droit")
+                    .default_width(400.0)
+                    .min_width(320.0)
+                    .max_width(560.0)
+                    .frame(
+                        egui::Frame::NONE
+                            .fill(rgb(16, 19, 26))
+                            .stroke(Stroke::new(1.0_f32, rgb(32, 38, 52)))
+                            .inner_margin(egui::Margin::symmetric(14, 12)),
+                    )
+                    .show(ctx, |ui| self.panneau_editions(ui));
+            }
+            PanneauLateral::Aucun if self.onglet == OngletActif::Ecriture => {}
             PanneauLateral::Aucun => {
                 let nb_alertes = alertes.len();
                 let nb_rep = repetitions.len();
@@ -2173,8 +2728,8 @@ impl eframe::App for App {
                     .exact_width(42.0)
                     .frame(
                         egui::Frame::NONE
-                            .fill(Color32::from_rgb(18, 22, 30))
-                            .stroke(Stroke::new(1.0_f32, Color32::from_rgb(45, 55, 75)))
+                            .fill(rgb(18, 22, 30))
+                            .stroke(Stroke::new(1.0_f32, rgb(45, 55, 75)))
                             .inner_margin(egui::Margin::symmetric(4, 12))
                     )
                     .show(ctx, |ui| {
@@ -2183,11 +2738,11 @@ impl eframe::App for App {
                                 egui::Button::new(
                                     egui::RichText::new("◀")
                                         .size(16.0)
-                                        .color(Color32::from_rgb(52, 211, 153))
+                                        .color(rgb(52, 211, 153))
                                         .strong()
                                 )
-                                .fill(Color32::from_rgb(26, 36, 48))
-                                .stroke(Stroke::new(1.0_f32, Color32::from_rgb(52, 211, 153)))
+                                .fill(rgb(26, 36, 48))
+                                .stroke(Stroke::new(1.0_f32, rgb(52, 211, 153)))
                             ).on_hover_text("Ouvrir le panneau latéral des alertes (F9 ou Ctrl+B)");
 
                             if btn_reouvrir.clicked() {
@@ -2196,17 +2751,17 @@ impl eframe::App for App {
 
                             ui.add_space(8.0);
                             if nb_alertes > 0 {
-                                if ui.button(egui::RichText::new(format!("⚠️\n{nb_alertes}")).color(Color32::from_rgb(248, 113, 113)).size(12.0).strong())
+                                if ui.button(egui::RichText::new(format!("⚠️\n{nb_alertes}")).color(rgb(248, 113, 113)).size(12.0).strong())
                                     .on_hover_text("Ouvrir les alertes de grammaire et d'orthographe (F9)").clicked() {
                                     self.panneau_lateral = PanneauLateral::Detections;
                                 }
                             } else if nb_rep > 0 {
-                                if ui.button(egui::RichText::new(format!("◈\n{nb_rep}")).color(Color32::from_rgb(167, 139, 250)).size(12.0).strong())
+                                if ui.button(egui::RichText::new(format!("◈\n{nb_rep}")).color(rgb(167, 139, 250)).size(12.0).strong())
                                     .on_hover_text("Ouvrir les répétitions de style (F9)").clicked() {
                                     self.panneau_lateral = PanneauLateral::Detections;
                                 }
                             } else {
-                                ui.label(egui::RichText::new("✨\nOK").color(Color32::from_rgb(52, 211, 153)).size(11.0));
+                                ui.label(egui::RichText::new("✨\nOK").color(rgb(52, 211, 153)).size(11.0));
                             }
                         });
                     });
@@ -2221,8 +2776,8 @@ impl eframe::App for App {
                 .max_width(480.0)
                 .frame(
                     egui::Frame::NONE
-                        .fill(Color32::from_rgb(16, 19, 26))
-                        .stroke(Stroke::new(1.0_f32, Color32::from_rgb(32, 38, 52)))
+                        .fill(rgb(16, 19, 26))
+                        .stroke(Stroke::new(1.0_f32, rgb(32, 38, 52)))
                         .inner_margin(egui::Margin::symmetric(14, 12)),
                 )
                 .show(ctx, |ui| self.panneau_plan(ui, &alertes));
@@ -2240,25 +2795,10 @@ impl eframe::App for App {
         egui::CentralPanel::default()
             .frame(
                 egui::Frame::NONE
-                    .fill(Color32::from_rgb(13, 15, 20))
+                    .fill(rgb(13, 15, 20))
                     .inner_margin(egui::Margin::symmetric(16, 12)),
             )
             .show(ctx, |ui| {
-                // Ruban de suggestions et actions contextuelles stylisé en carte flottante
-                egui::Frame::NONE
-                    .fill(Color32::from_rgb(20, 24, 33))
-                    .corner_radius(egui::CornerRadius::same(8))
-                    .stroke(Stroke::new(1.0_f32, Color32::from_rgb(36, 43, 58)))
-                    .inner_margin(egui::Margin::symmetric(14, 9))
-                    .show(ui, |ui| {
-                        if souligner {
-                            self.barre_suggestions(ui, &alertes, &repetitions);
-                        } else {
-                            ui.label(egui::RichText::new("✎ Écriture libre — fautes masquées (cochez « Souligner les fautes » dans le plan)").weak());
-                        }
-                    });
-
-                ui.add_space(8.0);
 
                 let masque = self.masque.clone();
                 let plages_repetitions: Vec<(usize, usize)> = if !ecriture && self.surligner_repetitions || self.onglet == OngletActif::Repetitions {
@@ -2286,15 +2826,19 @@ impl eframe::App for App {
 
                 // Feuille / Document paper card avec marges aérées
                 egui::Frame::NONE
-                    .fill(Color32::from_rgb(18, 21, 28))
+                    .fill(rgb(18, 21, 28))
                     .corner_radius(egui::CornerRadius::same(8))
-                    .stroke(Stroke::new(1.0_f32, Color32::from_rgb(32, 37, 50)))
-                    .inner_margin(egui::Margin::symmetric(24, 18))
+                    .stroke(Stroke::new(1.0_f32, rgb(32, 37, 50)))
+                    .inner_margin(if ecriture { egui::Margin::symmetric(24, 28) } else { egui::Margin::symmetric(24, 18) })
                     .show(ui, |ui| {
                         egui::ScrollArea::vertical().auto_shrink(false).show(ui, |ui| {
+                            // écriture : colonne d'environ 72 caractères, centrée
+                            ui.horizontal_top(|ui| {
+                            let colonne = if ecriture { ui.available_width().min(760.0) } else { ui.available_width() };
+                            ui.add_space((ui.available_width() - colonne) / 2.0);
                             let sortie = egui::TextEdit::multiline(&mut self.texte)
                                 .id(id_editeur)
-                                .desired_width(f32::INFINITY)
+                                .desired_width(colonne)
                                 .desired_rows(28)
                                 .lock_focus(true)
                                 .frame(false)
@@ -2316,11 +2860,45 @@ impl eframe::App for App {
                             if souligner {
                                 vagues(ui.painter(), &sortie.galley, sortie.galley_pos, &alertes);
                             }
+                            // Bulle de correction, juste sous le mot où se trouve le curseur (ou sous la sélection)
+                            let cur = self.selection.0;
+                            let ancre = if self.selection.1 > self.selection.0 {
+                                Some((self.selection.0, self.selection.1))
+                            } else if self.onglet == OngletActif::Repetitions {
+                                repetitions.iter().flat_map(|r| r.occurrences.iter().copied()).find(|&(d, f)| d <= cur && cur <= f)
+                            } else if souligner {
+                                alertes.iter().find(|a| a.debut <= cur && cur <= a.fin).map(|a| (a.debut, a.fin))
+                            } else {
+                                None
+                            };
+                            if let Some((d, f)) = ancre.filter(|&(_, f)| f <= self.texte.chars().count()) {
+                                let g = |c| sortie.galley.pos_from_ccursor(CCursor::new(c)).translate(sortie.galley_pos.to_vec2());
+                                let (rd, rf) = (g(d), g(f));
+                                let bas = if (rf.top() - rd.top()).abs() < 1.0 { rd.bottom() } else { rf.bottom() };
+                                if ui.clip_rect().contains(egui::pos2(rd.left(), bas - 2.0)) {
+                                    egui::Area::new(egui::Id::new("bulle_correction"))
+                                        .order(egui::Order::Foreground)
+                                        .fixed_pos(egui::pos2(rd.left() - 10.0, bas + 6.0))
+                                        .constrain(true)
+                                        .show(ui.ctx(), |ui| {
+                                            egui::Frame::popup(ui.style())
+                                                .fill(rgb(22, 26, 35))
+                                                .stroke(Stroke::new(1.0_f32, rgb(48, 56, 82)))
+                                                .corner_radius(10)
+                                                .inner_margin(egui::Margin::symmetric(12, 9))
+                                                .show(ui, |ui| {
+                                                    ui.set_max_width(560.0);
+                                                    self.barre_suggestions(ui, &alertes, &repetitions);
+                                                });
+                                        });
+                                }
+                            }
                             // titre choisi dans le plan : amené en haut de l'éditeur
                             if let Some(p) = self.defiler_vers.take() {
                                 let r = sortie.galley.pos_from_ccursor(CCursor::new(p)).translate(sortie.galley_pos.to_vec2());
                                 ui.scroll_to_rect(r.expand2(egui::vec2(0.0, 40.0)), Some(egui::Align::TOP));
                             }
+                            });
                         });
                     });
             });

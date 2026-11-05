@@ -86,6 +86,12 @@ pub struct Reglages {
     pub proteger_ecritures: bool,
     /// Mode écriture : nombre de mots visé par séance.
     pub objectif_mots: usize,
+    /// Mode écriture : nombre de pages visées pour le document (0 : pas d'objectif).
+    pub pages_visees: usize,
+    /// Mots par page imprimée (environ 250 pour un livre).
+    pub mots_par_page: usize,
+    /// Mode clair doux au lieu du mode sombre.
+    pub theme_clair: bool,
 }
 
 impl Default for Reglages {
@@ -96,6 +102,9 @@ impl Default for Reglages {
             cible: "Chinois".into(),
             proteger_ecritures: true,
             objectif_mots: 500,
+            pages_visees: 0,
+            mots_par_page: 250,
+            theme_clair: false,
         }
     }
 }

@@ -178,6 +178,48 @@ impl RapportIA {
     }
 
     /// Génère un rapport Markdown concis, optimisé pour les prompts d'IA (ChatGPT, Gemini, Claude...).
+    /// Passages à corriger, prêts à coller dans une IA : une consigne, puis chaque phrase fautive une seule fois,
+    /// avec les fautes repérées (mot, règle, suggestion). L'IA rend les passages corrigés, dans le même ordre.
+    pub fn vers_passages(&self) -> String {
+        let mut passages: Vec<(&str, Vec<&AlerteIA>)> = Vec::new();
+        for a in &self.alertes {
+            let p = a.phrase_contexte.trim();
+            if p.is_empty() {
+                continue;
+            }
+            match passages.iter_mut().find(|(q, _)| *q == p) {
+                Some((_, v)) => v.push(a),
+                None => passages.push((p, vec![a])),
+            }
+        }
+        if passages.is_empty() {
+            return "Aucune faute à corriger.".into();
+        }
+        let mut t = String::from(
+            "Corrige les fautes de français (grammaire, orthographe, syntaxe, ponctuation) des passages ci-dessous.
+             Règles : ne change ni le sens ni le style ; ne touche pas aux noms propres, au pinyin ni aux caractères chinois ;
+             vérifie chaque faute signalée (certaines peuvent être de fausses alertes) et corrige aussi celles qui auraient été oubliées.
+             Réponds avec chaque passage corrigé, numéroté comme ci-dessous, sans commentaire.
+
+",
+        );
+        for (i, (p, fautes)) in passages.iter().enumerate() {
+            t.push_str(&format!("{}. {}
+", i + 1, p));
+            let liste: Vec<String> = fautes
+                .iter()
+                .map(|a| match a.suggestions.first() {
+                    Some(s) => format!("« {} » → « {} » ({})", a.terme, s, a.regle),
+                    None => format!("« {} » ({})", a.terme, a.regle),
+                })
+                .collect();
+            t.push_str(&format!("   Fautes repérées : {}
+
+", liste.join(" ; ")));
+        }
+        t
+    }
+
     pub fn vers_markdown(&self) -> String {
         let mut md = String::new();
         md.push_str("# Rapport d'analyse Texteur (optimisé pour IA)\n");

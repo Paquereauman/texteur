@@ -45,6 +45,40 @@ fn titre_implicite(ligne: &str) -> bool {
     l.chars().count() <= 100 && !l.ends_with(['.', ',', ';']) && MOTS.contains(&premier.as_str())
 }
 
+/// Part idéale de chaque chapitre (titres de niveau 1) dans le livre : l'introduction ≈ 10 %, la conclusion ≈ 8 %,
+/// le reste partagé à parts égales entre les autres chapitres. Renvoie une part (0 à 1) par section du plan (0 hors niveau 1).
+pub fn parts_ideales(plan: &[Section]) -> Vec<f32> {
+    let est = |s: &Section, mots: &[&str]| {
+        let t = s.titre.to_lowercase();
+        mots.iter().any(|m| t.contains(m))
+    };
+    let chap: Vec<usize> = (0..plan.len()).filter(|&i| plan[i].niveau == 1).collect();
+    let intro = chap.iter().filter(|&&i| est(&plan[i], &["introduction", "avant-propos", "préface", "prologue"])).count();
+    let concl = chap.iter().filter(|&&i| est(&plan[i], &["conclusion", "épilogue", "postface"])).count();
+    let autres = chap.len() - intro - concl;
+    let (pi, pc) = (if intro > 0 { 0.10 } else { 0.0 }, if concl > 0 { 0.08 } else { 0.0 });
+    let reste = if autres > 0 { (1.0 - pi - pc) / autres as f32 } else { 0.0 };
+    plan.iter()
+        .map(|s| match () {
+            _ if s.niveau != 1 => 0.0,
+            _ if est(s, &["introduction", "avant-propos", "préface", "prologue"]) => pi / intro as f32,
+            _ if est(s, &["conclusion", "épilogue", "postface"]) => pc / concl as f32,
+            _ if autres > 0 => reste,
+            _ => (1.0 - pi - pc) / chap.len().max(1) as f32,
+        })
+        .collect()
+}
+
+/// Plan type d'un livre : introduction, chapitres, conclusion.
+pub fn modele_livre(chapitres: usize) -> String {
+    let mut t = String::from("# Introduction\n\n");
+    for i in 1..=chapitres {
+        t.push_str(&format!("# Chapitre {i}\n\n## Partie 1\n\n## Partie 2\n\n"));
+    }
+    t.push_str("# Conclusion\n\n");
+    t
+}
+
 #[derive(Clone, Debug, PartialEq)]
 pub struct Section {
     pub niveau: u8,
@@ -167,9 +201,84 @@ pub fn insere_titre(texte: &str, k: usize, n: u8, nom: &str) -> (String, (usize,
     (joint(&lignes), (debut, debut + nom.chars().count()))
 }
 
+fn est_conclusion(t: &str) -> bool {
+    let t = t.to_lowercase();
+    ["conclusion", "épilogue", "postface"].iter().any(|m| t.contains(m))
+}
+
+/// Numérote dans l'ordre les titres de plus haut niveau « Chapitre N… » (les autres titres ne bougent pas).
+pub fn renumerote(texte: &str) -> String {
+    let p = plan(texte);
+    let Some(haut) = p.iter().map(|s| s.niveau).min() else { return texte.to_string() };
+    let mut lignes: Vec<String> = texte.split('\n').map(String::from).collect();
+    let mut n = 0;
+    for s in p.iter().filter(|s| s.niveau == haut && s.marque) {
+        let nouveau = {
+            let Some((_, t)) = titre(&lignes[s.ligne]) else { continue };
+            let Some(reste) = t.strip_prefix("Chapitre ") else { continue };
+            let chiffres = reste.bytes().take_while(u8::is_ascii_digit).count();
+            if chiffres == 0 {
+                continue;
+            }
+            n += 1;
+            format!("{} Chapitre {n}{}", "#".repeat(haut as usize), &reste[chiffres..])
+        };
+        lignes[s.ligne] = nouveau;
+    }
+    lignes.join("\n")
+}
+
+/// Ajoute un chapitre après celui du curseur (sinon avant la conclusion, sinon à la fin), numéroté à la suite ;
+/// les « Chapitre N » suivants sont renumérotés. Renvoie le texte et le titre, à sélectionner pour le renommer.
+pub fn ajoute_chapitre(texte: &str, pos: usize) -> (String, (usize, usize)) {
+    let p = plan(texte);
+    let base = marque_tout(texte, &p);
+    let haut = p.iter().map(|s| s.niveau).min().unwrap_or(1);
+    let chap = courante(&p, pos).and_then(|c| (0..=c).rev().find(|&k| p[k].niveau == haut));
+    let concl = p.iter().find(|s| s.niveau == haut && est_conclusion(&s.titre));
+    let k = match (chap, concl) {
+        (Some(c), _) if !est_conclusion(&p[c].titre) => p[c].fin_ligne,
+        (_, Some(s)) => s.ligne,
+        _ => texte.split('\n').count(),
+    };
+    let t = renumerote(&insere_titre(&base, k, haut, "Chapitre 0").0);
+    let sel = {
+        let lignes: Vec<&str> = t.split('\n').collect();
+        let d = debut_ligne(&lignes, k);
+        (d + haut as usize + 1, d + lignes[k].chars().count())
+    };
+    (t, sel)
+}
+
+/// Ajoute « Partie N » à la fin de la section `i` (N : nombre de ses parties + 1).
+pub fn ajoute_partie(texte: &str, i: usize) -> (String, (usize, usize)) {
+    let p = plan(texte);
+    let base = marque_tout(texte, &p);
+    let n = p[i].niveau + 1;
+    let nb = p[i + 1..].iter().take_while(|s| s.niveau > p[i].niveau).filter(|s| s.niveau == n).count();
+    insere_titre(&base, p[i].fin_ligne, n, &format!("Partie {}", nb + 1))
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn ajout_de_chapitres() {
+        let t = "# Introduction\nA\n# Chapitre 1\nB\n# Chapitre 2\nC\n# Conclusion\nD";
+        let sel = |r: &str, (d, f): (usize, usize)| r.chars().skip(d).take(f - d).collect::<String>();
+        let (r, s) = ajoute_chapitre(t, t.find('B').unwrap());
+        assert_eq!(r, "# Introduction\nA\n# Chapitre 1\nB\n# Chapitre 2\n\n# Chapitre 3\nC\n# Conclusion\nD");
+        assert_eq!(sel(&r, s), "Chapitre 2");
+        let (r, s) = ajoute_chapitre(t, t.len() - 1);
+        assert!(r.ends_with("# Chapitre 3\n\n# Conclusion\nD"), "{r}");
+        assert_eq!(sel(&r, s), "Chapitre 3");
+        let (r, s) = ajoute_partie(t, 1);
+        assert!(r.contains("# Chapitre 1\nB\n## Partie 1\n\n# Chapitre 2"), "{r}");
+        assert_eq!(sel(&r, s), "Partie 1");
+        let (r, s) = ajoute_chapitre("", 0);
+        assert_eq!(sel(&r, s), "Chapitre 1");
+    }
 
     const LIVRE: &str = "Avant-texte\n# Chapitre I\nUn deux trois.\n## Partie A\nQuatre.\n# Chapitre II\nCinq six.";
 

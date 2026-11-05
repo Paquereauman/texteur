@@ -16,8 +16,21 @@ chinois.
 - **Syntaxe :** prépositions imposées par le verbe (« dépendre de »), articles oubliés, mots en double, « où … y ».
 - **Style :** répétitions, tournures lourdes, expressions figées mal employées (« aller de l'avant »).
 - **Typographie :** espaces, majuscules en début de phrase, ponctuation française.
+- **Règles éditeurs :** chaque maison d'édition a ses conventions (« c.-à-d. », « XXe siècle »…). Volet
+  **📘 Règles éditeurs** : ajout en une ligne, collage d'une liste, import d'un classeur Excel (.xlsx) ou CSV, export.
+  Le guide stylistique français de Peter Lang est fourni.
 - **Textes sinisants :** le dictionnaire chinois (caractères, pinyin, sens) protège les noms propres pour qu'ils ne
   soient jamais « corrigés ».
+
+## Mode écriture
+
+**✎ Écriture** (Ctrl+E) : une colonne de texte centrée et un plan cliquable. Les chapitres s'ajoutent d'un clic
+(Ctrl+Maj+Entrée), numérotés à la suite ; **Fichier → Nouveau livre** crée un plan type. Selon le nombre de pages
+visées, chaque chapitre affiche sa taille idéale ; la carte d'écriture suit le chapitre en cours, l'avancement du
+livre (séances restantes) et la séance du jour.
+
+Les corrections s'affichent dans une bulle sous le mot. **Fichier → Copier les passages à corriger pour une IA**
+prépare les phrases fautives à coller dans un assistant.
 
 ## Comment il fonctionne
 
@@ -38,6 +51,7 @@ cargo build --release
 ```
 
 L'exécutable se trouve dans `target/release/texteur.exe`. Le menu **« ⬆ Mise à jour »** installe une nouvelle version.
+Le mode sombre est le mode par défaut. Un mode clair doux (papier crème, texte encre) s'active dans **⚙**.
 
 En ligne de commande :
 

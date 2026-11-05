@@ -63,6 +63,8 @@ pub struct CorrecteurGrammaire {
     couleurs_variables_exceptions: HashSet<&'static str>,
     pub villes_sans_article: HashSet<&'static str>,
     pub banque_regles: crate::regles_dynamiques::BanqueRegles,
+    /// Édition choisie (règles maison), appliquée à tout le texte.
+    pub edition: Option<crate::editions::Edition>,
 }
 
 impl Default for CorrecteurGrammaire {
@@ -205,6 +207,7 @@ impl CorrecteurGrammaire {
             couleurs_variables_exceptions: coul_var,
             villes_sans_article: villes,
             banque_regles: crate::regles_dynamiques::BanqueRegles::charge(),
+            edition: None,
         }
     }
 
@@ -216,6 +219,9 @@ impl CorrecteurGrammaire {
         for ligne in texte.split('\n') {
             self.analyse_paragraphe(ligne, decalage_ligne, &mut alertes);
             decalage_ligne += ligne.chars().count() + 1; // +1 pour le '\n'
+        }
+        if let Some(e) = &self.edition {
+            alertes.extend(crate::editions::alertes(e, texte));
         }
 
                 alertes.sort_by_key(|a| (a.debut, a.fin));

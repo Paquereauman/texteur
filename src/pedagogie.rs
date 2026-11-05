@@ -10,6 +10,13 @@ pub struct FichePedagogique {
     pub exemple_correct: &'static str,
 }
 
+impl FichePedagogique {
+    /// Une vraie fiche existe pour cette faute (sinon, pas de bouton « Plus d'infos »).
+    pub fn utile(&self) -> bool {
+        !self.titre.is_empty()
+    }
+}
+
 /// Analyse la règle et le contexte de la faute pour retourner la fiche pédagogique idoine.
 pub fn explication_pedagogique_approfondie(
     regle: &str,
@@ -238,11 +245,6 @@ pub fn explication_pedagogique_approfondie(
         };
     }
 
-    // PAR DÉFAUT
-    FichePedagogique {
-        titre: "Règle de syntaxe et grammaire française",
-        regle_complete: "L'usage standard de la langue française prescrit le respect des règles d'accord, de conjugaison et de syntaxe pour garantir la clarté et la précision des écrits professionnels.",
-        astuce: "Adoptez la correction suggérée pour assurer une communication irréprochable auprès de vos interlocuteurs.",
-        exemple_correct: "« Utiliser les suggestions du correcteur Texteur. »",
-    }
+    // PAR DÉFAUT : pas de fiche (l'explication de la faute suffit ; un texte passe-partout n'apprend rien)
+    FichePedagogique { titre: "", regle_complete: "", astuce: "", exemple_correct: "" }
 }
